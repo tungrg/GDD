@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 188521424}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -345,13 +345,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385028919}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 12.6, z: 0}
+  m_LocalRotation: {x: 0.29166347, y: -0, z: -0, w: 0.95652103}
+  m_LocalPosition: {x: 0, y: 8.7, z: -8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 33.915, y: 0, z: 0}
 --- !u!114 &385028923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,8 +409,6 @@ GameObject:
   - component: {fileID: 1466503695}
   - component: {fileID: 1466503694}
   - component: {fileID: 1466503698}
-  - component: {fileID: 1466503700}
-  - component: {fileID: 1466503701}
   - component: {fileID: 1466503693}
   - component: {fileID: 1466503699}
   m_Layer: 0
@@ -432,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9c3e482d6080c40bba98cac26555c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossData: {fileID: 11400000, guid: a84a08bddd0668c44805c787f97c2dfb, type: 2}
+  bossData: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
   player: {fileID: 1528605170}
   bulletPrefab: {fileID: 422932167381499507, guid: 5a3859f5b616f6e4aaa61d9a480a1436, type: 3}
   firePoint: {fileID: 187288456}
@@ -440,8 +438,6 @@ MonoBehaviour:
   fireForce: 20
   moveDuration: 2
   waitBeforeShoot: 1
-  freezeSkill: {fileID: 1466503700}
-  stormBombSkill: {fileID: 1466503701}
 --- !u!136 &1466503694
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -527,7 +523,7 @@ Transform:
   m_GameObject: {fileID: 1466503692}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.84, z: 3.45}
+  m_LocalPosition: {x: 0.6, y: 1.84, z: 5.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -573,39 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c28be2101c1e0bf45b2b9af6d8d35963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossData: {fileID: 11400000, guid: a84a08bddd0668c44805c787f97c2dfb, type: 2}
---- !u!114 &1466503700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466503692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd429630d5a8d444187af22360d32a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  freezeEffectPrefab: {fileID: 2524371124355826282, guid: bede553731848a847922051c740eb4c5, type: 3}
-  freezeDuration: 3
-  cooldown: 10
---- !u!114 &1466503701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466503692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fb59d71f4a9cfd45b561b06e7959e4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombPrefab: {fileID: 7105956024688538642, guid: 0ef97c279d8cebe4893a015f3281be68, type: 3}
-  bombCount: 5
-  radius: 2
-  height: 10
-  cooldown: 5
+  bossData: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
 --- !u!1 &1528605166
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,7 +583,6 @@ GameObject:
   - component: {fileID: 1528605168}
   - component: {fileID: 1528605167}
   - component: {fileID: 1528605171}
-  - component: {fileID: 1528605172}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -712,7 +675,7 @@ Transform:
   m_GameObject: {fileID: 1528605166}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 0.9, z: -2.82}
+  m_LocalPosition: {x: 0.74, y: 0.9, z: -3.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -742,22 +705,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 1
---- !u!114 &1528605172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1528605166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21f73e34e2ff1364ab661011a6da2ed9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
+  m_CollisionDetection: 0
 --- !u!1 &1829746730
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,13 +799,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829746730}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1829746733
 MonoBehaviour:
   m_ObjectHideFlags: 0
