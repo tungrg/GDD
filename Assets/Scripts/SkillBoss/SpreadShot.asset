@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a05b44838532c7849b0d1816c1a9b9b6, type: 3}
-  m_Name: BossMap1
+  m_Script: {fileID: 11500000, guid: a497303aa8d9e4f45a3aaf4e62d4e4a0, type: 3}
+  m_Name: SpreadShot
   m_EditorClassIdentifier: 
-  nameBoss: BossMap1
-  icon: {fileID: 0}
-  health: 200
-  speed: 3
-  damageAtk: 20
-  speedAtk: 2
-  skills: []
+  skillName: SpreadShot
+  cooldown: 5
+  bulletPrefab: {fileID: 358111301209145196, guid: f7bc8d52609b51249af3b669c60adcce, type: 3}
+  bulletCount: 5
+  spreadAngle: 30
+  bulletForce: 15
