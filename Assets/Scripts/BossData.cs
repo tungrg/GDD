@@ -1,25 +1,27 @@
-using System;
-using Unity.Mathematics;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "New Boss", menuName = "Game/Boss")]
 public class BossData : ScriptableObject
 {
-    [Header("Boss Data")]
+    [Header("Boss Info")]
     public string nameBoss;
     public Sprite icon;
-    //public GameObject prefabBoss3D;
 
-    [Header("Offensive Stats")]
+    [Header("Stats")]
     [Range(0f, 1000f)]
-    public float health;                            //Máu
+    public float health = 100;
     [Range(0f, 100f)]
-    public float speed;                            //Tốc độ di chuyển
+    public float speed = 5;
     [Range(0f, 100f)]
-    public float damageAtk;                        //Sát thương tấn công
+    public float damageAtk = 10;
     [Range(0f, 10f)]
-    public float speedAtk;                         //Tốc độ tấn công
-    public void OnValidate()
+    public float speedAtk = 1f;
+
+    [Header("Skills")]
+    public SkillBoss[] skills;
+
+    private void OnValidate()
     {
         health = Math.Max(0, health);
         speed = Math.Max(0, speed);
