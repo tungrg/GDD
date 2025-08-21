@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BossManager : MonoBehaviour
+public class BossManager : BossBase
 {
     [Header("References")]
     public Transform player;
@@ -18,13 +18,21 @@ public class BossManager : MonoBehaviour
 
     private bool isMoving = false;
 
-    private BossData data;
 
     private void Start()
     {
-        if (data != null)
+        if (Data != null)
         {
-            moveDistance = data.speed;
+            moveDistance = Data.speed;
+            
+            // Khởi động từng skill (chúng tự lo cooldown riêng)
+            foreach (var skill in Data.skills)
+            {
+                if (skill != null)
+                {
+                    skill.StartSkill(this);
+                }
+            }
         }
         StartCoroutine(BossBehaviorLoop());
     }

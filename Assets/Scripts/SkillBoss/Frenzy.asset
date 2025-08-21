@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a05b44838532c7849b0d1816c1a9b9b6, type: 3}
-  m_Name: BossMap1
+  m_Script: {fileID: 11500000, guid: 681da13f76e02494682f2355878884b1, type: 3}
+  m_Name: Frenzy
   m_EditorClassIdentifier: 
-  nameBoss: BossMap1
-  icon: {fileID: 0}
-  health: 200
-  speed: 3
-  damageAtk: 20
-  speedAtk: 2
-  skills: []
+  skillName: Frenzy
+  cooldown: 13
+  moveSpeedMultiplier: 3
+  attackSpeedMultiplier: 3
+  duration: 5
