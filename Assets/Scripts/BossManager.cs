@@ -51,6 +51,16 @@ public class BossManager : BossBase
     private IEnumerator BossBehaviorLoop()
     {
         yield return new WaitForSeconds(3f);
+        if (Data != null)
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill != null)
+                {
+                    skill.StartSkill(this);
+                }
+            }
+        }
 
         while (true)
         {
@@ -104,7 +114,7 @@ public class BossManager : BossBase
             rb.linearVelocity = dir * fireForce;
         }
     }
-        public void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         CurrentHealth -= amount;
         Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
@@ -115,7 +125,7 @@ public class BossManager : BossBase
                 if (skill is SkillClone cloneSkill)
                 {
                     cloneSkill.Use(this);
-                    cloneUsed = true; 
+                    cloneUsed = true;
                 }
             }
         }
