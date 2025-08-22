@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/TaiNguyenGame.meta
 guid: ea7269faa801f974088d6501c8364275
-========
-guid: 44fb56f6d41a3034ab1b411a7dc891c9
->>>>>>>> 7d802ee (UpSkill):Assets/Scripts/Skill.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
