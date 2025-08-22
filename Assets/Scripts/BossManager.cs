@@ -18,12 +18,32 @@ public class BossManager : BossBase
 
     private bool isMoving = false;
 
+    public float CurrentHealth { get; private set; }
+    private bool cloneUsed = false;
+
 
     private void Start()
     {
+        bossData.ResetRuntimeStats();
+        if (player == null)
+        {
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null) player = p.transform;
+        }
         if (Data != null)
         {
             moveDistance = Data.speed;
+            CurrentHealth = Data.health;
+
+            // Khởi động từng skill (chúng tự lo cooldown riêng)
+            foreach (var skill in Data.skills)
+            {
+                if (skill != null && !(skill is SkillClone)) // bỏ qua clone
+                {
+                    skill.StartSkill(this);
+                }
+            }
+
         }
         StartCoroutine(BossBehaviorLoop());
     }
@@ -31,16 +51,6 @@ public class BossManager : BossBase
     private IEnumerator BossBehaviorLoop()
     {
         yield return new WaitForSeconds(3f);
-        if (Data != null)
-        {
-            foreach (var skill in Data.skills)
-            {
-                if (skill != null)
-                {
-                    skill.StartSkill(this);
-                }
-            }
-        }
 
         while (true)
         {
@@ -94,20 +104,29 @@ public class BossManager : BossBase
             rb.linearVelocity = dir * fireForce;
         }
     }
-    // private IEnumerator TriggerStormBombAfterDelay(float delay)
-    // {
-    //     yield return new WaitForSeconds(delay);
-    //     if (stormBombSkill != null && player != null)
-    //     {
-    //         stormBombSkill.TriggerStormBomb(player);
-    //     }
-    // }
-    // private IEnumerator TriggerStormBombAfterDelay(float delay)
-    // {
-    //     yield return new WaitForSeconds(delay);
-    //     if (stormBombSkill != null && player != null)
-    //     {
-    //         stormBombSkill.TriggerStormBomb(player);
-    //     }
-    // }
+        public void TakeDamage(float amount)
+    {
+        CurrentHealth -= amount;
+        Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
+        if (!cloneUsed && CurrentHealth <= Data.health * 0.5f) // dưới 50% máu
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill is SkillClone cloneSkill)
+                {
+                    cloneSkill.Use(this);
+                    cloneUsed = true; 
+                }
+            }
+        }
+        if (CurrentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
 }
