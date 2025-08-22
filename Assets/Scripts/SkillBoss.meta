@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/SkillBoss.meta
 guid: 14cdd284e09a3b74691582aaa4d60072
+========
+guid: ea7269faa801f974088d6501c8364275
+>>>>>>>> 7d802ee (UpSkill):Assets/TaiNguyenGame.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
