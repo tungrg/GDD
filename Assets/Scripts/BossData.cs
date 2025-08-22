@@ -19,6 +19,9 @@ public class BossData : ScriptableObject
     public float damageAtk;                        //Sát thương tấn công
     [Range(0f, 10f)]
     public float speedAtk;                         //Tốc độ tấn công
+
+    [Header("Skills")]
+    public SkillBoss[] skills;
     public void OnValidate()
     {
         health = Math.Max(0, health);
