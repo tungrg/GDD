@@ -101,4 +101,12 @@ public class BossManager : BossBase
     //         stormBombSkill.TriggerStormBomb(player);
     //     }
     // }
+    // private IEnumerator TriggerStormBombAfterDelay(float delay)
+    // {
+    //     yield return new WaitForSeconds(delay);
+    //     if (stormBombSkill != null && player != null)
+    //     {
+    //         stormBombSkill.TriggerStormBomb(player);
+    //     }
+    // }
 }
