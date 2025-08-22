@@ -61,6 +61,16 @@ public class BossManager : BossBase
                 }
             }
         }
+        if (Data != null)
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill != null)
+                {
+                    skill.StartSkill(this);
+                }
+            }
+        }
 
         while (true)
         {
