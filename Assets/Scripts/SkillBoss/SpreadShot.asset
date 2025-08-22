@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a497303aa8d9e4f45a3aaf4e62d4e4a0, type: 3}
+  m_Name: SpreadShot
+  m_EditorClassIdentifier: 
+  skillName: SpreadShot
+  cooldown: 5
+  bulletPrefab: {fileID: 358111301209145196, guid: f7bc8d52609b51249af3b669c60adcce, type: 3}
+  bulletCount: 5
+  spreadAngle: 30
+  bulletForce: 15
