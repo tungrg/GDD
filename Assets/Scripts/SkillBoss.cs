@@ -23,4 +23,8 @@ public abstract class SkillBoss : ScriptableObject
     }
 
     protected abstract void Activate(BossManager boss);
+    public void Use(BossManager boss)
+    {
+        Activate(boss); 
+    }
 }

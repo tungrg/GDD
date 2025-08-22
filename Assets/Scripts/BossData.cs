@@ -8,24 +8,34 @@ public class BossData : ScriptableObject
     public string nameBoss;
     public Sprite icon;
 
-    [Header("Stats")]
-    [Range(0f, 1000f)]
-    public float health = 100;
-    [Range(0f, 100f)]
-    public float speed = 5;
-    [Range(0f, 100f)]
-    public float damageAtk = 10;
-    [Range(0f, 10f)]
-    public float speedAtk = 1f;
+[Header("Original Stats")]
+    [Range(0f, 1000f)] public float originalHealth = 100;
+    [Range(0f, 100f)]  public float originalSpeed = 5;
+    [Range(0f, 100f)]  public float originalDamageAtk = 10;
+    [Range(0f, 10f)]   public float originalSpeedAtk = 1f;
+
+    [Header("Runtime Stats")]
+    [NonSerialized] public float health;
+     public float speed;
+    [NonSerialized] public float damageAtk;
+    [NonSerialized] public float speedAtk;
 
     [Header("Skills")]
     public SkillBoss[] skills;
 
+    public void ResetRuntimeStats()
+    {
+        health = originalHealth;
+        speed = originalSpeed;
+        damageAtk = originalDamageAtk;
+        speedAtk = originalSpeedAtk;
+    }
+
     private void OnValidate()
     {
-        health = Math.Max(0, health);
-        speed = Math.Max(0, speed);
-        damageAtk = Math.Max(0, damageAtk);
-        speedAtk = Math.Max(0, speedAtk);
+        originalHealth   = Math.Max(0, originalHealth);
+        originalSpeed    = Math.Max(0, originalSpeed);
+        originalDamageAtk= Math.Max(0, originalDamageAtk);
+        originalSpeedAtk = Math.Max(0, originalSpeedAtk);
     }
 }
