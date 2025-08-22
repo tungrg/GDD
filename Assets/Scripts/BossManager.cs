@@ -24,8 +24,15 @@ public class BossManager : BossBase
         if (Data != null)
         {
             moveDistance = Data.speed;
-            
-            // Khởi động từng skill (chúng tự lo cooldown riêng)
+        }
+        StartCoroutine(BossBehaviorLoop());
+    }
+
+    private IEnumerator BossBehaviorLoop()
+    {
+        yield return new WaitForSeconds(3f);
+        if (Data != null)
+        {
             foreach (var skill in Data.skills)
             {
                 if (skill != null)
@@ -34,12 +41,6 @@ public class BossManager : BossBase
                 }
             }
         }
-        StartCoroutine(BossBehaviorLoop());
-    }
-
-    private IEnumerator BossBehaviorLoop()
-    {
-        yield return new WaitForSeconds(3f);
 
         while (true)
         {
@@ -93,4 +94,20 @@ public class BossManager : BossBase
             rb.linearVelocity = dir * fireForce;
         }
     }
+    // private IEnumerator TriggerStormBombAfterDelay(float delay)
+    // {
+    //     yield return new WaitForSeconds(delay);
+    //     if (stormBombSkill != null && player != null)
+    //     {
+    //         stormBombSkill.TriggerStormBomb(player);
+    //     }
+    // }
+    // private IEnumerator TriggerStormBombAfterDelay(float delay)
+    // {
+    //     yield return new WaitForSeconds(delay);
+    //     if (stormBombSkill != null && player != null)
+    //     {
+    //         stormBombSkill.TriggerStormBomb(player);
+    //     }
+    // }
 }
