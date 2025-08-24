@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd429630d5a8d444187af22360d32a11, type: 3}
   m_Name: Freeze
   m_EditorClassIdentifier: 
-  skillName: 
-  cooldown: 5
-  freezeEffectPrefab: {fileID: 0}
+  skillName: Freeze
+  cooldown: 15
+  freezeEffectPrefab: {fileID: 2524371124355826282, guid: bede553731848a847922051c740eb4c5, type: 3}
   freezeDuration: 3

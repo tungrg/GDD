@@ -17,14 +17,14 @@ public abstract class SkillBoss : ScriptableObject
 
         while (true)
         {
-            Activate(boss); // dùng skill
             yield return new WaitForSeconds(cooldown); // chờ hồi chiêu
+            Activate(boss); // dùng skill
         }
     }
 
     protected abstract void Activate(BossManager boss);
     public void Use(BossManager boss)
     {
-        Activate(boss); 
+        Activate(boss);
     }
 }
