@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb59d71f4a9cfd45b561b06e7959e4d, type: 3}
   m_Name: StormBomb
   m_EditorClassIdentifier: 
-  skillName: 
-  cooldown: 5
-  bombPrefab: {fileID: 0}
-  bombCount: 5
-  radius: 4
-  height: 10
+  skillName: Storm Bomb
+  cooldown: 10
+  bombPrefab: {fileID: 7105956024688538642, guid: 0ef97c279d8cebe4893a015f3281be68, type: 3}
+  markerPrefab: {fileID: 5184371879822970307, guid: e759bd1640c0484479bcc3550057dd0f, type: 3}
+  bombCount: 6
+  radius: 3
+  height: 7
+  minDistance: 1.7
