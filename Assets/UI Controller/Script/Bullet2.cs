@@ -10,8 +10,7 @@ public class Bullet2 : MonoBehaviour
     {
         Destroy(gameObject, lifeTime);
     }
-
-    private void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision) // Sử dụng OnTriggerEnter thay vì OnCollisionEnter 
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -38,4 +37,31 @@ public class Bullet2 : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Enemy"))
+    //     {
+
+    //         BossHealth enemy = collision.gameObject.GetComponent<BossHealth>();
+    //         if (enemy != null)
+    //         {
+    //             enemy.TakeDamage(damage);
+    //         }
+
+
+    //         PlayerMana playerMana = FindFirstObjectByType<PlayerMana>();
+    //         if (playerMana != null)
+    //         {
+    //             playerMana.GainMana(10f);
+    //         }
+
+
+    //         Destroy(gameObject);
+    //     }
+    //     else if (!collision.gameObject.CompareTag("Player"))
+    //     {
+
+    //         Destroy(gameObject);
+    //     }
+    // }
 }
