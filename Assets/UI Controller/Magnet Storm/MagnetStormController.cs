@@ -48,7 +48,7 @@ public class MagnetStormController : MonoBehaviour
         }
 
         // Truyền prefab vùng hiệu ứng cho bomb
-        Bomb bombScript = bomb.GetComponent<Bomb>();
+        BombPlayer bombScript = bomb.GetComponent<BombPlayer>();
         if (bombScript != null)
         {
             bombScript.stormZonePrefab = stormZonePrefab;

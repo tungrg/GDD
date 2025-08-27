@@ -6,11 +6,24 @@ public class Bullet : MonoBehaviour
     public float lifeTime = 5f;
     [Header("Impact Effect")]
     public GameObject hitEffectPrefab;
+    private float damage;
+
+    public void SetDamage(float dmg)
+    {
+        damage = dmg;
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Player"))
         {
+            PlayerHealth ph = collision.gameObject.GetComponent<PlayerHealth>();
+            if (ph != null)
+            {
+                ph.TakeDamage(damage);
+            }
+
             if (hitEffectPrefab != null)
             {
                 GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
@@ -22,7 +35,9 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject, lifeTime);
+            GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, 1f);
+            Destroy(gameObject);
         }
     }
 

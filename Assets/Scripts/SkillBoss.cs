@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 public abstract class SkillBoss : ScriptableObject
 {
     public string skillName;
