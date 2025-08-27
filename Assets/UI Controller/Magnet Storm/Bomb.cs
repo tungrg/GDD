@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class BombPlayer : MonoBehaviour
 {
     public GameObject stormZonePrefab;
 

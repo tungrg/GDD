@@ -50,6 +50,7 @@ public class SkillStormBomb : SkillBoss
             Bomb bombScript = bomb.GetComponent<Bomb>();
             if (bombScript != null && marker != null)
                 bombScript.SetMarker(marker);
+
         }
     }
     private bool IsTooClose(Vector3 pos, List<Vector3> usedPositions)
