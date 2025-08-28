@@ -655,7 +655,8 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 0388ddbd2e759354c8a1deeb91c28af5, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
@@ -3121,7 +3122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dddcdb2256577442ba20894127e7549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joystick: {fileID: 1789775381}
+  joystick: {fileID: 1948340648}
   gravityScale: 2
   rotationSpeed: 10
   dashButton: {fileID: 1464841815}
@@ -3250,7 +3251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af66833a756e8f44c9d9088c45648a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bombPrefab: {fileID: 7114652297688444540, guid: 459e9e8e0d80aee48bcfc44429e27ab3, type: 3}
+  bombPrefab: {fileID: 6884366404448989457, guid: 459e9e8e0d80aee48bcfc44429e27ab3, type: 3}
   firePoint: {fileID: 279677368}
   throwForce: 15
 --- !u!114 &958306563
@@ -3416,17 +3417,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
   m_PrefabInstance: {fileID: 124689047}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1047468760 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
-  m_PrefabInstance: {fileID: 124689047}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047468758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1047468763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3439,7 +3429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344d1529d8624a4cbbb1b396999c691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joystickGun: {fileID: 1047468760}
+  joystickGun: {fileID: 1047468767}
   player: {fileID: 958306555}
   firePoint: {fileID: 279677368}
   bulletPrefab: {fileID: 8129674459754788520, guid: f02f83bea0c9c854e807f596ed033f17, type: 3}
@@ -3466,6 +3456,17 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1047468767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 124689047}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047468758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1081468549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5925,17 +5926,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
   m_PrefabInstance: {fileID: 1847725746}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1789775381 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
-  m_PrefabInstance: {fileID: 1847725746}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1797919211
 GameObject:
   m_ObjectHideFlags: 0
@@ -6423,7 +6413,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: JoystickMove
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6891,6 +6882,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1917239978}
   m_CullTransparentMesh: 1
+--- !u!114 &1948340648 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 1847725746}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1971134392
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,6 +6,13 @@ public class Bomb : MonoBehaviour
     public GameObject explosionEffect;
     private GameObject marker;
 
+    public float damage;
+
+    public void SetDamage(float dmg)
+    {
+        damage = dmg;
+    }
+
     public void SetMarker(GameObject markerObj)
     {
         marker = markerObj;
@@ -13,11 +20,21 @@ public class Bomb : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Ground") || collision.collider.CompareTag("Wall"))
+        if (collision.collider.CompareTag("Player"))
         {
+            HPPlayer ph = collision.gameObject.GetComponent<HPPlayer>();
+            if (ph != null)
+            {
+                ph.TakeDamage(damage);
+            }
             if (marker != null) Destroy(marker);
             Destroy(gameObject);
             //Explode();
+        }
+        else
+        {
+            if (marker != null) Destroy(marker);
+            Destroy(gameObject);
         }
     }
 
