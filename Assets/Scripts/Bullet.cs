@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     }
 
 
-private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -39,9 +39,6 @@ private void OnTriggerEnter(Collider other)
                 GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
                 Destroy(effect, 1f);
             }
-
-            Destroy(gameObject);
         }
     }
-
 }
