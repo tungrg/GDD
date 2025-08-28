@@ -42,4 +42,10 @@ public class HPPlayer : MonoBehaviour
         if (hpText != null)
             hpText.text = playerStats.currentHP + "/" + playerStats.maxHP;
     }
+
+    public void TakeDamage(float damage)
+    {
+        if (playerStats == null) return;
+        playerStats.TakeDamage(damage);
+    }
 }

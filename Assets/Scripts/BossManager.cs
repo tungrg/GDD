@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class BossManager : BossBase
@@ -9,140 +10,135 @@ public class BossManager : BossBase
     public Transform firePoint;
 
     [Header("Movement Settings")]
-    public float moveDistance;
+    public float moveRadius = 5f;
+    public float waitAtPoint = 1f;
 
     [Header("Attack Settings")]
     public float fireForce = 20f;
-    public float moveDuration = 2f;
     public float waitBeforeShoot = 1f;
-
-    private bool isMoving = false;
+    private bool gameStarted = false;
 
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
 
+    private NavMeshAgent agent;
 
     private void Start()
     {
         bossData.ResetRuntimeStats();
+
         if (player == null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
         }
+
         if (Data != null)
         {
-            moveDistance = Data.speed;
             CurrentHealth = Data.health;
         }
-        StartCoroutine(BossBehaviorLoop());
+
+        // lấy agent
+        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            agent = gameObject.AddComponent<NavMeshAgent>();
+        }
+    }
+
+    public void StartBossBattle()
+    {
+        if (!gameStarted)
+        {
+            gameStarted = true;
+            StartCoroutine(BossBehaviorLoop());
+        }
     }
 
     private IEnumerator BossBehaviorLoop()
     {
         yield return new WaitForSeconds(3f);
+
         if (Data != null)
         {
             foreach (var skill in Data.skills)
             {
-                if (skill != null)
+                if (skill != null && !(skill is SkillClone)) // bỏ qua clone
                 {
                     skill.StartSkill(this);
                 }
             }
         }
-        while (true)
-        {
-            yield return MoveRandom();
-            Debug.Log("FirePoint Position: " + firePoint.position);
 
-            yield return new WaitForSeconds(waitBeforeShoot);
+        while (gameStarted)
+        {
+            Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
+            agent.SetDestination(destination);
+
+            while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(waitAtPoint);
 
             ShootAtPlayer();
+            yield return new WaitForSeconds(waitBeforeShoot);
         }
     }
 
-    private IEnumerator MoveRandom()
+    private Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
     {
-        isMoving = true;
-
-        Vector3[] directions = new Vector3[]
+        Vector3 randomPos = center + Random.insideUnitSphere * radius;
+        if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
         {
-        Vector3.left,
-        Vector3.right,
-        Vector3.forward,
-        Vector3.back
-        };
-
-        System.Random rng = new System.Random();
-        for (int i = 0; i < directions.Length; i++)
-        {
-            int swapIndex = rng.Next(i, directions.Length);
-            (directions[i], directions[swapIndex]) = (directions[swapIndex], directions[i]);
+            return hit.position;
         }
-
-        Vector3 targetPos = transform.position;
-        bool found = false;
-
-        foreach (var dir in directions)
-        {
-            if (CanMove(dir))
-            {
-                targetPos = transform.position + dir * moveDistance;
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-        {
-            Debug.Log("Boss bị chặn hết hướng -> đứng yên");
-            isMoving = false;
-            yield break;
-        }
-
-        // Di chuyển tới targetPos
-        float elapsed = 0;
-        Vector3 startPos = transform.position;
-
-        while (elapsed < moveDuration)
-        {
-            transform.position = Vector3.Lerp(startPos, targetPos, elapsed / moveDuration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = targetPos;
-        isMoving = false;
-    }
-
-    private bool CanMove(Vector3 dir)
-    {
-        float checkDistance = moveDistance + 0.5f;
-        float checkRadius = 0.5f;
-
-        return !Physics.SphereCast(transform.position, checkRadius, dir, out RaycastHit hit, checkDistance);
+        return center;
     }
 
     private void ShootAtPlayer()
     {
         if (player == null) return;
 
-        Vector3 dir = (player.position - firePoint.position).normalized; // focus Player
+        Vector3 dir = (player.position - transform.position).normalized;
+        dir.y = 0;
 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
+        // xoay boss
+        if (dir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        }
+
+        Vector3 shootDir = (player.position - firePoint.position);
+        shootDir.y = 0;
+        shootDir.Normalize();
+
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDir));
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.SetDamage(Data.damageAtk);
+        }
 
         if (rb != null)
         {
-            rb.linearVelocity = dir * fireForce;
+#if UNITY_6000_0_OR_NEWER
+            rb.linearVelocity = shootDir * fireForce;
+#else
+            rb.velocity = shootDir * fireForce;
+#endif
         }
     }
+
     public void TakeDamage(float amount)
     {
         CurrentHealth -= amount;
         Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
-        if (!cloneUsed && CurrentHealth <= Data.health * 0.5f) // dưới 50% máu
+
+        if (!cloneUsed && CurrentHealth <= Data.health * 0.5f)
         {
             foreach (var skill in Data.skills)
             {
@@ -153,6 +149,7 @@ public class BossManager : BossBase
                 }
             }
         }
+
         if (CurrentHealth <= 0)
         {
             Die();
