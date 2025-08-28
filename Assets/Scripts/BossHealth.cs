@@ -9,62 +9,62 @@ public class BossHealth : MonoBehaviour
     [Header("UI")]
     public Slider healthSlider;
 
-    private float currentHealth;
+    //private float currentHealth;
 
-    public bool IsDead => currentHealth <= 0;
+    //public bool IsDead => currentHealth <= 0;
 
     void Start()
     {
-        if (bossData != null)
-        {
-            // Lấy máu từ runtime stats
-            currentHealth = bossData.health;
-        }
-        else
-        {
-            Debug.LogWarning("BossData chưa được gắn vào BossHealth!");
-            currentHealth = 100f; // fallback
-        }
+        // if (bossData != null)
+        // {
+        //     // Lấy máu từ runtime stats
+        //     currentHealth = bossData.health;
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("BossData chưa được gắn vào BossHealth!");
+        //     currentHealth = 100f; // fallback
+        // }
 
-        UpdateHealthUI();
+        UpdateHealthUI(bossData.health, bossData.health);
     }
 
-    void UpdateHealthUI()
+    public void UpdateHealthUI(float currentHealth, float maxHealth)
     {
         if (healthSlider != null && bossData != null)
         {
-            healthSlider.maxValue = bossData.health;
+            healthSlider.maxValue = maxHealth;
             healthSlider.value = currentHealth;
         }
     }
 
-    public void TakeDamage(float amount)
-    {
-        if (IsDead) return;
+    // public void TakeDamage(float amount)
+    // {
+    //     if (IsDead) return;
 
-        currentHealth -= amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, bossData.health);
-        UpdateHealthUI();
+    //     currentHealth -= amount;
+    //     currentHealth = Mathf.Clamp(currentHealth, 0, bossData.health);
+    //     UpdateHealthUI();
 
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
+    //     if (currentHealth <= 0)
+    //     {
+    //         Die();
+    //     }
+    // }
 
-    public void Heal(float amount)
-    {
-        if (IsDead) return;
+    // public void Heal(float amount)
+    // {
+    //     if (IsDead) return;
 
-        currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, bossData.health);
-        UpdateHealthUI();
-    }
+    //     currentHealth += amount;
+    //     currentHealth = Mathf.Clamp(currentHealth, 0, bossData.health);
+    //     UpdateHealthUI();
+    // }
 
-    void Die()
-    {
-        Debug.Log("Boss Died");
-        // có thể gọi animation chết, hủy Boss, drop loot...
-        Destroy(gameObject);
-    }
+    // void Die()
+    // {
+    //     Debug.Log("Boss Died");
+    //     // có thể gọi animation chết, hủy Boss, drop loot...
+    //     Destroy(gameObject);
+    // }
 }

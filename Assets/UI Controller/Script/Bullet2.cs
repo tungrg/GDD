@@ -16,24 +16,33 @@ public class Bullet2 : MonoBehaviour
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collision)
     {
-        if (other.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy"))
         {
-            Enemy e = other.GetComponent<Enemy>();
-            if (e != null)
-            {
-                e.TakeDamage(damage); 
 
-                ManaPlayer manaPlayer = FindAnyObjectByType<ManaPlayer>();
-                if (manaPlayer != null)
-                {
-                    manaPlayer.AddMana(10f);
-                }
+            BossManager boss = collision.gameObject.GetComponent<BossManager>();
+            if (boss != null)
+            {
+                boss.TakeDamage(damage);
             }
+
+            BossCloneManager clone = collision.gameObject.GetComponent<BossCloneManager>();
+            if (clone != null)
+            {
+                clone.TakeDamage(damage);
+            }
+
+            ManaPlayer playerMana = FindFirstObjectByType<ManaPlayer>();
+            if (playerMana != null)
+            {
+                playerMana.AddMana(10f);
+            }
+
+
             Destroy(gameObject);
         }
-        else if (other.CompareTag("Map"))
+        else if (collision.CompareTag("Map"))
         {
             Destroy(gameObject);
         }
