@@ -2,66 +2,40 @@
 
 public class Bullet2 : MonoBehaviour
 {
-    [Header("Settings")]
-    public float damage = 10f;
-    public float lifeTime = 5f;
+    public float speed = 10f;
+    public float lifeTime = 2f;
+    public float damage = 0f; 
 
-    private void Start()
+    void Start()
     {
         Destroy(gameObject, lifeTime);
     }
-    void OnTriggerEnter(Collider collision) // Sử dụng OnTriggerEnter thay vì OnCollisionEnter 
+
+    void Update()
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
         {
-
-            BossHealth enemy = collision.gameObject.GetComponent<BossHealth>();
-            if (enemy != null)
+            Enemy e = other.GetComponent<Enemy>();
+            if (e != null)
             {
-                enemy.TakeDamage(damage);
+                e.TakeDamage(damage); 
+
+                ManaPlayer manaPlayer = FindAnyObjectByType<ManaPlayer>();
+                if (manaPlayer != null)
+                {
+                    manaPlayer.AddMana(10f);
+                }
             }
-
-
-            PlayerMana playerMana = FindFirstObjectByType<PlayerMana>();
-            if (playerMana != null)
-            {
-                playerMana.GainMana(10f);
-            }
-
-
             Destroy(gameObject);
         }
-        else if (!collision.gameObject.CompareTag("Player"))
+        else if (other.CompareTag("Map"))
         {
-
             Destroy(gameObject);
         }
     }
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Enemy"))
-    //     {
-
-    //         BossHealth enemy = collision.gameObject.GetComponent<BossHealth>();
-    //         if (enemy != null)
-    //         {
-    //             enemy.TakeDamage(damage);
-    //         }
-
-
-    //         PlayerMana playerMana = FindFirstObjectByType<PlayerMana>();
-    //         if (playerMana != null)
-    //         {
-    //             playerMana.GainMana(10f);
-    //         }
-
-
-    //         Destroy(gameObject);
-    //     }
-    //     else if (!collision.gameObject.CompareTag("Player"))
-    //     {
-
-    //         Destroy(gameObject);
-    //     }
-    // }
 }
