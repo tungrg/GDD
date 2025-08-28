@@ -15,12 +15,17 @@ public class Bullet2 : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
 
-            BossHealth enemy = collision.gameObject.GetComponent<BossHealth>();
-            if (enemy != null)
+            BossManager boss = collision.gameObject.GetComponent<BossManager>();
+            if (boss != null)
             {
-                enemy.TakeDamage(damage);
+                boss.TakeDamage(damage);
             }
 
+            BossCloneManager clone = collision.gameObject.GetComponent<BossCloneManager>();
+            if (clone != null)
+            {
+                clone.TakeDamage(damage);
+            }
 
             PlayerMana playerMana = FindFirstObjectByType<PlayerMana>();
             if (playerMana != null)
