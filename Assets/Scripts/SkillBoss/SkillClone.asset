@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: SkillClone
   cooldown: 0
-  clonePrefab: {fileID: 4394989374170366566, guid: 5f87a24e9cec18c42a5f2a0a24470b17, type: 3}
+  clonePrefab: {fileID: 1132415578243645973, guid: 5d64f2372f33b314681c0eb94569009e, type: 3}
   cloneCount: 1
   spawnRadius: 3

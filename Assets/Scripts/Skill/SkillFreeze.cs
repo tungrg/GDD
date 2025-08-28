@@ -30,29 +30,25 @@ public class SkillFreeze : SkillBoss
         }
 
         // --- Disable các hành động ---
-        PlayerController pc = player.GetComponent<PlayerController>();
+        PlayerMove pc = player.GetComponent<PlayerMove>();
         if (pc != null) pc.enabled = false;
 
-        GunJoystickController gun = Object.FindFirstObjectByType<GunJoystickController>();
+        JoystickGun gun = Object.FindFirstObjectByType<JoystickGun>();
         if (gun != null) gun.enabled = false;
 
-        UltimateButton ultiBtn = Object.FindFirstObjectByType<UltimateButton>();
-        if (ultiBtn != null) ultiBtn.enabled = false;
-
-        UltimateSelector ultiSel = Object.FindFirstObjectByType<UltimateSelector>();
+        UltimateManager ultiSel = Object.FindFirstObjectByType<UltimateManager>();
         if (ultiSel != null) ultiSel.enabled = false;
 
         player.SetParent(iceBlock.transform);
 
-        boss.StartCoroutine(UnfreezeAfterDelay(player, pc, gun, ultiBtn, ultiSel, rb, iceBlock));
+        boss.StartCoroutine(UnfreezeAfterDelay(player, pc, gun, ultiSel, rb, iceBlock));
     }
 
     private IEnumerator UnfreezeAfterDelay(
         Transform player,
-        PlayerController pc,
-        GunJoystickController gun,
-        UltimateButton ultiBtn,
-        UltimateSelector ultiSel,
+        PlayerMove pc,
+        JoystickGun gun,
+        UltimateManager ultiSel,
         Rigidbody rb,
         GameObject iceBlock)
     {
@@ -61,7 +57,6 @@ public class SkillFreeze : SkillBoss
         // Enable lại các hành động       
         if (pc != null) pc.enabled = true;
         if (gun != null) gun.enabled = true;
-        if (ultiBtn != null) ultiBtn.enabled = true;
         if (ultiSel != null) ultiSel.enabled = true;
 
         if (rb != null)
