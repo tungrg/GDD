@@ -14,11 +14,11 @@ public class Bullet : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            HPPlayer ph = collision.gameObject.GetComponent<HPPlayer>();
+            HPPlayer ph = other.GetComponent<HPPlayer>();
             if (ph != null)
             {
                 ph.TakeDamage(damage);
@@ -27,18 +27,18 @@ public class Bullet : MonoBehaviour
             if (hitEffectPrefab != null)
             {
                 GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
-                Destroy(effect, 1f); // xóa effect sau 2s
+                Destroy(effect, 1f);
             }
 
-            Debug.Log("hit");
             Destroy(gameObject);
         }
-        else
+        else if (!other.CompareTag("Enemy") && !other.isTrigger) // tránh phá chính boss/clone
         {
-            GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(effect, 1f);
-            Destroy(gameObject);
+            if (hitEffectPrefab != null)
+            {
+                GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+                Destroy(effect, 1f);
+            }
         }
     }
-
 }
