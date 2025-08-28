@@ -34,16 +34,6 @@ public class BossManager : BossBase
         {
             moveDistance = Data.speed;
             CurrentHealth = Data.health;
-
-            // Khởi động từng skill (chúng tự lo cooldown riêng)
-            foreach (var skill in Data.skills)
-            {
-                if (skill != null && !(skill is SkillClone)) // bỏ qua clone
-                {
-                    skill.StartSkill(this);
-                }
-            }
-
         }
         StartCoroutine(BossBehaviorLoop());
     }
@@ -61,20 +51,10 @@ public class BossManager : BossBase
                 }
             }
         }
-        if (Data != null)
-        {
-            foreach (var skill in Data.skills)
-            {
-                if (skill != null)
-                {
-                    skill.StartSkill(this);
-                }
-            }
-        }
-
         while (true)
         {
             yield return MoveRandom();
+            Debug.Log("FirePoint Position: " + firePoint.position);
 
             yield return new WaitForSeconds(waitBeforeShoot);
 
@@ -85,17 +65,43 @@ public class BossManager : BossBase
     private IEnumerator MoveRandom()
     {
         isMoving = true;
-        int dir = Random.Range(0, 2);
-        Vector3 targetPos = transform.position;
 
-        switch (dir)
+        Vector3[] directions = new Vector3[]
         {
-            case 0: targetPos += Vector3.left * moveDistance; break;
-            case 1: targetPos += Vector3.right * moveDistance; break;
-                //case 2: targetPos += Vector3.forward * moveDistance; break;
-                //case 3: targetPos += Vector3.back * moveDistance; break;
+        Vector3.left,
+        Vector3.right,
+        Vector3.forward,
+        Vector3.back
+        };
+
+        System.Random rng = new System.Random();
+        for (int i = 0; i < directions.Length; i++)
+        {
+            int swapIndex = rng.Next(i, directions.Length);
+            (directions[i], directions[swapIndex]) = (directions[swapIndex], directions[i]);
         }
 
+        Vector3 targetPos = transform.position;
+        bool found = false;
+
+        foreach (var dir in directions)
+        {
+            if (CanMove(dir))
+            {
+                targetPos = transform.position + dir * moveDistance;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            Debug.Log("Boss bị chặn hết hướng -> đứng yên");
+            isMoving = false;
+            yield break;
+        }
+
+        // Di chuyển tới targetPos
         float elapsed = 0;
         Vector3 startPos = transform.position;
 
@@ -108,6 +114,14 @@ public class BossManager : BossBase
 
         transform.position = targetPos;
         isMoving = false;
+    }
+
+    private bool CanMove(Vector3 dir)
+    {
+        float checkDistance = moveDistance + 0.5f;
+        float checkRadius = 0.5f;
+
+        return !Physics.SphereCast(transform.position, checkRadius, dir, out RaycastHit hit, checkDistance);
     }
 
     private void ShootAtPlayer()
