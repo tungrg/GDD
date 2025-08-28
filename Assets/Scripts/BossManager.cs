@@ -134,27 +134,37 @@ public class BossManager : BossBase
     }
 
     public void TakeDamage(float amount)
-    {
-        CurrentHealth -= amount;
-        Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
+{
+    CurrentHealth -= amount;
+    Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
 
-        if (!cloneUsed && CurrentHealth <= Data.health * 0.5f)
+    // cập nhật UI
+    BossHealth bossHealth = GetComponent<BossHealth>();
+    if (bossHealth != null)
+    {
+        bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+    }
+
+    // kích hoạt clone skill khi còn 50%
+    if (!cloneUsed && CurrentHealth <= Data.health * 0.5f)
+    {
+        foreach (var skill in Data.skills)
         {
-            foreach (var skill in Data.skills)
+            if (skill is SkillClone cloneSkill)
             {
-                if (skill is SkillClone cloneSkill)
-                {
-                    cloneSkill.Use(this);
-                    cloneUsed = true;
-                }
+                cloneSkill.Use(this);
+                cloneUsed = true;
             }
         }
-
-        if (CurrentHealth <= 0)
-        {
-            Die();
-        }
     }
+
+    // chết
+    if (CurrentHealth <= 0)
+    {
+        Die();
+    }
+}
+
 
     private void Die()
     {

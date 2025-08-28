@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: SpreadShot
   cooldown: 5
-  bulletPrefab: {fileID: 358111301209145196, guid: f7bc8d52609b51249af3b669c60adcce, type: 3}
+  bulletPrefab: {fileID: 4220850484020903645, guid: 7c8db6c6f53e17a428899b025123a2a1, type: 3}
   bulletCount: 5
   spreadAngle: 30
   bulletForce: 15

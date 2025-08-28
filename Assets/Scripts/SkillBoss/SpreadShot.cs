@@ -21,6 +21,12 @@ public class SpreadShot : SkillBoss
             Quaternion rot = Quaternion.AngleAxis(angle, Vector3.up) * Quaternion.LookRotation(dir);
 
             GameObject bullet = Instantiate(bulletPrefab, boss.firePoint.position, rot);
+            Bullet b = bullet.GetComponent<Bullet>();
+            if (b != null)
+            {
+                b.SetDamage(boss.bossData.damageAtk);
+
+            }
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
             if (rb != null)
             {
