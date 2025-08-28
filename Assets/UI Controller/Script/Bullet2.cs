@@ -2,39 +2,48 @@
 
 public class Bullet2 : MonoBehaviour
 {
-    [Header("Settings")]
-    public float damage = 10f;
-    public float lifeTime = 5f;
+    public float speed = 10f;
+    public float lifeTime = 2f;
+    public float damage = 0f; 
 
-    private void Start()
+    void Start()
     {
         Destroy(gameObject, lifeTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void Update()
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.CompareTag("Enemy"))
         {
 
-            BossHealth enemy = collision.gameObject.GetComponent<BossHealth>();
-            if (enemy != null)
+            BossManager boss = collision.gameObject.GetComponent<BossManager>();
+            if (boss != null)
             {
-                enemy.TakeDamage(damage);
+                boss.TakeDamage(damage);
             }
 
+            BossCloneManager clone = collision.gameObject.GetComponent<BossCloneManager>();
+            if (clone != null)
+            {
+                clone.TakeDamage(damage);
+            }
 
-            PlayerMana playerMana = FindFirstObjectByType<PlayerMana>();
+            ManaPlayer playerMana = FindFirstObjectByType<ManaPlayer>();
             if (playerMana != null)
             {
-                playerMana.GainMana(10f);
+                playerMana.AddMana(10f);
             }
 
 
             Destroy(gameObject);
         }
-        else if (!collision.gameObject.CompareTag("Player"))
+        else if (collision.CompareTag("Map"))
         {
-
             Destroy(gameObject);
         }
     }

@@ -22,7 +22,7 @@ public class Bomb : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            PlayerHealth ph = collision.gameObject.GetComponent<PlayerHealth>();
+            HPPlayer ph = collision.gameObject.GetComponent<HPPlayer>();
             if (ph != null)
             {
                 ph.TakeDamage(damage);

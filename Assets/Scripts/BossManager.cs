@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class BossManager : BossBase
@@ -9,34 +10,42 @@ public class BossManager : BossBase
     public Transform firePoint;
 
     [Header("Movement Settings")]
-    public float moveDistance;
-    public float rotationSpeed = 5f;
+    public float moveRadius = 5f;
+    public float waitAtPoint = 1f;
 
     [Header("Attack Settings")]
     public float fireForce = 20f;
-    public float moveDuration = 2f;
     public float waitBeforeShoot = 1f;
     private bool gameStarted = false;
-    public bool isMoving = false;
 
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
 
+    private NavMeshAgent agent;
+
     private void Start()
     {
         bossData.ResetRuntimeStats();
+
         if (player == null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
         }
+
         if (Data != null)
         {
-            moveDistance = Data.speed;
             CurrentHealth = Data.health;
         }
 
+        // lấy agent
+        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            agent = gameObject.AddComponent<NavMeshAgent>();
+        }
     }
+
     public void StartBossBattle()
     {
         if (!gameStarted)
@@ -49,95 +58,43 @@ public class BossManager : BossBase
     private IEnumerator BossBehaviorLoop()
     {
         yield return new WaitForSeconds(3f);
+
         if (Data != null)
         {
             foreach (var skill in Data.skills)
             {
-                if (skill != null)
+                if (skill != null && !(skill is SkillClone)) // bỏ qua clone
                 {
                     skill.StartSkill(this);
                 }
             }
         }
+
         while (gameStarted)
         {
-            yield return MoveRandom();
-            Debug.Log("FirePoint Position: " + firePoint.position);
+            Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
+            agent.SetDestination(destination);
+
+            while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(waitAtPoint);
+
             ShootAtPlayer();
             yield return new WaitForSeconds(waitBeforeShoot);
         }
     }
 
-    private IEnumerator MoveRandom()
+    private Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
     {
-        isMoving = true;
-
-        Vector3[] directions = new Vector3[]
+        Vector3 randomPos = center + Random.insideUnitSphere * radius;
+        if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
         {
-            Vector3.left,
-            Vector3.right
-            // Vector3.forward,
-            // Vector3.back
-        };
-
-        System.Random rng = new System.Random();
-        for (int i = 0; i < directions.Length; i++)
-        {
-            int swapIndex = rng.Next(i, directions.Length);
-            (directions[i], directions[swapIndex]) = (directions[swapIndex], directions[i]);
+            return hit.position;
         }
-
-        Vector3 targetPos = transform.position;
-        Vector3 moveDir = Vector3.zero;
-        bool found = false;
-
-        foreach (var dir in directions)
-        {
-            if (CanMove(dir))
-            {
-                targetPos = transform.position + dir * moveDistance;
-                moveDir = dir;
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-        {
-            Debug.Log("Boss bị chặn hết hướng -> đứng yên");
-            isMoving = false;
-            yield break;
-        }
-
-        // Di chuyển tới targetPos
-        float elapsed = 0;
-        Vector3 startPos = transform.position;
-
-        while (elapsed < moveDuration)
-        {
-            transform.position = Vector3.Lerp(startPos, targetPos, elapsed / moveDuration);
-
-            // xoay về hướng di chuyển
-            if (moveDir != Vector3.zero)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(moveDir, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
-            }
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = targetPos;
-        isMoving = false;
-    }
-
-    private bool CanMove(Vector3 dir)
-    {
-        float checkDistance = moveDistance + 0.5f;
-        float checkRadius = 0.5f;
-
-        return !Physics.SphereCast(transform.position, checkRadius, dir, out RaycastHit hit, checkDistance);
+        return center;
     }
 
     private void ShootAtPlayer()
@@ -147,14 +104,14 @@ public class BossManager : BossBase
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
 
-        // Boss xoay ngay lập tức
+        // xoay boss
         if (dir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
         }
 
         Vector3 shootDir = (player.position - firePoint.position);
-        shootDir.y = 0; // bỏ thành phần Y
+        shootDir.y = 0;
         shootDir.Normalize();
 
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDir));
@@ -166,37 +123,48 @@ public class BossManager : BossBase
             bulletScript.SetDamage(Data.damageAtk);
         }
 
-
         if (rb != null)
         {
 #if UNITY_6000_0_OR_NEWER
             rb.linearVelocity = shootDir * fireForce;
 #else
-        rb.velocity = shootDir * fireForce;
+            rb.velocity = shootDir * fireForce;
 #endif
         }
     }
 
     public void TakeDamage(float amount)
+{
+    CurrentHealth -= amount;
+    Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
+
+    // cập nhật UI
+    BossHealth bossHealth = GetComponent<BossHealth>();
+    if (bossHealth != null)
     {
-        CurrentHealth -= amount;
-        Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
-        if (!cloneUsed && CurrentHealth <= Data.health * 0.5f) // dưới 50% máu
+        bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+    }
+
+    // kích hoạt clone skill khi còn 50%
+    if (!cloneUsed && CurrentHealth <= Data.health * 0.5f)
+    {
+        foreach (var skill in Data.skills)
         {
-            foreach (var skill in Data.skills)
+            if (skill is SkillClone cloneSkill)
             {
-                if (skill is SkillClone cloneSkill)
-                {
-                    cloneSkill.Use(this);
-                    cloneUsed = true;
-                }
+                cloneSkill.Use(this);
+                cloneUsed = true;
             }
         }
-        if (CurrentHealth <= 0)
-        {
-            Die();
-        }
     }
+
+    // chết
+    if (CurrentHealth <= 0)
+    {
+        Die();
+    }
+}
+
 
     private void Die()
     {
