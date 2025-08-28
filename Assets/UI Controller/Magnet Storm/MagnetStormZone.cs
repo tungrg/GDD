@@ -3,45 +3,36 @@ using System.Collections;
 
 public class MagnetStormZone : MonoBehaviour
 {
-    public float duration = 20f;        // tồn tại 20 giây
-    public float tickInterval = 1.5f;   // mỗi 1.5s
-    public int damagePerTick = 5;
-    public float slowAmount = 0.5f;     // giảm tốc enemy 50%
+    [Header("Settings")]
+    public float duration = 20f;      
+    public float damageInterval = 2f; 
+    public float damage = 20f;       
+    public float radius = 5f;        
+    public LayerMask enemyLayer;     
 
     private void Start()
     {
-        StartCoroutine(StormEffect());
+        StartCoroutine(ZoneEffect());
+        Destroy(gameObject, duration); 
     }
 
-    IEnumerator StormEffect()
+    IEnumerator ZoneEffect()
     {
-        float elapsed = 0f;
-        while (elapsed < duration)
+        int ticks = Mathf.CeilToInt(duration / damageInterval);
+
+        for (int i = 0; i < ticks; i++)
         {
-            Collider[] hits = Physics.OverlapSphere(transform.position, 5f); // bán kính vùng
+            Collider[] hits = Physics.OverlapSphere(transform.position, radius, enemyLayer);
             foreach (Collider hit in hits)
             {
-                if (hit.CompareTag("Enemy"))
+                Enemy e = hit.GetComponent<Enemy>();
+                if (e != null)
                 {
-                    Enemy1 enemy = hit.GetComponent<Enemy1>();
-                    if (enemy != null)
-                    {
-                        enemy.TakeDamage(damagePerTick);
-                        enemy.Stun(0.5f);   // choáng 0.5s
-                        enemy.Slow(slowAmount, tickInterval);
-                    }
+                    e.TakeDamage(damage);
+                    e.Stun(2f);
                 }
             }
-            yield return new WaitForSeconds(tickInterval);
-            elapsed += tickInterval;
+            yield return new WaitForSeconds(damageInterval);
         }
-
-        Destroy(gameObject); // vùng biến mất
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, 5f);
     }
 }
