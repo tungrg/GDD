@@ -48,6 +48,7 @@ public class BossManager : BossBase
 
     public void StartBossBattle()
     {
+        Debug.LogWarning("⚠ StartBossBattle() HAS BEEN CALLED", this);
         if (!gameStarted)
         {
             gameStarted = true;
