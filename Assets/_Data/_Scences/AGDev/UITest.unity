@@ -815,11 +815,25 @@ PrefabInstance:
       value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 9208060076173872538, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 811.5358
+      objectReference: {fileID: 0}
+    - target: {fileID: 9208060076173872538, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9208060076173872538, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 39
+      objectReference: {fileID: 0}
+    - target: {fileID: 9208060076173872538, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000008583069
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5381838447042285683, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
+    - {fileID: 7521749715221599077, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d8f96c95ee12417783757ce59f9262f, type: 3}
