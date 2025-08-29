@@ -18,7 +18,8 @@ public class UltimateManager : MonoBehaviour
     public GameObject skillSelectPanel;
     public Image selectedSkillIcon;
     public Button ultimateButton;
-
+    public GameObject hpBoss;
+    
     [Header("Cooldown")]
     public float ultimateCooldown = 20f;
 
@@ -54,6 +55,11 @@ public class UltimateManager : MonoBehaviour
         ultimateButton.interactable = true;
         skillSelectPanel.SetActive(false);
         Debug.Log("Đã chọn kỹ năng: " + currentSkill.skillName);
+        BossManager boss = FindFirstObjectByType<BossManager>();
+        if (boss != null)
+            boss.StartBossBattle();
+        if (hpBoss != null)
+            hpBoss.SetActive(true);
     }
 
     void UseUltimate()
