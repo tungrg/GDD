@@ -43,7 +43,7 @@ public class BossCloneManager : MonoBehaviour
         if (agent == null) agent = gameObject.AddComponent<NavMeshAgent>();
 
         // tìm boss để né
-        BossManager bm = FindObjectOfType<BossManager>();
+        BossManager bm = FindAnyObjectByType<BossManager>();
         if (bm != null) boss = bm.transform;
 
         // bắt đầu hành vi clone
