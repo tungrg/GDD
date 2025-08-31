@@ -24,6 +24,7 @@ public class BossCloneManager : MonoBehaviour
     private NavMeshAgent agent;
     private bool isAlive = true;
     private Transform boss; // để clone né boss
+    public Animator animator;
 
     private void Start()
     {
@@ -48,6 +49,7 @@ public class BossCloneManager : MonoBehaviour
 
         // bắt đầu hành vi clone
         StartCoroutine(CloneBehaviorLoop());
+        animator = GetComponent<Animator>();
     }
 
     private IEnumerator CloneBehaviorLoop()
