@@ -61,7 +61,8 @@ public class BossCloneManager : MonoBehaviour
             agent.SetDestination(destination);
 
             // đợi đến khi tới nơi
-            while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+            while (agent != null && agent.isOnNavMesh &&
+      (agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
             {
                 yield return null;
             }
@@ -138,7 +139,7 @@ public class BossCloneManager : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         isAlive = false;
         Debug.Log("[Clone Died]");
