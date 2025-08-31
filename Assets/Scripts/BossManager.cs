@@ -16,7 +16,7 @@ public class BossManager : BossBase
     [Header("Attack Settings")]
     public float fireForce = 20f;
     public float waitBeforeShoot = 1f;
-    private bool gameStarted = false;
+    public bool gameStarted = false;
 
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
@@ -174,22 +174,36 @@ public class BossManager : BossBase
             Die();
         }
     }
-
-    private void Die()
+private void Die()
+{
+    BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
+    if (clone != null)
     {
-        BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
-        if (clone != null)
-        {
-            clone.Die();
-        }
+        clone.Die();
+    }
+    hpBoss.SetActive(false);
 
-        //if (animator != null) animator.SetTrigger("die");
-        Destroy(gameObject, 2f);
-
-        uiPanel.SetActive(true);
-        hpBoss.SetActive(false);
-        Time.timeScale = 0;
+    gameStarted = false;
+    StopAllCoroutines();
+    if (agent != null)
+    {
+        agent.isStopped = true;
+        agent.ResetPath();
+        agent.velocity = Vector3.zero;
     }
 
+    if (animator != null) 
+        animator.SetTrigger("die");
 
+    StartCoroutine(ShowUIAfterDelay());
+}
+
+private IEnumerator ShowUIAfterDelay()
+{
+    yield return new WaitForSeconds(2f); 
+
+    uiPanel.SetActive(true);
+
+    Time.timeScale = 0; 
+}
 }
