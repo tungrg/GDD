@@ -40,5 +40,13 @@ public class Bullet : MonoBehaviour
                 Destroy(effect, 1f);
             }
         }
+        if (hitEffectPrefab != null)
+        {
+            GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, 1f);
+        }
+
+        Destroy(gameObject);
+
     }
 }

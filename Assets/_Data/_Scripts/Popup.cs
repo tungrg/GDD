@@ -4,6 +4,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Ricimi
@@ -71,6 +72,23 @@ namespace Ricimi
             var image = m_background.GetComponent<Image>();
             if (image != null)
                 image.CrossFadeAlpha(0.0f, 0.2f, false);
+        }
+        public void PlayAgain()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        public void LoadScene(string sceneName)
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(sceneName);
+        }
+
+        public void SceneMenu()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("Level");
         }
     }
 }
