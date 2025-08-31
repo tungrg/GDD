@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fee0fc00f8351547ac6a2143d152ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zonePrefab: {fileID: 1015630816426645864, guid: 37ffed3ff19392a45859f1c0fe9cc686, type: 3}
+  zonePrefab: {fileID: 7713509824923762171, guid: 250eb06bffd73454aa9b7ab5ba16f262, type: 3}
   destroyDelay: 0.1
 --- !u!54 &-5152786964227366005
 Rigidbody:
