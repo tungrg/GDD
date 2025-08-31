@@ -16,6 +16,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("BulletEnemy")) 
+        {
+            return;
+        }
         if (other.CompareTag("Player"))
         {
             HPPlayer ph = other.GetComponent<HPPlayer>();
