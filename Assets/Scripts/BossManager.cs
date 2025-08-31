@@ -21,7 +21,11 @@ public class BossManager : BossBase
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
 
+    [Header("UI")]
+    public GameObject uiPanel;
+    public GameObject hpBoss;
     private NavMeshAgent agent;
+    public Animator animator;
 
     private void Start()
     {
@@ -38,14 +42,16 @@ public class BossManager : BossBase
             CurrentHealth = Data.health;
         }
 
-        // lấy agent
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
         {
             agent = gameObject.AddComponent<NavMeshAgent>();
         }
-    }
+        if (uiPanel != null)
+            uiPanel.SetActive(false);
+        animator = GetComponent<Animator>();
 
+    }
     public void StartBossBattle()
     {
         Debug.LogWarning("⚠ StartBossBattle() HAS BEEN CALLED", this);
@@ -73,6 +79,8 @@ public class BossManager : BossBase
 
         while (gameStarted)
         {
+            //if (animator != null) animator.SetBool("isMoving", true);
+
             Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
             agent.SetDestination(destination);
 
@@ -81,8 +89,10 @@ public class BossManager : BossBase
                 yield return null;
             }
 
+            //if (animator != null) animator.SetBool("isMoving", false);
             yield return new WaitForSeconds(waitAtPoint);
 
+            //if (animator != null) animator.SetTrigger("attack");
             ShootAtPlayer();
             yield return new WaitForSeconds(waitBeforeShoot);
         }
@@ -105,7 +115,6 @@ public class BossManager : BossBase
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
 
-        // xoay boss
         if (dir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
@@ -135,40 +144,52 @@ public class BossManager : BossBase
     }
 
     public void TakeDamage(float amount)
-{
-    CurrentHealth -= amount;
-    Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
-
-    // cập nhật UI
-    BossHealth bossHealth = GetComponent<BossHealth>();
-    if (bossHealth != null)
     {
-        bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
-    }
+        CurrentHealth -= amount;
+        Debug.Log($"Boss HP: {CurrentHealth}/{Data.health}");
 
-    // kích hoạt clone skill khi còn 50%
-    if (!cloneUsed && CurrentHealth <= Data.health * 0.5f)
-    {
-        foreach (var skill in Data.skills)
+        BossHealth bossHealth = GetComponent<BossHealth>();
+        if (bossHealth != null)
         {
-            if (skill is SkillClone cloneSkill)
+            bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+        }
+
+        if (animator != null) animator.SetTrigger("hit");
+
+        // kích hoạt clone skill khi còn 50%
+        if (!cloneUsed && CurrentHealth <= Data.health * 0.5f)
+        {
+            foreach (var skill in Data.skills)
             {
-                cloneSkill.Use(this);
-                cloneUsed = true;
+                if (skill is SkillClone cloneSkill)
+                {
+                    cloneSkill.Use(this);
+                    cloneUsed = true;
+                }
             }
+        }
+
+        if (CurrentHealth <= 0)
+        {
+            Die();
         }
     }
 
-    // chết
-    if (CurrentHealth <= 0)
-    {
-        Die();
-    }
-}
-
-
     private void Die()
     {
-        Destroy(gameObject);
+        BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
+        if (clone != null)
+        {
+            clone.Die();
+        }
+
+        //if (animator != null) animator.SetTrigger("die");
+        Destroy(gameObject, 2f);
+
+        uiPanel.SetActive(true);
+        hpBoss.SetActive(false);
+        Time.timeScale = 0;
     }
+
+
 }
