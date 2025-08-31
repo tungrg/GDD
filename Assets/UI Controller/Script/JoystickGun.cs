@@ -31,7 +31,6 @@ public class JoystickGun : MonoBehaviour
     [Header("Ultimate")]
     public bool isUltimateMode = false;
     public UltimateType currentUltimate = UltimateType.None;
-    private float ultimateEndTime = 0f; // thời gian kết thúc ulti (Railgun)
 
     private Vector3 lastDirection;
     private bool isAiming = false;
@@ -66,16 +65,6 @@ public class JoystickGun : MonoBehaviour
         float v = joystickGun.Vertical;
         Vector3 dir = new Vector3(h, 0, v);
 
-        // Kiểm tra nếu ulti Railgun đã hết thời gian thì tắt
-        if (currentUltimate == UltimateType.RailgunBurst && isUltimateMode)
-        {
-            if (Time.time >= ultimateEndTime)
-            {
-                SetUltimateMode(false, UltimateType.None);
-                FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
-            }
-        }
-
         if (dir.magnitude > 0.1f)
         {
             // Đang kéo joystick
@@ -103,7 +92,8 @@ public class JoystickGun : MonoBehaviour
                         case UltimateType.MagnetStorm:
                             MagnetStormSkill ms = FindAnyObjectByType<MagnetStormSkill>();
                             if (ms != null) ms.Cast(lastDirection);
-                            // MagnetStorm chỉ bắn 1 lần → reset ulti
+
+                            // chỉ bắn 1 lần → reset ulti
                             SetUltimateMode(false, UltimateType.None);
                             FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
                             break;
@@ -111,7 +101,10 @@ public class JoystickGun : MonoBehaviour
                         case UltimateType.RailgunBurst:
                             RailgunBurstSkill rb = FindAnyObjectByType<RailgunBurstSkill>();
                             if (rb != null) rb.Cast(firePoint.position, lastDirection);
-                            // KHÔNG reset ulti, vì Railgun kéo dài 20s
+
+                            // giống MagnetStorm → bắn 1 lần rồi reset
+                            SetUltimateMode(false, UltimateType.None);
+                            FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
                             break;
                     }
 
@@ -182,9 +175,6 @@ public class JoystickGun : MonoBehaviour
     {
         isUltimateMode = active;
         currentUltimate = ultimate;
-
-        if (active && ultimate == UltimateType.RailgunBurst && duration > 0f)
-            ultimateEndTime = Time.time + duration;
 
         if (joystickIcon == null) return;
 
