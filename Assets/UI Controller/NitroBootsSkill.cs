@@ -3,10 +3,16 @@ using System.Collections;
 
 public class NitroBootsSkill : MonoBehaviour
 {
+    [Header("Skill Settings")]
     public float duration = 20f;
     public float moveSpeedBoost = 2f;
-    public float fireCooldownOverride = 0.2f; // bắn nhanh hơn
+    public float fireCooldownOverride = 0.2f;
     public float healAmount = 200f;
+
+    [Header("Visual Effect")]
+    public GameObject nitroEffectPrefab;   
+    public Vector3 effectOffset = new Vector3(0, 0.5f, -1f);
+    private GameObject activeEffect;
 
     private PlayerStats stats;
     private float originalMoveSpeed;
@@ -33,6 +39,17 @@ public class NitroBootsSkill : MonoBehaviour
         stats.currentMoveSpeed = stats.baseMoveSpeed + moveSpeedBoost;
         stats.currentFireCooldown = fireCooldownOverride;
 
+        if (nitroEffectPrefab != null && activeEffect == null)
+        {
+            Vector3 worldOffset = stats.transform.TransformDirection(effectOffset);
+            activeEffect = Instantiate(
+                nitroEffectPrefab,
+                stats.transform.position + worldOffset,
+                Quaternion.identity,
+                stats.transform
+            );
+        }
+
         StartCoroutine(DurationCoroutine(manager));
     }
 
@@ -42,10 +59,15 @@ public class NitroBootsSkill : MonoBehaviour
 
         stats.currentMoveSpeed = stats.baseMoveSpeed;
         stats.currentFireCooldown = stats.baseFireCooldown;
-
         isActive = false;
 
+        if (activeEffect != null)
+        {
+            Destroy(activeEffect);
+            activeEffect = null;
+        }
+
         if (manager != null)
-            manager.OnSkillEnd(20f);
+            manager.OnSkillEnd(duration);
     }
 }
