@@ -3,9 +3,14 @@ using System.Collections;
 
 public class IronArmorSkill : MonoBehaviour
 {
+    [Header("Skill Settings")]
     public float duration = 20f;
     public float armorBonus = 100f;
     public float speedBonus = 2f;
+
+    [Header("Visual Effect")]
+    public GameObject ironArmorPrefab;   
+    private GameObject activeEffect;    
 
     private PlayerStats player;
 
@@ -24,21 +29,29 @@ public class IronArmorSkill : MonoBehaviour
     {
         Debug.Log("Iron Armor kích hoạt!");
 
-        // Tăng giáp + tốc độ + miễn khống chế
         player.currentArmor += armorBonus;
         player.currentMoveSpeed += speedBonus;
         player.isImmuneCC = true;
 
+        if (ironArmorPrefab != null && activeEffect == null)
+        {
+            activeEffect = Instantiate(ironArmorPrefab, player.transform.position, Quaternion.identity, player.transform);
+        }
+
         yield return new WaitForSeconds(duration);
 
-        // Hết hiệu ứng -> trả lại stats
         player.currentArmor -= armorBonus;
         player.currentMoveSpeed -= speedBonus;
         player.isImmuneCC = false;
 
         Debug.Log("Iron Armor hết hiệu lực!");
 
-        // Hồi 20 mana khi kết thúc
+        if (activeEffect != null)
+        {
+            Destroy(activeEffect);
+            activeEffect = null;
+        }
+
         if (manager != null)
             manager.OnSkillEnd(20f);
     }

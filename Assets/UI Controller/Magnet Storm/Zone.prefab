@@ -123,8 +123,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 20
   damageInterval: 2
-  damage: 20
+  damage: 10
   radius: 5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
+  stunDuration: 1.5
+  slowDuration: 3
+  slowMultiplier: 0.5
