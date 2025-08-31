@@ -1,53 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class RailgunBurstSkill : MonoBehaviour
 {
-    [Header("Stats")]
+    [Header("Skill Settings")]
     public float damage = 100f;
-    public float beamLength = 20f;
-    public float beamDuration = 0.2f;
-    public LayerMask hitLayers;
-
-    [Header("Recoil")]
+    public float beamLength = 30f;
+    public float beamDuration = 1f;
     public float recoilForce = 15f;
 
-    [Header("Cooldown")]
-    public float fireCooldown = 20f;
-    private float nextFireTime = 0f;
-
     [Header("References")]
-    public LineRenderer lineRenderer;
+    public GameObject beamPrefab;
     public Gradient beamColor;
     public Rigidbody playerRb;
     private PlayerStats playerStats;
 
-    private bool isCasting = false;
-
     void Start()
     {
-        if (lineRenderer != null)
-        {
-            lineRenderer.enabled = false;
-            lineRenderer.positionCount = 2;
-            if (beamColor != null) lineRenderer.colorGradient = beamColor;
-        }
-
-        if (playerRb == null || playerStats == null)
-        {
+        if (playerStats == null)
             playerStats = FindFirstObjectByType<PlayerStats>();
-            if (playerStats != null)
-                playerRb = playerStats.GetComponent<Rigidbody>();
-        }
+
+        if (playerRb == null && playerStats != null)
+            playerRb = playerStats.GetComponent<Rigidbody>();
     }
 
+    /// <summary>
+    /// Gọi khi bắn Railgun Burst.
+    /// Không còn cooldown nội bộ, mỗi lần gọi sẽ luôn bắn.
+    /// </summary>
     public void Cast(Vector3 startPos, Vector3 dir)
     {
-        if (Time.time < nextFireTime) return;
-        if (isCasting) return;
-
-        nextFireTime = Time.time + fireCooldown;
+        StartCoroutine(FireBeam(startPos, dir));
 
         if (playerRb != null)
         {
@@ -56,54 +39,26 @@ public class RailgunBurstSkill : MonoBehaviour
         }
 
         if (playerStats != null)
-            StartCoroutine(StunPlayer(2f)); 
-
-        StartCoroutine(FireBeam(startPos, dir));
+            StartCoroutine(StunPlayer(2f));
     }
 
     private IEnumerator FireBeam(Vector3 startPos, Vector3 dir)
     {
-        isCasting = true;
-
-        Vector3 endPos = startPos + dir.normalized * beamLength;
-
-        if (lineRenderer != null)
+        GameObject beam = Instantiate(beamPrefab, startPos, Quaternion.identity);
+        RailgunBeamZone zone = beam.GetComponent<RailgunBeamZone>();
+        if (zone != null)
         {
-            lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, startPos);
-            lineRenderer.SetPosition(1, endPos);
+            zone.Init(playerStats.transform.Find("FirePoint"), dir, damage, beamDuration, beamLength, beamColor);
         }
 
-        Ray ray = new Ray(startPos, dir.normalized);
-        RaycastHit[] hits = Physics.RaycastAll(ray, beamLength, hitLayers);
-
-        HashSet<Enemy> damagedEnemies = new HashSet<Enemy>();
-
-        foreach (RaycastHit hit in hits)
-        {
-            Enemy e = hit.collider.GetComponent<Enemy>();
-            if (e != null && !damagedEnemies.Contains(e))
-            {
-                e.TakePureDamage(damage);
-                damagedEnemies.Add(e);
-            }
-        }
-
-        yield return new WaitForSeconds(beamDuration);
-
-        if (lineRenderer != null) lineRenderer.enabled = false;
-
-        isCasting = false;
+        yield return null;
     }
 
     private IEnumerator StunPlayer(float duration)
     {
         float originalSpeed = playerStats.currentMoveSpeed;
-
         playerStats.currentMoveSpeed = 0f;
-
         yield return new WaitForSeconds(duration);
-
         playerStats.currentMoveSpeed = playerStats.baseMoveSpeed;
     }
 }

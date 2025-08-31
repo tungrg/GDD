@@ -19,7 +19,7 @@ public class UltimateManager : MonoBehaviour
     public Image selectedSkillIcon;
     public Button ultimateButton;
     public GameObject hpBoss;
-    
+
     [Header("Cooldown")]
     public float ultimateCooldown = 20f;
 
@@ -55,9 +55,11 @@ public class UltimateManager : MonoBehaviour
         ultimateButton.interactable = true;
         skillSelectPanel.SetActive(false);
         Debug.Log("Đã chọn kỹ năng: " + currentSkill.skillName);
+
         BossManager boss = FindFirstObjectByType<BossManager>();
         if (boss != null)
             boss.StartBossBattle();
+
         if (hpBoss != null)
             hpBoss.SetActive(true);
     }
@@ -74,8 +76,7 @@ public class UltimateManager : MonoBehaviour
                 break;
 
             case "Railgun Burst":
-                // Bật ulti railgun trong 20 giây
-                joystick.SetUltimateMode(true, JoystickGun.UltimateType.RailgunBurst, 20f);
+                joystick.SetUltimateMode(true, JoystickGun.UltimateType.RailgunBurst);
                 break;
 
             case "Nitro Boots":
