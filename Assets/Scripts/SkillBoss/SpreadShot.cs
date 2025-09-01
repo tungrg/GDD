@@ -1,29 +1,32 @@
-using UnityEngine;
+    using UnityEngine;
 
-[CreateAssetMenu(fileName = "SpreadShot", menuName = "Game/BossSkill/SpreadShot")]
-public class SpreadShot : SkillBoss
-{
-    [Header("Bullet Settings")]
-    public GameObject bulletPrefab;
-    public int bulletCount = 5;
-    public float spreadAngle = 30f;
-    public float bulletForce = 15f;
-
-    protected override void Activate(BossManager boss)
+    [CreateAssetMenu(fileName = "SpreadShot", menuName = "Game/BossSkill/SpreadShot")]
+    public class SpreadShot : SkillBoss
     {
-        if (boss.player == null || bulletPrefab == null) return;
+        [Header("Bullet Settings")]
+        public GameObject bulletPrefab;
+        public int bulletCount = 5;
+        public float spreadAngle = 30f;
+        public float bulletForce = 15f;
 
-            // hướng tới player
-        Vector3 lookDir = boss.player.position - boss.transform.position;
-        lookDir.y = 0; 
-        if (lookDir != Vector3.zero)
+        protected override void Activate(BossManager boss)
         {
-            boss.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
-        }
+            if (boss.player == null || bulletPrefab == null) return;
 
-        Vector3 dir = (boss.player.position - boss.firePoint.position).normalized;
+                // hướng tới player
+            Vector3 lookDir = boss.player.position - boss.transform.position;
+            lookDir.y = 0; 
+            if (lookDir != Vector3.zero)
+            {
+                boss.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+            }
 
-        for (int i = 0; i < bulletCount; i++)
+            Vector3 dir = (boss.player.position - boss.firePoint.position).normalized;
+            dir.y = 0; // giữ đạn ngang trục Y
+            dir.Normalize() ;
+
+
+            for (int i = 0; i < bulletCount; i++)
         {
             float angle = spreadAngle * ((float)i / (bulletCount - 1) - 0.5f);
             Quaternion rot = Quaternion.AngleAxis(angle, Vector3.up) * Quaternion.LookRotation(dir);
@@ -43,9 +46,9 @@ public class SpreadShot : SkillBoss
 #if UNITY_6000_0_OR_NEWER
                 rb.linearVelocity = rot * Vector3.forward * bulletForce;
 #else
-                rb.velocity = rot * Vector3.forward * bulletForce;
+                    rb.velocity = rot * Vector3.forward * bulletForce;
 #endif
             }
         }
+        }
     }
-}
