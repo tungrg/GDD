@@ -6,6 +6,7 @@ public class BossManager : BossBase
 {
     [Header("References")]
     public Transform player;
+    public GameObject playerPrefab;
     public GameObject bulletPrefab;
     public Transform firePoint;
 
@@ -179,7 +180,6 @@ public class BossManager : BossBase
             Die();
         }
     }
-
     private void Die()
     {
         BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
@@ -197,8 +197,16 @@ public class BossManager : BossBase
             agent.ResetPath();
             agent.velocity = Vector3.zero;
         }
+        gameStarted = false;
+        StopAllCoroutines();
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.velocity = Vector3.zero;
+        }
 
-        if (animator != null) 
+        if (animator != null)
             animator.SetTrigger("die");
 
         StartCoroutine(ShowUIAfterDelay());
@@ -206,8 +214,10 @@ public class BossManager : BossBase
 
     private IEnumerator ShowUIAfterDelay()
     {
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(1f);
+
         uiPanel.SetActive(true);
-        Time.timeScale = 0; 
+
+        Time.timeScale = 0;
     }
 }

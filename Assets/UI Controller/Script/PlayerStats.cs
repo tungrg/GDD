@@ -31,7 +31,7 @@ public class PlayerStats : MonoBehaviour
     public bool isImmuneCC = false;
 
     [Header("References")]
-    public GameOverUI gameOverUI; 
+    public GameObject gameOverUI;
 
     void Start()
     {
@@ -42,6 +42,8 @@ public class PlayerStats : MonoBehaviour
         currentFireCooldown = baseFireCooldown;
         currentAttackPower = baseAttackPower;
         currentArmor = baseArmor;
+        if (gameOverUI != null)
+            gameOverUI.SetActive(false);
     }
 
     public void TakeDamage(float dmg)
@@ -70,6 +72,6 @@ public class PlayerStats : MonoBehaviour
     {
         isDead = true;
         Debug.Log("⚠ Player chết!");
-        if (gameOverUI) gameOverUI.ShowGameOver();
+        gameOverUI.SetActive(true);
     }
 }
