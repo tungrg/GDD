@@ -43,7 +43,9 @@ public class BossCloneManager : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if (agent == null) agent = gameObject.AddComponent<NavMeshAgent>();
 
-        // tìm boss để né
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; 
+        agent.avoidancePriority = 99; // Ưu tiên thấp => nhường đường
+
         BossManager bm = FindAnyObjectByType<BossManager>();
         if (bm != null) boss = bm.transform;
 
@@ -131,7 +133,11 @@ public class BossCloneManager : MonoBehaviour
     public void TakeDamage(float amount)
     {
         if (!isAlive) return;
-
+        BossCloneHealth health = GetComponent<BossCloneHealth>();
+        if (health != null)
+        {
+            health.TakeDamage(amount);
+        }
         currentHealth -= amount;
         Debug.Log($"[Clone Damaged] HP: {currentHealth}/{cloneHealth}");
 
