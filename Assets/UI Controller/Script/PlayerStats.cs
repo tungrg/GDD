@@ -28,8 +28,10 @@ public class PlayerStats : MonoBehaviour
     [Header("State")]
     public bool isDead = false;
 
-    // Kháng hiệu ứng (Iron Armor)
     public bool isImmuneCC = false;
+
+    [Header("References")]
+    public GameOverUI gameOverUI; 
 
     void Start()
     {
@@ -68,5 +70,6 @@ public class PlayerStats : MonoBehaviour
     {
         isDead = true;
         Debug.Log("⚠ Player chết!");
+        if (gameOverUI) gameOverUI.ShowGameOver();
     }
 }
