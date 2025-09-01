@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Freeze
   m_EditorClassIdentifier: 
   skillName: Freeze
-  cooldown: 15
-  freezeEffectPrefab: {fileID: 3229717982890662777, guid: a8a0b6948c1277c488f7b89c3e4a08de, type: 3}
+  cooldown: 10
+  freezeEffectPrefab: {fileID: 2610179636996891716, guid: c92f2340d7c248f48ad36746d56ca80c, type: 3}
   freezeDuration: 3

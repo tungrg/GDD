@@ -6,6 +6,7 @@ public class BossManager : BossBase
 {
     [Header("References")]
     public Transform player;
+    public GameObject playerPrefab;
     public GameObject bulletPrefab;
     public Transform firePoint;
 
@@ -174,36 +175,36 @@ public class BossManager : BossBase
             Die();
         }
     }
-private void Die()
-{
-    BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
-    if (clone != null)
+    private void Die()
     {
-        clone.Die();
-    }
-    hpBoss.SetActive(false);
+        BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
+        if (clone != null)
+        {
+            clone.Die();
+        }
+        hpBoss.SetActive(false);
 
-    gameStarted = false;
-    StopAllCoroutines();
-    if (agent != null)
+        gameStarted = false;
+        StopAllCoroutines();
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.velocity = Vector3.zero;
+        }
+
+        if (animator != null)
+            animator.SetTrigger("die");
+
+        StartCoroutine(ShowUIAfterDelay());
+    }
+
+    private IEnumerator ShowUIAfterDelay()
     {
-        agent.isStopped = true;
-        agent.ResetPath();
-        agent.velocity = Vector3.zero;
+        yield return new WaitForSeconds(1f);
+
+        uiPanel.SetActive(true);
+
+        Time.timeScale = 0;
     }
-
-    if (animator != null) 
-        animator.SetTrigger("die");
-
-    StartCoroutine(ShowUIAfterDelay());
-}
-
-private IEnumerator ShowUIAfterDelay()
-{
-    yield return new WaitForSeconds(2f); 
-
-    uiPanel.SetActive(true);
-
-    Time.timeScale = 0; 
-}
 }

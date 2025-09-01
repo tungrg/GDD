@@ -90,5 +90,11 @@ namespace Ricimi
             Time.timeScale = 1f;
             SceneManager.LoadScene("Level");
         }
+
+        public void Home()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("Home");
+        }
     }
 }

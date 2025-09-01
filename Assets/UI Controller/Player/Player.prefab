@@ -1943,6 +1943,7 @@ MonoBehaviour:
   dashDistance: 5
   dashDuration: 0.2
   dashCooldown: 3
+  animator: {fileID: 0}
 --- !u!54 &462249545640525471
 Rigidbody:
   m_ObjectHideFlags: 0
