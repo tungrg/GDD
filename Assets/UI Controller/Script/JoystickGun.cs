@@ -92,8 +92,6 @@ public class JoystickGun : MonoBehaviour
                         case UltimateType.MagnetStorm:
                             MagnetStormSkill ms = FindAnyObjectByType<MagnetStormSkill>();
                             if (ms != null) ms.Cast(lastDirection);
-
-                            // chỉ bắn 1 lần → reset ulti
                             SetUltimateMode(false, UltimateType.None);
                             FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
                             break;
@@ -101,24 +99,25 @@ public class JoystickGun : MonoBehaviour
                         case UltimateType.RailgunBurst:
                             RailgunBurstSkill rb = FindAnyObjectByType<RailgunBurstSkill>();
                             if (rb != null) rb.Cast(firePoint.position, lastDirection);
-
-                            // giống MagnetStorm → bắn 1 lần rồi reset
                             SetUltimateMode(false, UltimateType.None);
                             FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
                             break;
                     }
-
-                    nextFireTime = Time.time + stats.currentFireCooldown;
-                    if (joystickCanvas != null) joystickCanvas.alpha = 0.3f;
-                    if (cdText != null) cdText.gameObject.SetActive(true);
                 }
                 else
                 {
                     Shoot();
-                    nextFireTime = Time.time + stats.currentFireCooldown;
-                    if (joystickCanvas != null) joystickCanvas.alpha = 0.3f;
-                    if (cdText != null) cdText.gameObject.SetActive(true);
                 }
+
+                if (lastDirection.sqrMagnitude > 0.01f)
+                {
+                    Quaternion targetRot = Quaternion.LookRotation(lastDirection);
+                    player.rotation = targetRot;
+                }
+
+                nextFireTime = Time.time + stats.currentFireCooldown;
+                if (joystickCanvas != null) joystickCanvas.alpha = 0.3f;
+                if (cdText != null) cdText.gameObject.SetActive(true);
             }
 
             isAiming = false;
@@ -127,7 +126,7 @@ public class JoystickGun : MonoBehaviour
             cancelZone.gameObject.SetActive(false);
         }
 
-        // Update Cooldown UI
+
         if (cdText != null && cdText.gameObject.activeSelf)
         {
             float remainingCD = nextFireTime - Time.time;

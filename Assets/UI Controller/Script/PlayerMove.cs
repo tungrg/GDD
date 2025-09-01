@@ -12,8 +12,8 @@ public class PlayerMove : MonoBehaviour
     [Header("Dash Settings")]
     public Button dashButton;
     public TextMeshProUGUI dashText;
-    public float dashDistance = 5f;   
-    public float dashDuration = 0.2f; 
+    public float dashDistance = 5f;
+    public float dashDuration = 0.2f;
     public float dashCooldown = 3f;
 
     private Rigidbody rb;
@@ -24,6 +24,9 @@ public class PlayerMove : MonoBehaviour
 
     private PlayerStats stats;
     private bool isDashing = false;
+
+    // 👇 Thêm Animator
+    private Animator animator;
 
     void Start()
     {
@@ -37,6 +40,8 @@ public class PlayerMove : MonoBehaviour
         dashButton.onClick.AddListener(Dash);
         dashText.gameObject.SetActive(false);
         dashImage = dashButton.GetComponent<Image>();
+
+        animator = GetComponent<Animator>(); // lấy Animator
     }
 
     void Update()
@@ -47,12 +52,16 @@ public class PlayerMove : MonoBehaviour
             float v = joystick.Vertical + Input.GetAxisRaw("Vertical");
             Vector3 move = new Vector3(h, 0, v);
 
+            // 👇 nuôi tham số Speed cho Blend Tree 1D
+            float inputMag = Mathf.Clamp01(new Vector2(h, v).magnitude);
+            if (animator) animator.SetFloat("Speed", inputMag, 0.1f, Time.deltaTime); // damping mượt
+
             if (move.magnitude > 0.1f && isGrounded)
             {
                 Vector3 moveDir = move.normalized * stats.currentMoveSpeed * Time.deltaTime;
                 Vector3 targetPos = rb.position + moveDir;
 
-                rb.MovePosition(targetPos); 
+                rb.MovePosition(targetPos);
 
                 Quaternion targetRot = Quaternion.LookRotation(new Vector3(move.x, 0, move.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
@@ -104,7 +113,7 @@ public class PlayerMove : MonoBehaviour
         {
             if (hit.collider.CompareTag("Map"))
             {
-                maxDistance = hit.distance - 0.1f; 
+                maxDistance = hit.distance - 0.1f;
             }
         }
 
@@ -122,6 +131,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         rb.MovePosition(end);
+
         isDashing = false;
 
         dashTimer = dashCooldown;
@@ -142,13 +152,13 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground1"))
             isGrounded = true;
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground1"))
             isGrounded = false;
     }
 }
