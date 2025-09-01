@@ -10,6 +10,7 @@ public class SkillFreeze : SkillBoss
 
     protected override void Activate(BossManager boss)
     {
+
         if (boss.player == null || freezeEffectPrefab == null) return;
 
         Transform player = boss.player;
@@ -30,8 +31,10 @@ public class SkillFreeze : SkillBoss
         }
 
         // --- Disable các hành động ---
+        SetPlayerVisible(player, false);
         PlayerMove pc = player.GetComponent<PlayerMove>();
         if (pc != null) pc.enabled = false;
+        if (pc != null) pc.animator.enabled = false;
 
         JoystickGun gun = Object.FindFirstObjectByType<JoystickGun>();
         if (gun != null) gun.enabled = false;
@@ -54,8 +57,9 @@ public class SkillFreeze : SkillBoss
     {
         yield return new WaitForSeconds(freezeDuration);
 
-        // Enable lại các hành động       
+        // Enable lại các hành động          
         if (pc != null) pc.enabled = true;
+        if (pc != null) pc.animator.enabled = true;
         if (gun != null) gun.enabled = true;
         if (ultiSel != null) ultiSel.enabled = true;
 
@@ -74,5 +78,14 @@ public class SkillFreeze : SkillBoss
 
         if (iceBlock != null)
             Destroy(iceBlock);
+        SetPlayerVisible(player, true);
+    }
+    private void SetPlayerVisible(Transform player, bool visible)
+    {
+        var renderers = player.GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
+        {
+            r.enabled = visible;
+        }
     }
 }
