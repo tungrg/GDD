@@ -644,7 +644,7 @@ MonoBehaviour:
   waitAtPoint: 1
   fireForce: 15
   waitBeforeShoot: 1.5
-  animator: {fileID: 0}
+  animator: {fileID: 2901155388547647978}
 --- !u!1 &8989557073818522924
 GameObject:
   m_ObjectHideFlags: 0
