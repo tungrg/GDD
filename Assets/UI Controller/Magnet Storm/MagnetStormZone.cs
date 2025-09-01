@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class MagnetStormZone : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class MagnetStormZone : MonoBehaviour
     public float stunDuration = 1.5f;
     public float slowDuration = 3f;
     public float slowMultiplier = 0.5f;
+
+    private Dictionary<GameObject, Coroutine> activeCC = new Dictionary<GameObject, Coroutine>();
 
     private void Start()
     {
@@ -39,14 +42,14 @@ public class MagnetStormZone : MonoBehaviour
                 if (boss != null)
                 {
                     boss.TakeDamage(damage);
-                    StartCoroutine(ApplyStunAndSlow(boss.gameObject));
+                    ApplyCC(boss.gameObject);
                 }
 
                 BossCloneManager clone = hit.GetComponent<BossCloneManager>();
                 if (clone != null)
                 {
                     clone.TakeDamage(damage);
-                    StartCoroutine(ApplyStunAndSlow(clone.gameObject));
+                    ApplyCC(clone.gameObject);
                 }
 
                 ManaPlayer playerMana = FindFirstObjectByType<ManaPlayer>();
@@ -58,6 +61,16 @@ public class MagnetStormZone : MonoBehaviour
 
             yield return new WaitForSeconds(damageInterval);
         }
+    }
+
+    private void ApplyCC(GameObject target)
+    {
+        if (activeCC.ContainsKey(target))
+        {
+            StopCoroutine(activeCC[target]); // Hủy coroutine cũ
+            activeCC.Remove(target);
+        }
+        activeCC[target] = StartCoroutine(ApplyStunAndSlow(target));
     }
 
     private IEnumerator ApplyStunAndSlow(GameObject target)

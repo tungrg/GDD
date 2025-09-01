@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
     private bool isDashing = false;
 
     // 👇 Thêm Animator
-    private Animator animator;
+    public Animator animator;
 
     void Start()
     {
