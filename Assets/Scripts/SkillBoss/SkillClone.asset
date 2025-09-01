@@ -16,4 +16,4 @@ MonoBehaviour:
   cooldown: 0
   clonePrefab: {fileID: 8807272637876332821, guid: 8c1393f6d87cdba47b72ffb01ac61df4, type: 3}
   cloneCount: 1
-  spawnRadius: 3
+  spawnPosition: {x: 28.5, y: 2, z: 40}

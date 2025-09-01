@@ -622,7 +622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef64abf661cf0eb46974063f569ecd23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 60
+  maxHealth: 30
   healthSlider: {fileID: 7011659128207247467}
 --- !u!114 &1725771462299713421
 MonoBehaviour:

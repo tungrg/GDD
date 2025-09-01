@@ -50,8 +50,8 @@ public class BossManager : BossBase
         if (uiPanel != null)
             uiPanel.SetActive(false);
         animator = GetComponent<Animator>();
-
     }
+
     public void StartBossBattle()
     {
         Debug.LogWarning("⚠ StartBossBattle() HAS BEEN CALLED", this);
@@ -79,8 +79,6 @@ public class BossManager : BossBase
 
         while (gameStarted)
         {
-            //if (animator != null) animator.SetBool("isMoving", true);
-
             Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
             agent.SetDestination(destination);
 
@@ -89,11 +87,11 @@ public class BossManager : BossBase
                 yield return null;
             }
 
-            //if (animator != null) animator.SetBool("isMoving", false);
             yield return new WaitForSeconds(waitAtPoint);
 
-            //if (animator != null) animator.SetTrigger("attack");
+            // Gọi coroutine quay mặt & bắn
             ShootAtPlayer();
+
             yield return new WaitForSeconds(waitBeforeShoot);
         }
     }
@@ -111,15 +109,22 @@ public class BossManager : BossBase
     private void ShootAtPlayer()
     {
         if (player == null) return;
+        StartCoroutine(RotateTowardsPlayerThenShoot());
+    }
 
-        Vector3 dir = (player.position - transform.position).normalized;
+    private IEnumerator RotateTowardsPlayerThenShoot()
+    {
+        // Xoay ngay lập tức về phía player
+        Vector3 dir = (player.position - transform.position);
         dir.y = 0;
-
         if (dir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
         }
 
+        yield return new WaitForSeconds(0.5f);
+
+        // Tính hướng bắn
         Vector3 shootDir = (player.position - firePoint.position);
         shootDir.y = 0;
         shootDir.Normalize();
@@ -174,36 +179,35 @@ public class BossManager : BossBase
             Die();
         }
     }
-private void Die()
-{
-    BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
-    if (clone != null)
+
+    private void Die()
     {
-        clone.Die();
-    }
-    hpBoss.SetActive(false);
+        BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
+        if (clone != null)
+        {
+            clone.Die();
+        }
+        hpBoss.SetActive(false);
 
-    gameStarted = false;
-    StopAllCoroutines();
-    if (agent != null)
+        gameStarted = false;
+        StopAllCoroutines();
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.velocity = Vector3.zero;
+        }
+
+        if (animator != null) 
+            animator.SetTrigger("die");
+
+        StartCoroutine(ShowUIAfterDelay());
+    }
+
+    private IEnumerator ShowUIAfterDelay()
     {
-        agent.isStopped = true;
-        agent.ResetPath();
-        agent.velocity = Vector3.zero;
+        yield return new WaitForSeconds(2f); 
+        uiPanel.SetActive(true);
+        Time.timeScale = 0; 
     }
-
-    if (animator != null) 
-        animator.SetTrigger("die");
-
-    StartCoroutine(ShowUIAfterDelay());
-}
-
-private IEnumerator ShowUIAfterDelay()
-{
-    yield return new WaitForSeconds(2f); 
-
-    uiPanel.SetActive(true);
-
-    Time.timeScale = 0; 
-}
 }
