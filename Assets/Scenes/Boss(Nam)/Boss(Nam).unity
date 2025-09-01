@@ -194,6 +194,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36866941}
   m_CullTransparentMesh: 1
+--- !u!95 &46502654 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4029622817770156698, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+  m_PrefabInstance: {fileID: 1364189615}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &61757918 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2929252285020698103, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
@@ -3702,7 +3707,7 @@ PrefabInstance:
     - target: {fileID: 2564370730419533931, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: gunAnimator
       value: 
-      objectReference: {fileID: 1410521051}
+      objectReference: {fileID: 46502654}
     - target: {fileID: 2564370730419533931, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: idleAnimator
       value: 
@@ -3710,11 +3715,19 @@ PrefabInstance:
     - target: {fileID: 2564370730419533931, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: walkAnimator
       value: 
-      objectReference: {fileID: 1983078051}
+      objectReference: {fileID: 1983078053}
     - target: {fileID: 3730303047337230465, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: uiPanel
       value: 
       objectReference: {fileID: 1140028571}
+    - target: {fileID: 3730303047337230465, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+    - target: {fileID: 5365416622484035846, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: a84a08bddd0668c44805c787f97c2dfb, type: 2}
     - target: {fileID: 5955219522818319066, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: m_LocalScale.y
       value: 3
@@ -3847,11 +3860,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1392550512}
   m_CullTransparentMesh: 1
---- !u!95 &1410521051 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4029622817770156698, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
-  m_PrefabInstance: {fileID: 1364189615}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1463776553
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6272,7 +6280,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1977714480}
   m_CullTransparentMesh: 1
---- !u!95 &1983078051 stripped
+--- !u!95 &1983078053 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7394336832946294132, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
   m_PrefabInstance: {fileID: 1364189615}
