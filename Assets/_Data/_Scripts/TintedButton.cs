@@ -1,7 +1,3 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using System;
 using System.Collections;
 using UnityEngine;
@@ -9,12 +5,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Ricimi
-{
-    // This class is based on the official source code for Unity's UI Button (which can
-    // be found here: https://bitbucket.org/Unity-Technologies/ui), but adds functionality
-    // for smooth tinting the associated image when being pressed.
-    public class TintedButton : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
+// This class is based on the official source code for Unity's UI Button (which can
+// be found here: https://bitbucket.org/Unity-Technologies/ui), but adds functionality
+// for smooth tinting the associated image when being pressed.
+public class TintedButton : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
     {
         [Serializable]
         public class ButtonClickedEvent : UnityEvent { }
@@ -128,8 +122,7 @@ namespace Ricimi
                 newColor.g += 0.01f;
                 newColor.b += 0.01f;
                 image.color = newColor;
-                yield return new WaitForSeconds(0.01f);
-            }
+            yield return new WaitForSeconds(0.01f);
         }
     }
 }

@@ -1,16 +1,10 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ricimi
-{
-    // This class manages the level scene of the demo. It handles the left and right
-    // selection buttons that are used to navigate across the available levels and their
-    // associated animations.
-    public class LevelScene : MonoBehaviour
+// This class manages the level scene of the demo. It handles the left and right
+// selection buttons that are used to navigate across the available levels and their
+// associated animations.
+public class LevelScene : MonoBehaviour
     {
         public GameObject prevLevelButton;
         public GameObject nextLevelButton;
@@ -144,9 +138,8 @@ namespace Ricimi
             nextLevelButton.GetComponent<AnimatedButton>().interactable = false;
         }
 
-        private void SetLevelText(int level)
-        {
-            levelText.text = level.ToString() + "/3";
-        }
+    private void SetLevelText(int level)
+    {
+        levelText.text = level.ToString() + "/3";
     }
 }

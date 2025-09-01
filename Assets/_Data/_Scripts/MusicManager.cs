@@ -1,13 +1,7 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ricimi
-{
-    // This class handles updating the music UI widgets depending on the player's selection.
+// This class handles updating the music UI widgets depending on the player's selection.
     public class MusicManager : MonoBehaviour
     {
         private Slider m_musicSlider;
@@ -29,4 +23,3 @@ namespace Ricimi
                 m_musicButton.GetComponent<MusicButton>().ToggleSprite();
         }
     }
-}

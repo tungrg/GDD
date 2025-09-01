@@ -1,17 +1,11 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-namespace Ricimi
-{
-    // This class is responsible for managing the transitions between scenes that are performed
-    // in the demo via a classic fade.
-    public class Transition : MonoBehaviour
+// This class is responsible for managing the transitions between scenes that are performed
+// in the demo via a classic fade.
+public class Transition : MonoBehaviour
     {
         private static GameObject m_canvas;
 
@@ -92,4 +86,3 @@ namespace Ricimi
             Destroy(m_canvas);
         }
     }
-}

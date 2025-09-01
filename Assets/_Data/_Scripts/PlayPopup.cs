@@ -1,17 +1,11 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ricimi
-{
-    // Specialized behavior for the popup that opens before selecting a level to play in
-    // the demo. It showcases how to create a specialized popup with custom behavior: in this
-    // case, one to three stars can be displayed depending on the player score on that particular
-    // level.
-    public class PlayPopup : Popup
+// Specialized behavior for the popup that opens before selecting a level to play in
+// the demo. It showcases how to create a specialized popup with custom behavior: in this
+// case, one to three stars can be displayed depending on the player score on that particular
+// level.
+public class PlayPopup : Popup
     {
         public Color enabledColor;
         public Color disabledColor;
@@ -45,7 +39,6 @@ namespace Ricimi
                 leftStarImage.color = enabledColor;
                 middleStarImage.color = enabledColor;
                 rightStarImage.color = enabledColor;
-            }
         }
     }
 }

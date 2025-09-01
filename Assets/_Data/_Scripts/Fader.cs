@@ -1,14 +1,8 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using System.Collections;
 using UnityEngine;
 
-namespace Ricimi
-{
-    // Utility class for smoothly fading a UI CanvasGroup.
-    public class Fader : MonoBehaviour
+// Utility class for smoothly fading a UI CanvasGroup.
+public class Fader : MonoBehaviour
     {
         public float duration = 0.5f;
 
@@ -55,8 +49,7 @@ namespace Ricimi
                 m_canvasGroup.alpha = Mathf.Lerp(initialAlpha, 0.0f, time / duration);
                 yield return new WaitForEndOfFrame();
             }
-            m_canvasGroup.interactable = false;
-            m_canvasGroup.blocksRaycasts = false;
-        }
+        m_canvasGroup.interactable = false;
+        m_canvasGroup.blocksRaycasts = false;
     }
 }

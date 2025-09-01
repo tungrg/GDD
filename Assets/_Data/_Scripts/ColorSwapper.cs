@@ -1,39 +1,32 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ricimi
+// Utility class for swapping the color of a UI Image between two predefined values.
+public class ColorSwapper : MonoBehaviour
 {
-    // Utility class for swapping the color of a UI Image between two predefined values.
-    public class ColorSwapper : MonoBehaviour
+    public Color enabledColor;
+    public Color disabledColor;
+
+    private bool m_swapped = true;
+
+    private Image m_image;
+
+    private void Awake()
     {
-        public Color enabledColor;
-        public Color disabledColor;
+        m_image = GetComponent<Image>();
+    }
 
-        private bool m_swapped = true;
-
-        private Image m_image;
-
-        private void Awake()
+    public void SwapColor()
+    {
+        if (m_swapped)
         {
-            m_image = GetComponent<Image>();
+            m_swapped = false;
+            m_image.color = disabledColor;
         }
-
-        public void SwapColor()
+        else
         {
-            if (m_swapped)
-            {
-                m_swapped = false;
-                m_image.color = disabledColor;
-            }
-            else
-            {
-                m_swapped = true;
-                m_image.color = enabledColor;
-            }
+            m_swapped = true;
+            m_image.color = enabledColor;
         }
     }
 }

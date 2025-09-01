@@ -1,17 +1,11 @@
-// Copyright (C) 2015 ricimi - All rights reserved.
-// This code can only be used under the standard Unity Asset Store End User License Agreement.
-// A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Ricimi
-{
-    // This class is responsible for popup management. Popups follow the traditional behavior of
-    // automatically blocking the input on elements behind it and adding a background texture.
-    public class Popup : MonoBehaviour
+// This class is responsible for popup management. Popups follow the traditional behavior of
+// automatically blocking the input on elements behind it and adding a background texture.
+public class Popup : MonoBehaviour
     {
         public Color backgroundColor = new Color(10.0f / 255.0f, 10.0f / 255.0f, 10.0f / 255.0f, 0.6f);
 
@@ -85,10 +79,9 @@ namespace Ricimi
             SceneManager.LoadScene(sceneName);
         }
 
-        public void SceneMenu()
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene("Level");
-        }
+    public void SceneMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Level");
     }
 }
