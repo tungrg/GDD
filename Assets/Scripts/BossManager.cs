@@ -197,14 +197,6 @@ public class BossManager : BossBase
             agent.ResetPath();
             agent.velocity = Vector3.zero;
         }
-        gameStarted = false;
-        StopAllCoroutines();
-        if (agent != null)
-        {
-            agent.isStopped = true;
-            agent.ResetPath();
-            agent.velocity = Vector3.zero;
-        }
 
         if (animator != null)
             animator.SetTrigger("die");
