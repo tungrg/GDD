@@ -20,7 +20,9 @@ public class SpreadShot : SkillBoss
             float angle = spreadAngle * ((float)i / (bulletCount - 1) - 0.5f);
             Quaternion rot = Quaternion.AngleAxis(angle, Vector3.up) * Quaternion.LookRotation(dir);
 
-            GameObject bullet = Instantiate(bulletPrefab, boss.firePoint.position, rot);
+            Vector3 spawnPos = boss.firePoint.position + rot * Vector3.forward * 0.5f;
+            GameObject bullet = Instantiate(bulletPrefab, spawnPos, rot);
+
             Bullet b = bullet.GetComponent<Bullet>();
             if (b != null)
             {

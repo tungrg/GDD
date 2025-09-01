@@ -133,7 +133,11 @@ public class BossCloneManager : MonoBehaviour
     public void TakeDamage(float amount)
     {
         if (!isAlive) return;
-
+        BossCloneHealth health = GetComponent<BossCloneHealth>();
+        if (health != null)
+        {
+            health.TakeDamage(amount);
+        }
         currentHealth -= amount;
         Debug.Log($"[Clone Damaged] HP: {currentHealth}/{cloneHealth}");
 
