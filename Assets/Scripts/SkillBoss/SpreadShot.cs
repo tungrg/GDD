@@ -13,6 +13,14 @@ public class SpreadShot : SkillBoss
     {
         if (boss.player == null || bulletPrefab == null) return;
 
+            // hướng tới player
+        Vector3 lookDir = boss.player.position - boss.transform.position;
+        lookDir.y = 0; 
+        if (lookDir != Vector3.zero)
+        {
+            boss.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        }
+
         Vector3 dir = (boss.player.position - boss.firePoint.position).normalized;
 
         for (int i = 0; i < bulletCount; i++)
