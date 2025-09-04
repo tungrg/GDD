@@ -9,6 +9,7 @@ public class BossManager : BossBase
     public GameObject playerPrefab;
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public Transform bossModel;
 
     [Header("Movement Settings")]
     public float moveRadius = 5f;
