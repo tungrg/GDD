@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a8f288636cf434ca0a10d25708c5db, type: 3}
+  m_Name: SkillBoomTrap
+  m_EditorClassIdentifier: 
+  skillName: 
+  cooldown: 10
+  bombPrefab: {fileID: 2861767050390951901, guid: 1cd6b154a40c9114c82ddf93cb6e4eda, type: 3}
+  markerPrefab: {fileID: 6176073620493924811, guid: 389d14c460c9e8a4787133f51df7310a, type: 3}
+  bombCount: 1
+  throwHeight: 8
+  fallDuration: 1.5
+  spawnOffset: 1
