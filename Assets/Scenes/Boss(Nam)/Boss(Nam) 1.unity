@@ -3794,10 +3794,34 @@ PrefabInstance:
       propertyPath: walkAnimator
       value: 
       objectReference: {fileID: 1411750623}
+    - target: {fileID: 2769741069356036906, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
+    - target: {fileID: 3621938583780541321, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3730303047337230465, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: uiPanel
       value: 
       objectReference: {fileID: 1140028571}
+    - target: {fileID: 3730303047337230465, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
+    - target: {fileID: 3730303047337230465, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: bossModel
+      value: 
+      objectReference: {fileID: 1411750624}
+    - target: {fileID: 4266609053588016564, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365416622484035846, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
     - target: {fileID: 5955219522818319066, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: m_LocalScale.y
       value: 3
@@ -3842,6 +3866,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6220251708589116890, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6256143856035498121, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: m_Avatar
       value: 
@@ -3850,6 +3878,26 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 54d51a5692c872e40a397f433b5a43b0, type: 2}
+    - target: {fileID: 7394336832946294132, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038329817808977089, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038329817808977089, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038329817808977089, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038329817808977089, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3933,6 +3981,11 @@ CanvasRenderer:
 --- !u!95 &1411750623 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7394336832946294132, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
+  m_PrefabInstance: {fileID: 1364189615}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1411750624 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3494189647551272718, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
   m_PrefabInstance: {fileID: 1364189615}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1463776553
