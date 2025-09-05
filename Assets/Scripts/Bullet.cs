@@ -7,6 +7,10 @@ public class Bullet : MonoBehaviour
     [Header("Impact Effect")]
     public GameObject hitEffectPrefab;
     private float damage;
+    void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
 
     public void SetDamage(float dmg)
     {
@@ -16,7 +20,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-                Debug.Log($"Bullet collided with: {other.gameObject.name} (tag: {other.tag})");
+        Debug.Log($"Bullet collided with: {other.gameObject.name} (tag: {other.tag})");
         if (other.CompareTag("BulletEnemy"))
         {
             return;
