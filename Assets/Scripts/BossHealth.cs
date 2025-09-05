@@ -4,29 +4,27 @@ using UnityEngine.UI;
 public class BossHealth : MonoBehaviour
 {
     [Header("Boss Data")]
-    public BossData bossData;   // gắn ScriptableObject chứa stats của Boss
+    public BossData bossData;
 
     [Header("UI")]
     public Slider healthSlider;
-
-    //private float currentHealth;
-
-    //public bool IsDead => currentHealth <= 0;
+    public Image fillImage;
+    private Color originalColor;
 
     void Start()
     {
-        // if (bossData != null)
-        // {
-        //     // Lấy máu từ runtime stats
-        //     currentHealth = bossData.health;
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("BossData chưa được gắn vào BossHealth!");
-        //     currentHealth = 100f; // fallback
-        // }
+        if (fillImage != null)
+            originalColor = fillImage.color;
 
-        UpdateHealthUI(bossData.health, bossData.health);
+        var bossManager = GetComponent<BossManager>();
+        if (bossManager != null)
+        {
+            UpdateHealthUI(bossManager.CurrentHealth, bossData.health);
+        }
+        else
+        {
+            UpdateHealthUI(bossData.health, bossData.health);
+        }
     }
 
     public void UpdateHealthUI(float currentHealth, float maxHealth)
@@ -37,34 +35,32 @@ public class BossHealth : MonoBehaviour
             healthSlider.value = currentHealth;
         }
     }
+    public Coroutine flashCoroutine;
+    public void StartFlashing()
+    {
+        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = StartCoroutine(FlashFill());
+    }
 
-    // public void TakeDamage(float amount)
-    // {
-    //     if (IsDead) return;
+    public void StopFlashing()
+    {
+        if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+        flashCoroutine = null;
+        if (fillImage != null) fillImage.color = originalColor;
+    }
 
-    //     currentHealth -= amount;
-    //     currentHealth = Mathf.Clamp(currentHealth, 0, bossData.health);
-    //     UpdateHealthUI();
-
-    //     if (currentHealth <= 0)
-    //     {
-    //         Die();
-    //     }
-    // }
-
-    // public void Heal(float amount)
-    // {
-    //     if (IsDead) return;
-
-    //     currentHealth += amount;
-    //     currentHealth = Mathf.Clamp(currentHealth, 0, bossData.health);
-    //     UpdateHealthUI();
-    // }
-
-    // void Die()
-    // {
-    //     Debug.Log("Boss Died");
-    //     // có thể gọi animation chết, hủy Boss, drop loot...
-    //     Destroy(gameObject);
-    // }
+    private System.Collections.IEnumerator FlashFill()
+    {
+        float t = 0f;
+        while (true)
+        {
+            t += Time.deltaTime * 2f; // tốc độ nhấp nháy
+            float lerp = Mathf.PingPong(t, 1f); // dao động 0 -> 1 -> 0
+            if (fillImage != null)
+            {
+                fillImage.color = Color.Lerp(originalColor, Color.white, lerp);
+            }
+            yield return null;
+        }
+    }
 }
