@@ -73,5 +73,6 @@ public class PlayerStats : MonoBehaviour
         isDead = true;
         Debug.Log("⚠ Player chết!");
         gameOverUI.SetActive(true);
+        Time.timeScale = 0;
     }
 }

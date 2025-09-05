@@ -7,7 +7,7 @@ public abstract class SkillBoss : ScriptableObject
     public string skillName;
     public float cooldown = 5f;
 
-    public void StartSkill(BossManager boss)
+    public virtual void StartSkill(BossManager boss)
     {
         boss.StartCoroutine(SkillRoutine(boss));
     }

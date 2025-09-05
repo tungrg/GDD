@@ -10,16 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a05b44838532c7849b0d1816c1a9b9b6, type: 3}
-  m_Name: BossMap1
+  m_Name: BossMap3
   m_EditorClassIdentifier: 
-  nameBoss: BossMap1
+  nameBoss: 
   icon: {fileID: 0}
-  originalHealth: 200
-  originalSpeed: 3
-  originalDamageAtk: 20
-  originalSpeedAtk: 2
-  speed: 3
-  skills:
-  - {fileID: 11400000, guid: 1101102ff6743cd4c9edb7cd958d79df, type: 2}
-  - {fileID: 11400000, guid: e3b0519d87ca0614496671c6448b03ee, type: 2}
-  - {fileID: 11400000, guid: 6c64cb013bb040c4ebc1ca1bf9caae39, type: 2}
+  originalHealth: 100
+  originalSpeed: 5
+  originalDamageAtk: 10
+  originalSpeedAtk: 1
+  speed: 0
+  skills: []
