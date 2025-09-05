@@ -7,8 +7,8 @@ public class Bullet2 : MonoBehaviour
     public float damage = 0f;
 
     [Header("Effects")]
-    public GameObject hitEnemyEffectPrefab; 
-    public GameObject hitMapEffectPrefab;  
+    public GameObject hitEnemyEffectPrefab;
+    public GameObject hitMapEffectPrefab;
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class Bullet2 : MonoBehaviour
             if (hitEnemyEffectPrefab != null)
             {
                 GameObject effect = Instantiate(hitEnemyEffectPrefab, hitPos, Quaternion.identity);
-                Destroy(effect, 1f); 
+                Destroy(effect, 1f);
             }
 
             BossManager boss = collision.gameObject.GetComponent<BossManager>();

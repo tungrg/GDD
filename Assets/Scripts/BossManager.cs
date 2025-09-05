@@ -22,12 +22,25 @@ public class BossManager : BossBase
 
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
+    private bool recoveryTriggered = false;
 
     [Header("UI")]
     public GameObject uiPanel;
     public GameObject hpBoss;
     private NavMeshAgent agent;
     public Animator animator;
+
+    [Header("Effects")]
+    public GameObject healEffectPrefab;
+
+
+
+    public bool CanTriggerRecovery()
+    {
+        if (recoveryTriggered) return false;
+        recoveryTriggered = true;
+        return true;
+    }
 
     private void Start()
     {
@@ -42,6 +55,11 @@ public class BossManager : BossBase
         if (Data != null)
         {
             CurrentHealth = Data.health;
+            BossHealth bossHealth = GetComponent<BossHealth>();
+            if (bossHealth != null)
+            {
+                bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+            }
         }
 
         agent = GetComponent<NavMeshAgent>();
@@ -98,7 +116,7 @@ public class BossManager : BossBase
         }
     }
 
-    private Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+    public Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
     {
         Vector3 randomPos = center + Random.insideUnitSphere * radius;
         if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
@@ -175,6 +193,18 @@ public class BossManager : BossBase
                 }
             }
         }
+        if (!recoveryTriggered && CurrentHealth <= Data.health * 0.5f)
+        {
+            Debug.Log("Recovery kich hoat");
+            foreach (var skill in Data.skills)
+            {
+                if (skill is Recovery recoverySkill)
+                {
+                    recoverySkill.Use(this);
+                }
+            }
+        }
+
 
         if (CurrentHealth <= 0)
         {
@@ -213,4 +243,28 @@ public class BossManager : BossBase
 
         Time.timeScale = 0;
     }
+    public void Heal(float amount)
+    {
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, Data.health);
+        Debug.Log($"Boss healed: {CurrentHealth}/{Data.health}");
+
+        BossHealth bossHealth = GetComponent<BossHealth>();
+        if (bossHealth != null)
+        {
+            bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+        }
+    }
+    public void OnPlayerAttack()
+    {
+        if (Data == null || Data.skills == null) return;
+
+        foreach (var skill in Data.skills)
+        {
+            if (skill is Teleportation teleportSkill)
+            {
+                teleportSkill.OnPlayerAttack(this);
+            }
+        }
+    }
+
 }
