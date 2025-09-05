@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd429630d5a8d444187af22360d32a11, type: 3}
-  m_Name: Freeze
+  m_Script: {fileID: 11500000, guid: dbfdf810ad527a746ae01b69b1702a23, type: 3}
+  m_Name: Recovery
   m_EditorClassIdentifier: 
-  skillName: Freeze
-  cooldown: 15
-  freezeEffectPrefab: {fileID: 2610179636996891716, guid: c92f2340d7c248f48ad36746d56ca80c, type: 3}
-  freezeDuration: 3
+  skillName: 
+  cooldown: 5
