@@ -32,7 +32,7 @@ public class BossManager : BossBase
 
     [Header("Effects")]
     public GameObject healEffectPrefab;
-
+    public ParticleSystem SkillRevengeShotVFX;
 
 
     public bool CanTriggerRecovery()
@@ -153,9 +153,23 @@ public class BossManager : BossBase
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
         Bullet bulletScript = bullet.GetComponent<Bullet>();
+
         if (bulletScript != null)
         {
-            bulletScript.SetDamage(Data.damageAtk);
+            float finalDamage = Data.damageAtk;
+
+            if (Data != null && Data.skills != null)
+            {
+                foreach (var skill in Data.skills)
+                {
+                    if (skill is SkillRevengeShot revenge)
+                    {
+                        finalDamage = revenge.ModifyBulletDamage(this, finalDamage, bullet);
+                    }
+                }
+            }
+
+            bulletScript.SetDamage(finalDamage);
         }
 
         if (rb != null)
@@ -204,7 +218,14 @@ public class BossManager : BossBase
                 }
             }
         }
-
+        // Gọi passive RevengeShot
+        foreach (var skill in Data.skills)
+        {
+            if (skill is SkillRevengeShot revenge)
+            {
+                revenge.OnBossDamaged(this);
+            }
+        }
 
         if (CurrentHealth <= 0)
         {
