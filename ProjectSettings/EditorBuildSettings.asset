@@ -20,6 +20,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Boss(Nam)/Boss(Nam).unity
     guid: 528e16ccf52d07b4498758e152f57067
+  - enabled: 1
+    path: Assets/Scenes/SceneMap1.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/SceneMap2.unity
+    guid: a3fdd77198e376c41a45f35556967057
+  - enabled: 1
+    path: Assets/Scenes/SceneMap3.unity
+    guid: b2b67cbc49ec843428250aca0b906dda
+  - enabled: 1
+    path: Assets/Scenes/SceneMap4.unity
+    guid: 6b5c62ee3e40ba6499753a7199e395d0
+  - enabled: 1
+    path: Assets/Scenes/SceneMap5.unity
+    guid: 6a6d216d26b606a46b28c577d5554ea2
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 9bd803bf8831ff943a57a85d01addfff, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 246c1f8ca580d2344b8052998a47a281, type: 2}

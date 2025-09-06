@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d4226170443564da1b0f0c2ab8f10b, type: 3}
+  m_Name: LevelData_1
+  m_EditorClassIdentifier: 
+  levelIndex: 1
+  sceneName: SceneMap1
+  starThresholds: 90d0030020a10700b0710b00
+  bestScore: 0
+  starsEarned: 0
+  goldClaimed: 0
+  testHealthPercentage: 0
