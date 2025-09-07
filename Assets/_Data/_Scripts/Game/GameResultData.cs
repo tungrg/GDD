@@ -7,33 +7,40 @@ public class GameResultData
     public string levelName;
     public int score;
     public int starsEarned;
-    public int goldEarned;
+    public int goldEarned; // Vàng vừa nhận được
     public bool isWin;
-    public bool canClaimGold; // THÊM MỚI: có thể nhận vàng không
+    public bool canClaimGold; // Có vàng để claim không
     
-    public GameResultData(int levelIndex, string levelName, int score, int starsEarned, bool isWin, bool goldAlreadyClaimed)
+    // Default constructor (Unity yêu cầu)
+    public GameResultData()
+    {
+    }
+    
+    // Constructor với parameters
+    public GameResultData(int levelIndex, string levelName, int score, int starsEarned, bool isWin, int claimableGold)
     {
         this.levelIndex = levelIndex;
         this.levelName = levelName;
         this.score = score;
         this.starsEarned = starsEarned;
         this.isWin = isWin;
-        
-        // Tính vàng theo số sao
-        this.goldEarned = CalculateGold(starsEarned);
-        
-        // Chỉ có thể claim vàng nếu win và chưa claim trước đó
-        this.canClaimGold = isWin && !goldAlreadyClaimed && goldEarned > 0;
+        this.goldEarned = claimableGold;
+        this.canClaimGold = isWin && claimableGold > 0;
     }
     
-    private int CalculateGold(int stars)
+    /// <summary>
+    /// Static factory method để tạo an toàn
+    /// </summary>
+    public static GameResultData Create(int levelIndex, string levelName, int score, int starsEarned, bool isWin, int claimableGold)
     {
-        switch (stars)
-        {
-            case 1: return 150;
-            case 2: return 300;
-            case 3: return 500;
-            default: return 0;
-        }
+        var data = new GameResultData();
+        data.levelIndex = levelIndex;
+        data.levelName = levelName;
+        data.score = score;
+        data.starsEarned = starsEarned;
+        data.isWin = isWin;
+        data.goldEarned = claimableGold;
+        data.canClaimGold = isWin && claimableGold > 0;
+        return data;
     }
 }

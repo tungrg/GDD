@@ -12,17 +12,23 @@ public class LevelData : ScriptableObject
     [Header("Player Progress")]
     [SerializeField] private int bestScore = 0;        // Điểm cao nhất đã đạt được
     [SerializeField] private int starsEarned = 0;      // Số sao đã đạt được
-    [SerializeField] private bool goldClaimed = false; // Đã nhận vàng hay chưa
+    
+    [Header("Gold Milestones - Tracked per star")]
+    [SerializeField] private bool star1GoldClaimed = false; // Đã nhận vàng mốc 1 sao
+    [SerializeField] private bool star2GoldClaimed = false; // Đã nhận vàng mốc 2 sao  
+    [SerializeField] private bool star3GoldClaimed = false; // Đã nhận vàng mốc 3 sao
     
     [Header("Test Parameters")]
     [SerializeField] private float testHealthPercentage = 100f; // % máu để test (0-100)
     
-    // Properties để truy cập (GIỮ NGUYÊN)
+    // Properties để truy cập
     public int BestScore => bestScore;
     public int StarsEarned => starsEarned;
-    public bool GoldClaimed => goldClaimed;
+    public bool Star1GoldClaimed => star1GoldClaimed;
+    public bool Star2GoldClaimed => star2GoldClaimed;
+    public bool Star3GoldClaimed => star3GoldClaimed;
 
-    // GIỮ NGUYÊN method này
+    // Các method cũ giữ nguyên
     public int StarsForScore(int score)
     {
         int stars = 0;
@@ -34,73 +40,43 @@ public class LevelData : ScriptableObject
         return Mathf.Clamp(stars, 0, 3);
     }
     
-    // GIỮ NGUYÊN method này
     public int CalculateScoreFromHealth(float healthPercentage)
     {
         healthPercentage = Mathf.Clamp(healthPercentage, 0f, 100f);
         
         if (healthPercentage >= 75f)
         {
-            // 3 sao - từ 750000 đến tối đa (100% = 1,000,000)
-            // Tính tỷ lệ từ 75% đến 100%
-            float ratio = (healthPercentage - 75f) / 25f; // 0 đến 1
-            int baseScore = starThresholds[2]; // 750000
+            float ratio = (healthPercentage - 75f) / 25f;
+            int baseScore = starThresholds[2];
             int maxScore = 1000000;
             return Mathf.RoundToInt(Mathf.Lerp(baseScore, maxScore, ratio));
         }
         else if (healthPercentage >= 50f)
         {
-            // 2 sao - từ 500000 đến 749999
-            // Tính tỷ lệ từ 50% đến 75%
-            float ratio = (healthPercentage - 50f) / 25f; // 0 đến 1
-            int minScore = starThresholds[1]; // 500000
-            int maxScore = starThresholds[2] - 1; // 749999
+            float ratio = (healthPercentage - 50f) / 25f;
+            int minScore = starThresholds[1];
+            int maxScore = starThresholds[2] - 1;
             return Mathf.RoundToInt(Mathf.Lerp(minScore, maxScore, ratio));
         }
         else if (healthPercentage >= 25f)
         {
-            // 1 sao - từ 250000 đến 499999
-            // Tính tỷ lệ từ 25% đến 50%
-            float ratio = (healthPercentage - 25f) / 25f; // 0 đến 1
-            int minScore = starThresholds[0]; // 250000
-            int maxScore = starThresholds[1] - 1; // 499999
+            float ratio = (healthPercentage - 25f) / 25f;
+            int minScore = starThresholds[0];
+            int maxScore = starThresholds[1] - 1;
             return Mathf.RoundToInt(Mathf.Lerp(minScore, maxScore, ratio));
         }
         else if (healthPercentage > 0f)
         {
-            // 0 sao nhưng vẫn có điểm - từ 1 đến 249999
-            // Tính tỷ lệ từ 0% đến 25%
-            float ratio = healthPercentage / 25f; // 0 đến 1
-            int maxScore = starThresholds[0] - 1; // 249999
+            float ratio = healthPercentage / 25f;
+            int maxScore = starThresholds[0] - 1;
             return Mathf.RoundToInt(Mathf.Lerp(1, maxScore, ratio));
         }
         else
         {
-            // 0% máu = 0 điểm
             return 0;
         }
     }
     
-    // GIỮ NGUYÊN method này
-    public void CompleteLevel(float healthPercentage)
-    {
-        int earnedScore = CalculateScoreFromHealth(healthPercentage);
-        int earnedStars = StarsForScore(earnedScore);
-        
-        Debug.Log($"Level {levelIndex} completed with {healthPercentage}% health!");
-        Debug.Log($"Earned: {earnedScore:N0} points, {earnedStars} stars");
-        
-        // Cập nhật điểm nếu cao hơn
-        UpdateScore(earnedScore);
-    }
-    
-    [ContextMenu("Test Complete Level")]
-    public void TestCompleteLevel()
-    {
-        CompleteLevel(testHealthPercentage);
-    }
-    
-    // GIỮ NGUYÊN method này - KHÔNG THAY ĐỔI GÌ
     public void UpdateScore(int newScore)
     {
         if (newScore > bestScore)
@@ -109,7 +85,6 @@ public class LevelData : ScriptableObject
             starsEarned = StarsForScore(bestScore);
             
 #if UNITY_EDITOR
-            // Đánh dấu dirty để Unity save thay đổi
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
             
@@ -122,29 +97,83 @@ public class LevelData : ScriptableObject
     }
     
     /// <summary>
-    /// THÊM MỚI: Đánh dấu đã nhận vàng
+    /// THÊM MỚI: Tính vàng có thể claim từ các mốc sao mới
     /// </summary>
-    public void MarkGoldClaimed()
+    public int CalculateClaimableGold(int currentStarsAchieved)
     {
-        if (!goldClaimed)
+        int totalGold = 0;
+        
+        // Kiểm tra từng mốc sao
+        if (currentStarsAchieved >= 1 && !star1GoldClaimed)
         {
-            goldClaimed = true;
-            
+            totalGold += 150; // 1 sao = 150 vàng
+        }
+        
+        if (currentStarsAchieved >= 2 && !star2GoldClaimed)
+        {
+            totalGold += 300; // 2 sao = 300 vàng
+        }
+        
+        if (currentStarsAchieved >= 3 && !star3GoldClaimed)
+        {
+            totalGold += 500; // 3 sao = 500 vàng
+        }
+        
+        return totalGold;
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Đánh dấu các mốc sao đã claim vàng
+    /// </summary>
+    public void ClaimStarGold(int starsToClaimUpTo)
+    {
+        bool changed = false;
+        
+        if (starsToClaimUpTo >= 1 && !star1GoldClaimed)
+        {
+            star1GoldClaimed = true;
+            changed = true;
+            Debug.Log($"Level {levelIndex}: Claimed 1-star gold (150)");
+        }
+        
+        if (starsToClaimUpTo >= 2 && !star2GoldClaimed)
+        {
+            star2GoldClaimed = true;
+            changed = true;
+            Debug.Log($"Level {levelIndex}: Claimed 2-star gold (300)");
+        }
+        
+        if (starsToClaimUpTo >= 3 && !star3GoldClaimed)
+        {
+            star3GoldClaimed = true;
+            changed = true;
+            Debug.Log($"Level {levelIndex}: Claimed 3-star gold (500)");
+        }
+        
+        if (changed)
+        {
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
-            
-            Debug.Log($"Level {levelIndex}: Gold claimed!");
         }
     }
     
-    // GIỮ NGUYÊN method này
+    /// <summary>
+    /// THÊM MỚI: Get thông tin chi tiết về gold status
+    /// </summary>
+    public string GetGoldStatusDebug()
+    {
+        return $"Level {levelIndex} Gold Status: 1★({(star1GoldClaimed ? "✓" : "✗")}) 2★({(star2GoldClaimed ? "✓" : "✗")}) 3★({(star3GoldClaimed ? "✓" : "✗")})";
+    }
+    
     [ContextMenu("Reset Progress")]
     public void ResetProgress()
     {
         bestScore = 0;
         starsEarned = 0;
-        goldClaimed = false; // Reset cả gold
+        star1GoldClaimed = false;
+        star2GoldClaimed = false;
+        star3GoldClaimed = false;
         
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
@@ -153,7 +182,24 @@ public class LevelData : ScriptableObject
         Debug.Log($"Level {levelIndex}: Progress reset");
     }
     
-    // GIỮ NGUYÊN tất cả method test khác...
+    // Các test methods cũ giữ nguyên...
+    [ContextMenu("Test Complete Level")]
+    public void TestCompleteLevel()
+    {
+        CompleteLevel(testHealthPercentage);
+    }
+    
+    public void CompleteLevel(float healthPercentage)
+    {
+        int earnedScore = CalculateScoreFromHealth(healthPercentage);
+        int earnedStars = StarsForScore(earnedScore);
+        
+        Debug.Log($"Level {levelIndex} completed with {healthPercentage}% health!");
+        Debug.Log($"Earned: {earnedScore:N0} points, {earnedStars} stars");
+        
+        UpdateScore(earnedScore);
+    }
+    
     [ContextMenu("Test All Health Scenarios")]
     public void TestAllHealthScenarios()
     {
@@ -171,7 +217,7 @@ public class LevelData : ScriptableObject
     [ContextMenu("Set 1 Star")]
     public void SetOneStar()
     {
-        bestScore = starThresholds[0]; // 250000
+        bestScore = starThresholds[0];
         starsEarned = 1;
         
 #if UNITY_EDITOR
@@ -179,19 +225,12 @@ public class LevelData : ScriptableObject
 #endif
         
         Debug.Log($"Level {levelIndex}: Set to 1 star manually");
-        
-        // Tìm và refresh ProgressManager
-        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-        if (progressManager != null)
-        {
-            progressManager.ForceRefreshAll();
-        }
     }
     
     [ContextMenu("Set 3 Stars")]
     public void SetThreeStars()
     {
-        bestScore = starThresholds[2]; // 750000
+        bestScore = starThresholds[2];
         starsEarned = 3;
         
 #if UNITY_EDITOR
@@ -199,12 +238,5 @@ public class LevelData : ScriptableObject
 #endif
         
         Debug.Log($"Level {levelIndex}: Set to 3 stars manually");
-        
-        // Tìm và refresh ProgressManager
-        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-        if (progressManager != null)
-        {
-            progressManager.ForceRefreshAll();
-        }
     }
 }

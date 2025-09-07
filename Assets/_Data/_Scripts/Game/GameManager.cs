@@ -11,15 +11,50 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider healthSlider;           
     [SerializeField] private TextMeshProUGUI healthText;    
     [SerializeField] private TextMeshProUGUI scoreText;     
-    [SerializeField] private TextMeshProUGUI starsText;     
+    [SerializeField] private TextMeshProUGUI starsText;
+    [SerializeField] private TextMeshProUGUI goldDebugText; // THÊM MỚI: Hiển thị số vàng
     [SerializeField] private Button completeButton;        
     
     [Header("Test Parameters")]
     [SerializeField] private float currentHealthPercentage = 100f;
     
+    [Header("Game Currency - DEBUG")]
+    [SerializeField] private int totalGameGold = 0; // THÊM MỚI: Tổng vàng của game
+    
+    // Singleton pattern để dễ truy cập
+    private static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = FindFirstObjectByType<GameManager>();
+            return instance;
+        }
+    }
+    
+    public int TotalGold => totalGameGold; // Property để truy cập
+    
+    void Awake()
+    {
+        // Singleton setup
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // Giữ GameManager qua scenes
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        // Load tổng vàng từ PlayerPrefs
+        LoadTotalGold();
+    }
+    
     void Start()
     {
-        // Tự động lấy level data từ PlayerPrefs nếu có
         int currentLevel = PlayerPrefs.GetInt("current_level", 1);
         LoadLevelData(currentLevel);
         
@@ -28,14 +63,56 @@ public class GameManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Load level data theo index
+    /// THÊM MỚI: Load tổng vàng từ PlayerPrefs
     /// </summary>
+    private void LoadTotalGold()
+    {
+        totalGameGold = PlayerPrefs.GetInt("total_game_gold", 0);
+        Debug.Log($"[GameManager] Loaded total gold: {totalGameGold}");
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Save tổng vàng vào PlayerPrefs
+    /// </summary>
+    private void SaveTotalGold()
+    {
+        PlayerPrefs.SetInt("total_game_gold", totalGameGold);
+        PlayerPrefs.Save();
+        Debug.Log($"[GameManager] Saved total gold: {totalGameGold}");
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Add vàng vào tổng
+    /// </summary>
+    public void AddGold(int amount)
+    {
+        if (amount <= 0) return;
+        
+        int oldGold = totalGameGold;
+        totalGameGold += amount;
+        SaveTotalGold();
+        
+        Debug.Log($"[GameManager] Added {amount} gold: {oldGold} → {totalGameGold}");
+        
+        // Cập nhật UI ngay lập tức
+        UpdateGoldDisplay();
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Cập nhật hiển thị vàng
+    /// </summary>
+    private void UpdateGoldDisplay()
+    {
+        if (goldDebugText != null)
+        {
+            goldDebugText.text = $"Total Gold: {totalGameGold:N0}";
+        }
+    }
+    
     void LoadLevelData(int levelIndex)
     {
-        // Tự động load LevelData từ Resources
         if (currentLevelData == null)
         {
-            // Tìm LevelData trong Resources theo pattern "LevelData_X"
             currentLevelData = Resources.Load<LevelData>($"LevelData_{levelIndex}");
             
             if (currentLevelData == null)
@@ -46,11 +123,9 @@ public class GameManager : MonoBehaviour
         }
         
         Debug.Log($"Loaded Level {currentLevelData.levelIndex} data");
+        Debug.Log(currentLevelData.GetGoldStatusDebug()); // Debug gold status
     }
     
-    /// <summary>
-    /// Setup UI elements
-    /// </summary>
     void SetupUI()
     {
         if (healthSlider != null)
@@ -67,18 +142,12 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Callback khi thay đổi health slider
-    /// </summary>
     void OnHealthChanged(float value)
     {
         currentHealthPercentage = value;
         UpdateDisplay();
     }
     
-    /// <summary>
-    /// Cập nhật hiển thị UI
-    /// </summary>
     void UpdateDisplay()
     {
         if (currentLevelData == null) return;
@@ -95,14 +164,17 @@ public class GameManager : MonoBehaviour
         if (scoreText != null)
             scoreText.text = $"Score: {predictedScore:N0}";
         
-        // Hiển thị sao
+        // Hiển thị sao và vàng có thể nhận
         if (starsText != null)
-            starsText.text = $"Stars: {predictedStars}";
+        {
+            int claimableGold = currentLevelData.CalculateClaimableGold(predictedStars);
+            starsText.text = $"Stars: {predictedStars} (Gold: +{claimableGold})";
+        }
+        
+        // Cập nhật hiển thị tổng vàng
+        UpdateGoldDisplay();
     }
     
-    /// <summary>
-    /// Complete level với % máu hiện tại
-    /// </summary>
     public void CompleteLevel()
     {
         if (currentLevelData == null)
@@ -123,14 +195,34 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"WIN! Saving score {finalScore} to LevelData...");
             
+            // TÍNH VÀNG CÓ THỂ CLAIM TRƯỚC KHI UPDATE VÀ CLAIM
+            int claimableGold = currentLevelData.CalculateClaimableGold(stars);
+            Debug.Log($"Claimable gold for {stars} stars: {claimableGold}");
+            
             // Ghi log trước khi cập nhật
+            Debug.Log($"Before update: {currentLevelData.GetGoldStatusDebug()}");
             Debug.Log($"Before update: BestScore = {currentLevelData.BestScore}, StarsEarned = {currentLevelData.StarsEarned}");
             
             // Cập nhật LevelData
             currentLevelData.UpdateScore(finalScore);
             
+            // Add vàng và đánh dấu đã claim
+            if (claimableGold > 0)
+            {
+                AddGold(claimableGold);
+                currentLevelData.ClaimStarGold(stars);
+            }
+            
             // Ghi log sau khi cập nhật
+            Debug.Log($"After update: {currentLevelData.GetGoldStatusDebug()}");
             Debug.Log($"After update: BestScore = {currentLevelData.BestScore}, StarsEarned = {currentLevelData.StarsEarned}");
+            
+            // TRUYỀN CLAIMABLE GOLD VÀO RESULT MANAGER
+            var resultManager = GameResultManager.Instance;
+            if (resultManager != null)
+            {
+                resultManager.ShowGameResult(currentLevelData, currentHealthPercentage, claimableGold);
+            }
             
             // Thông báo ProgressManager
             UpdateProgressManager();
@@ -138,23 +230,16 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log($"LOSE! No score saved (0 stars)");
-        }
-        
-        // Hiển thị kết quả thông qua GameResultManager
-        var resultManager = GameResultManager.Instance;
-        if (resultManager != null)
-        {
-            resultManager.ShowGameResult(currentLevelData, currentHealthPercentage);
-        }
-        else
-        {
-            Debug.LogError("GameResultManager not found!");
+            
+            // Hiển thị kết quả lose (không có vàng)
+            var resultManager = GameResultManager.Instance;
+            if (resultManager != null)
+            {
+                resultManager.ShowGameResult(currentLevelData, currentHealthPercentage, 0);
+            }
         }
     }
     
-    /// <summary>
-    /// THÊM MỚI: Cập nhật ProgressManager sau khi save điểm
-    /// </summary>
     private void UpdateProgressManager()
     {
         var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
@@ -169,9 +254,6 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Set health percentage (để gọi từ script khác)
-    /// </summary>
     public void SetHealthPercentage(float percentage)
     {
         currentHealthPercentage = Mathf.Clamp(percentage, 0f, 100f);
@@ -182,12 +264,8 @@ public class GameManager : MonoBehaviour
         UpdateDisplay();
     }
     
-    /// <summary>
-    /// Test methods với shortcut keys
-    /// </summary>
     void Update()
     {
-        // Test shortcuts (chỉ trong development build)
         if (Debug.isDebugBuild)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1)) SetHealthPercentage(100f); // 3 sao
@@ -197,14 +275,34 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha5)) SetHealthPercentage(10f);  // 0 sao
             if (Input.GetKeyDown(KeyCode.Space)) CompleteLevel();
             
-            // THÊM: Test direct score update
             if (Input.GetKeyDown(KeyCode.T)) TestDirectScoreUpdate();
+            if (Input.GetKeyDown(KeyCode.G)) DebugGoldSystem(); // THÊM MỚI: Debug gold
         }
     }
     
     /// <summary>
-    /// THÊM: Test direct score update
+    /// THÊM MỚI: Debug hệ thống vàng
     /// </summary>
+    [ContextMenu("Debug Gold System")]
+    public void DebugGoldSystem()
+    {
+        Debug.Log($"=== GOLD SYSTEM DEBUG ===");
+        Debug.Log($"Total Game Gold: {totalGameGold}");
+        
+        if (currentLevelData != null)
+        {
+            Debug.Log(currentLevelData.GetGoldStatusDebug());
+            
+            for (int stars = 1; stars <= 3; stars++)
+            {
+                int claimable = currentLevelData.CalculateClaimableGold(stars);
+                Debug.Log($"If achieve {stars} stars → can claim {claimable} gold");
+            }
+        }
+        
+        Debug.Log($"PlayerPrefs total_game_gold: {PlayerPrefs.GetInt("total_game_gold", 0)}");
+    }
+    
     [ContextMenu("Test Direct Score Update")]
     public void TestDirectScoreUpdate()
     {
@@ -221,19 +319,27 @@ public class GameManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Set level data từ bên ngoài
+    /// THÊM MỚI: Reset tất cả vàng (for testing)
     /// </summary>
+    [ContextMenu("Reset All Gold")]
+    public void ResetAllGold()
+    {
+        totalGameGold = 0;
+        SaveTotalGold();
+        UpdateGoldDisplay();
+        
+        Debug.Log("All gold reset!");
+    }
+    
     public void SetLevelData(LevelData levelData)
     {
         currentLevelData = levelData;
         UpdateDisplay();
         
         Debug.Log($"GameManager: Set LevelData to Level {levelData.levelIndex}");
+        Debug.Log(levelData.GetGoldStatusDebug());
     }
     
-    /// <summary>
-    /// THÊM: Debug current level data
-    /// </summary>
     [ContextMenu("Debug Current Level Data")]
     public void DebugCurrentLevelData()
     {
@@ -244,8 +350,10 @@ public class GameManager : MonoBehaviour
             Debug.Log($"Scene Name: {currentLevelData.sceneName}");
             Debug.Log($"Best Score: {currentLevelData.BestScore}");
             Debug.Log($"Stars Earned: {currentLevelData.StarsEarned}");
-            Debug.Log($"Gold Claimed: {currentLevelData.GoldClaimed}");
+            Debug.Log(currentLevelData.GetGoldStatusDebug());
+#if UNITY_EDITOR
             Debug.Log($"Asset Path: {UnityEditor.AssetDatabase.GetAssetPath(currentLevelData)}");
+#endif
         }
         else
         {

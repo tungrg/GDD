@@ -45,20 +45,23 @@ public class WinPopup : MonoBehaviour
         if (scoreText != null)
             scoreText.text = data.score.ToString("N0");
             
-        // Hiển thị vàng với trạng thái
+        // SỬA LOGIC HIỂN thị VÀNG
         if (goldText != null)
         {
-            if (data.canClaimGold)
+            if (data.canClaimGold && data.goldEarned > 0)
             {
-                goldText.text = $"{data.goldEarned}"; // Vừa nhận vàng
+                // Có vàng mới để claim
+                goldText.text = $"+{data.goldEarned}";
             }
             else if (data.goldEarned > 0)
             {
-                goldText.text = $"0"; // Đã nhận rồi
+                // Có vàng nhưng đã claim rồi (hiển thị số vàng đã claim trước đó)
+                goldText.text = $"{data.goldEarned}";
             }
             else
             {
-                goldText.text = "0"; // Không có vàng
+                // Không có vàng hoặc đã claim hết
+                goldText.text = "0";
             }
         }
         

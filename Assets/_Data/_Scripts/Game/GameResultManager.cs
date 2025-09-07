@@ -48,39 +48,24 @@ public class GameResultManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Hiển thị kết quả game (KHÔNG LƯU ĐIỂM - để LevelManager xử lý)
+    /// Hiển thị kết quả game với claimable gold đã tính trước
     /// </summary>
-    public void ShowGameResult(LevelData levelData, float healthPercentage)
+    public void ShowGameResult(LevelData levelData, float healthPercentage, int claimableGold)
     {
         // Tính toán kết quả cho hiển thị
         int score = levelData.CalculateScoreFromHealth(healthPercentage);
         int stars = levelData.StarsForScore(score);
-        bool isWin = stars > 0; // Win nếu có ít nhất 1 sao
+        bool isWin = stars > 0;
         
-        // Tạo result data với thông tin vàng
+        // Tạo result data với claimable gold đã được tính trước
         var resultData = new GameResultData(
             levelData.levelIndex,
             $"Level {levelData.levelIndex}",
             score,
             stars,
             isWin,
-            levelData.GoldClaimed // Kiểm tra đã claim vàng chưa
+            claimableGold // Truyền trực tiếp claimable gold
         );
-        
-        // LOẠI BỎ Time.timeScale = 0f; 
-        // Player sẽ tự dừng thông qua gameplay logic
-        
-        // KHÔNG LƯU ĐIỂM Ở ĐÂY - để LevelManager xử lý
-        
-        // Chỉ add vàng nếu có thể claim
-        if (resultData.canClaimGold)
-        {
-            AddGold(resultData.goldEarned);
-            levelData.MarkGoldClaimed(); // Đánh dấu đã nhận vàng
-        }
-        
-        // Ẩn tất cả panels trước
-        HideAllPanels();
         
         // Hiển thị panel tương ứng
         if (isWin)
@@ -92,8 +77,13 @@ public class GameResultManager : MonoBehaviour
             ShowLosePanel(resultData);
         }
         
-        string goldStatus = resultData.canClaimGold ? $"Claimed {resultData.goldEarned}" : "Already claimed";
-        Debug.Log($"Game Result: {(isWin ? "WIN" : "LOSE")} - Score: {score}, Stars: {stars}, Gold: {goldStatus}");
+        Debug.Log($"Game Result: {(isWin ? "WIN" : "LOSE")} - Score: {score}, Stars: {stars}, Gold: {claimableGold}");
+    }
+
+    // Giữ lại overload cũ để backward compatibility
+    public void ShowGameResult(LevelData levelData, float healthPercentage)
+    {
+        ShowGameResult(levelData, healthPercentage, 0);
     }
     
     /// <summary>
