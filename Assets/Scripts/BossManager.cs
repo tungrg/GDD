@@ -33,6 +33,18 @@ public class BossManager : BossBase
     [Header("Effects")]
     public GameObject healEffectPrefab;
 
+    private bool isBusy = false;
+
+    public void SetBusy(bool value)
+    {
+        isBusy = value;
+        if (agent != null)
+        {
+            if (value) agent.isStopped = true;
+            else agent.isStopped = false;
+        }
+    }
+
 
 
     public bool CanTriggerRecovery()
@@ -99,6 +111,12 @@ public class BossManager : BossBase
 
         while (gameStarted)
         {
+            if (isBusy)
+            {
+                yield return null;
+                continue;
+            }
+
             Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
             agent.SetDestination(destination);
 
@@ -109,8 +127,8 @@ public class BossManager : BossBase
 
             yield return new WaitForSeconds(waitAtPoint);
 
-            // Gọi coroutine quay mặt & bắn
-            ShootAtPlayer();
+            if (!isBusy)
+                ShootAtPlayer();
 
             yield return new WaitForSeconds(waitBeforeShoot);
         }
@@ -166,6 +184,7 @@ public class BossManager : BossBase
             rb.velocity = shootDir * fireForce;
 #endif
         }
+
     }
 
     public void TakeDamage(float amount)
@@ -254,17 +273,14 @@ public class BossManager : BossBase
             bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
         }
     }
-    public void OnPlayerAttack()
+    public void OnPlayerHitByBoss()
     {
-        if (Data == null || Data.skills == null) return;
-
         foreach (var skill in Data.skills)
         {
-            if (skill is Teleportation teleportSkill)
+            if (skill is Teleportation bombSkill)
             {
-                teleportSkill.OnPlayerAttack(this);
+                bombSkill.OnBossHitPlayer();
             }
         }
     }
-
 }
