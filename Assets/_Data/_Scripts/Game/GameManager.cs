@@ -7,19 +7,19 @@ public class GameManager : MonoBehaviour
     [Header("Current Level")]
     [SerializeField] private LevelData currentLevelData;
     
+    [Header("Game Currency")]
+    [SerializeField] private GameCurrency gameCurrency; // Reference tới GameCurrency asset
+    
     [Header("Test UI")]
     [SerializeField] private Slider healthSlider;           
     [SerializeField] private TextMeshProUGUI healthText;    
     [SerializeField] private TextMeshProUGUI scoreText;     
     [SerializeField] private TextMeshProUGUI starsText;
-    [SerializeField] private TextMeshProUGUI goldDebugText; // THÊM MỚI: Hiển thị số vàng
+    [SerializeField] private TextMeshProUGUI goldDebugText; // Hiển thị số vàng
     [SerializeField] private Button completeButton;        
     
     [Header("Test Parameters")]
     [SerializeField] private float currentHealthPercentage = 100f;
-    
-    [Header("Game Currency - DEBUG")]
-    [SerializeField] private int totalGameGold = 0; // THÊM MỚI: Tổng vàng của game
     
     // Singleton pattern để dễ truy cập
     private static GameManager instance;
@@ -33,7 +33,9 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public int TotalGold => totalGameGold; // Property để truy cập
+    // Property để truy cập vàng
+    public int TotalGold => gameCurrency != null ? gameCurrency.TotalGold : 0;
+    public GameCurrency Currency => gameCurrency;
     
     void Awake()
     {
@@ -49,8 +51,21 @@ public class GameManager : MonoBehaviour
             return;
         }
         
-        // Load tổng vàng từ PlayerPrefs
-        LoadTotalGold();
+        // Load GameCurrency nếu chưa assign
+        if (gameCurrency == null)
+        {
+            gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
+            if (gameCurrency == null)
+            {
+                Debug.LogError("GameCurrency asset not found in Resources! Please create one.");
+            }
+        }
+        
+        // Reset session stats
+        if (gameCurrency != null)
+        {
+            gameCurrency.ResetSessionStats();
+        }
     }
     
     void Start()
@@ -63,49 +78,50 @@ public class GameManager : MonoBehaviour
     }
     
     /// <summary>
-    /// THÊM MỚI: Load tổng vàng từ PlayerPrefs
+    /// Add vàng qua GameCurrency
     /// </summary>
-    private void LoadTotalGold()
+    public void AddGold(int amount, string source = "Level completion")
     {
-        totalGameGold = PlayerPrefs.GetInt("total_game_gold", 0);
-        Debug.Log($"[GameManager] Loaded total gold: {totalGameGold}");
-    }
-    
-    /// <summary>
-    /// THÊM MỚI: Save tổng vàng vào PlayerPrefs
-    /// </summary>
-    private void SaveTotalGold()
-    {
-        PlayerPrefs.SetInt("total_game_gold", totalGameGold);
-        PlayerPrefs.Save();
-        Debug.Log($"[GameManager] Saved total gold: {totalGameGold}");
-    }
-    
-    /// <summary>
-    /// THÊM MỚI: Add vàng vào tổng
-    /// </summary>
-    public void AddGold(int amount)
-    {
-        if (amount <= 0) return;
+        if (gameCurrency == null)
+        {
+            Debug.LogError("GameCurrency not assigned!");
+            return;
+        }
         
-        int oldGold = totalGameGold;
-        totalGameGold += amount;
-        SaveTotalGold();
-        
-        Debug.Log($"[GameManager] Added {amount} gold: {oldGold} → {totalGameGold}");
+        gameCurrency.AddGold(amount, source);
         
         // Cập nhật UI ngay lập tức
         UpdateGoldDisplay();
     }
     
     /// <summary>
-    /// THÊM MỚI: Cập nhật hiển thị vàng
+    /// Spend vàng qua GameCurrency
+    /// </summary>
+    public bool SpendGold(int amount, string purpose = "Purchase")
+    {
+        if (gameCurrency == null)
+        {
+            Debug.LogError("GameCurrency not assigned!");
+            return false;
+        }
+        
+        bool success = gameCurrency.SpendGold(amount, purpose);
+        if (success)
+        {
+            UpdateGoldDisplay();
+        }
+        
+        return success;
+    }
+    
+    /// <summary>
+    /// Cập nhật hiển thị vàng
     /// </summary>
     private void UpdateGoldDisplay()
     {
-        if (goldDebugText != null)
+        if (goldDebugText != null && gameCurrency != null)
         {
-            goldDebugText.text = $"Total Gold: {totalGameGold:N0}";
+            goldDebugText.text = $"Gold: {gameCurrency.TotalGold:N0}";
         }
     }
     
@@ -123,7 +139,7 @@ public class GameManager : MonoBehaviour
         }
         
         Debug.Log($"Loaded Level {currentLevelData.levelIndex} data");
-        Debug.Log(currentLevelData.GetGoldStatusDebug()); // Debug gold status
+        Debug.Log(currentLevelData.GetGoldStatusDebug());
     }
     
     void SetupUI()
@@ -209,7 +225,7 @@ public class GameManager : MonoBehaviour
             // Add vàng và đánh dấu đã claim
             if (claimableGold > 0)
             {
-                AddGold(claimableGold);
+                AddGold(claimableGold, $"Level {currentLevelData.levelIndex} - {stars} stars");
                 currentLevelData.ClaimStarGold(stars);
             }
             
@@ -276,18 +292,27 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space)) CompleteLevel();
             
             if (Input.GetKeyDown(KeyCode.T)) TestDirectScoreUpdate();
-            if (Input.GetKeyDown(KeyCode.G)) DebugGoldSystem(); // THÊM MỚI: Debug gold
+            if (Input.GetKeyDown(KeyCode.G)) DebugGoldSystem();
+            if (Input.GetKeyDown(KeyCode.R)) TestSpendGold(); // Test spend gold
         }
     }
     
     /// <summary>
-    /// THÊM MỚI: Debug hệ thống vàng
+    /// Debug hệ thống vàng
     /// </summary>
     [ContextMenu("Debug Gold System")]
     public void DebugGoldSystem()
     {
         Debug.Log($"=== GOLD SYSTEM DEBUG ===");
-        Debug.Log($"Total Game Gold: {totalGameGold}");
+        
+        if (gameCurrency != null)
+        {
+            Debug.Log(gameCurrency.GetDebugInfo());
+        }
+        else
+        {
+            Debug.LogError("GameCurrency not assigned!");
+        }
         
         if (currentLevelData != null)
         {
@@ -299,8 +324,15 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"If achieve {stars} stars → can claim {claimable} gold");
             }
         }
-        
-        Debug.Log($"PlayerPrefs total_game_gold: {PlayerPrefs.GetInt("total_game_gold", 0)}");
+    }
+    
+    /// <summary>
+    /// Test spend gold
+    /// </summary>
+    [ContextMenu("Test Spend 100 Gold")]
+    public void TestSpendGold()
+    {
+        SpendGold(100, "Test purchase");
     }
     
     [ContextMenu("Test Direct Score Update")]
@@ -316,19 +348,6 @@ public class GameManager : MonoBehaviour
             
             Debug.Log($"After: BestScore = {currentLevelData.BestScore}, StarsEarned = {currentLevelData.StarsEarned}");
         }
-    }
-    
-    /// <summary>
-    /// THÊM MỚI: Reset tất cả vàng (for testing)
-    /// </summary>
-    [ContextMenu("Reset All Gold")]
-    public void ResetAllGold()
-    {
-        totalGameGold = 0;
-        SaveTotalGold();
-        UpdateGoldDisplay();
-        
-        Debug.Log("All gold reset!");
     }
     
     public void SetLevelData(LevelData levelData)

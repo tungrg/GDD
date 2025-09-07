@@ -1571,6 +1571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLevelData: {fileID: 11400000, guid: e564ef25bcfeea846a41780d906975c6, type: 2}
+  gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
   healthSlider: {fileID: 198204287}
   healthText: {fileID: 5691240}
   scoreText: {fileID: 334260950}
@@ -1578,7 +1579,6 @@ MonoBehaviour:
   goldDebugText: {fileID: 492904176}
   completeButton: {fileID: 1045549345}
   currentHealthPercentage: 50
-  totalGameGold: 0
 --- !u!1 &1002023996
 GameObject:
   m_ObjectHideFlags: 0

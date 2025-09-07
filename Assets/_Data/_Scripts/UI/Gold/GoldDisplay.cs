@@ -6,6 +6,9 @@ public class GoldDisplay : MonoBehaviour
     [Header("UI Reference")]
     [SerializeField] private TextMeshProUGUI goldText; // Text để hiển thị vàng
     
+    [Header("Currency Reference")]
+    [SerializeField] private GameCurrency gameCurrency; // Reference trực tiếp tới GameCurrency
+    
     [Header("Display Settings")]
     [SerializeField] private bool useThousandsSeparator = true; // Sử dụng dấu phẩy phân cách nghìn
     
@@ -17,12 +20,18 @@ public class GoldDisplay : MonoBehaviour
             goldText = GetComponent<TextMeshProUGUI>();
         }
         
+        // Tự động load GameCurrency nếu chưa assign
+        if (gameCurrency == null)
+        {
+            gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
+        }
+        
         // Cập nhật hiển thị lần đầu
         UpdateGoldDisplay();
     }
     
     /// <summary>
-    /// Cập nhật hiển thị số vàng từ GameManager
+    /// Cập nhật hiển thị số vàng từ GameCurrency
     /// </summary>
     public void UpdateGoldDisplay()
     {
@@ -32,11 +41,10 @@ public class GoldDisplay : MonoBehaviour
             return;
         }
         
-        // Lấy số vàng từ GameManager
-        var gameManager = GameManager.Instance;
-        if (gameManager == null)
+        // Lấy số vàng trực tiếp từ GameCurrency
+        if (gameCurrency == null)
         {
-            Debug.LogWarning("GoldDisplay: GameManager not found!");
+            Debug.LogWarning("GoldDisplay: GameCurrency not found!");
             goldText.text = "0";
             return;
         }
@@ -44,11 +52,11 @@ public class GoldDisplay : MonoBehaviour
         // Format và hiển thị số vàng
         if (useThousandsSeparator)
         {
-            goldText.text = gameManager.TotalGold.ToString("N0"); // Với dấu phẩy: 1,234
+            goldText.text = gameCurrency.TotalGold.ToString("N0"); // Với dấu phẩy: 1,234
         }
         else
         {
-            goldText.text = gameManager.TotalGold.ToString(); // Không dấu phẩy: 1234
+            goldText.text = gameCurrency.TotalGold.ToString(); // Không dấu phẩy: 1234
         }
     }
     
