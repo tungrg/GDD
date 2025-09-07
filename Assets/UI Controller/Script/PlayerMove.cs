@@ -46,6 +46,18 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.HasState(GameState.PlayerSkillLock))
+        {
+            if (dashButton != null) dashButton.interactable = false;
+            if (animator) animator.SetFloat("Speed", 0f);
+            return;
+        }
+        else
+        {
+            if (dashTimer <= 0 && !isDashing)
+                dashButton.interactable = true;
+        }
+
         if (!isDashing)
         {
             float h = joystick.Horizontal + Input.GetAxisRaw("Horizontal");
