@@ -1,95 +1,106 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Teleportation", menuName = "Game/BossSkill/Teleportation")]
 public class Teleportation : SkillBoss
 {
-    public GameObject portalPrefab;
-    public float portalDuration = 1f;
-    private float lastTeleportTime = -999f;
+    [Header("Effects")]
+    public GameObject teleportEffect;
 
-    // override để không chạy coroutine auto của SkillBoss
-    public override void StartSkill(BossManager boss)
-    {
-        lastTeleportTime = -cooldown;
-    }
+    [Header("Bomb Settings")]
+    public GameObject bombPrefab;
+    public GameObject explosionEffect;
+    public GameObject bombTextEffect;
+    public float bombDuration = 10f;
+    public int baseDamage = 70;
+    public int bonusDamagePerHit = 20;
+
+    private BombController activeBomb;
+
+    private ObjectPoolManager effectPool;
 
     protected override void Activate(BossManager boss)
     {
-        if (Time.time - lastTeleportTime < cooldown) return;
+        if (boss.player == null) return;
 
-        ObstacleManager obstacleManager = FindFirstObjectByType<ObstacleManager>();
-        if (obstacleManager == null) return;
+        if (effectPool == null)
+            effectPool = FindFirstObjectByType<ObjectPoolManager>();
 
-        // Lấy danh sách obstacle đang bật ở bossPairs
-        List<GameObject> activeObstacles = new List<GameObject>();
-        foreach (var pair in obstacleManager.bossPairs)
-        {
-            foreach (var o in pair.obstacles)
-            {
-                if (o.activeSelf) activeObstacles.Add(o);
-            }
-        }
-
-        if (activeObstacles.Count == 0) return;
-
-        // portal In
-        if (portalPrefab != null)
-        {
-            GameObject portalIn = Instantiate(portalPrefab, boss.transform.position, Quaternion.identity);
-            Destroy(portalIn, portalDuration);
-        }
-
-        // chọn obstacle random
-        GameObject chosen = activeObstacles[Random.Range(0, activeObstacles.Count)];
-
-        // hướng từ obstacle -> player
-        Vector3 dirToPlayer = (boss.player.position - chosen.transform.position).normalized;
-
-        // ra phía sau obstacle
-        float offset = 2f;
-        Collider col = chosen.GetComponent<Collider>();
-        if (col != null) offset = col.bounds.extents.magnitude + 1f;
-
-        Vector3 teleportPos = chosen.transform.position - dirToPlayer * offset;
-
-        // đảm bảo nằm trên NavMesh
-        UnityEngine.AI.NavMeshHit hit;
-        if (UnityEngine.AI.NavMesh.SamplePosition(teleportPos, out hit, 2f, UnityEngine.AI.NavMesh.AllAreas))
-        {
-            teleportPos = hit.position;
-        }
-
-        // dịch chuyển bằng Warp để sync với NavMeshAgent
-        UnityEngine.AI.NavMeshAgent agent = boss.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        if (agent != null)
-        {
-            agent.Warp(teleportPos);
-            agent.ResetPath();
-
-            // Boss tìm vị trí mới D để di chuyển
-            Vector3 newDestination = boss.GetRandomPointOnNavMesh(agent.transform.position, boss.moveRadius);
-            agent.SetDestination(newDestination);
-        }
-        else
-        {
-            // fallback nếu không có agent
-            boss.transform.position = teleportPos;
-        }
-
-        // portal Out
-        if (portalPrefab != null)
-        {
-            GameObject portalOut = Instantiate(portalPrefab, teleportPos, Quaternion.identity);
-            Destroy(portalOut, portalDuration);
-        }
-
-        lastTeleportTime = Time.time;
+        boss.StartCoroutine(DoTeleportation(boss, effectPool));
     }
 
-    // được gọi khi Player attack
-    public void OnPlayerAttack(BossManager boss)
+    private IEnumerator DoTeleportation(BossManager boss, ObjectPoolManager effectPool)
     {
-        Activate(boss);
+        boss.SetBusy(true);
+        GameManager.Instance.AddState(GameState.PlayerSkillLock);
+        GameManager.Instance.AddState(GameState.BossSkillLock);
+        Vector3 originalPos = boss.transform.position;
+
+        GameObject startFx = effectPool.GetObject("TeleportEffect", boss.transform.position, Quaternion.identity);
+
+        Vector3 dirToBoss = (boss.player.position - boss.transform.position).normalized;
+        Vector3 behindPlayer = boss.player.position + dirToBoss * 3f;
+        behindPlayer.y = boss.player.position.y;
+
+        GameObject targetFx = effectPool.GetObject("TeleportEffect", behindPlayer, Quaternion.identity);
+
+        yield return new WaitForSeconds(0.3f);
+
+        if (boss.TryGetComponent<UnityEngine.AI.NavMeshAgent>(out var agent))
+            agent.Warp(behindPlayer);
+        else
+            boss.transform.position = behindPlayer;
+
+        boss.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        CameraZoom.Instance.ZoomIn();
+
+        // if (boss.animator != null)
+        //     boss.animator.SetTrigger("placeBomb");
+
+        yield return new WaitForSeconds(2f);
+
+        PlaceBomb(boss);
+
+        if (agent != null)
+            agent.Warp(originalPos);
+        else
+            boss.transform.position = originalPos;
+
+        boss.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+
+        effectPool.ReturnObject("TeleportEffect", startFx);
+        effectPool.ReturnObject("TeleportEffect", targetFx);
+        boss.SetBusy(false);
+        CameraZoom.Instance.ZoomOut();
+        GameManager.Instance.RemoveState(GameState.PlayerSkillLock);
+        GameManager.Instance.RemoveState(GameState.BossSkillLock);
+    }
+    private void PlaceBomb(BossManager boss)
+    {
+        GameObject bombObj = effectPool.GetObject("C4", boss.player.position, Quaternion.identity);
+
+        bombObj.transform.SetParent(boss.player);
+        bombObj.transform.localPosition = new Vector3(0f, 0.8f, -0.4f);
+        bombObj.transform.localRotation = Quaternion.identity;
+        bombObj.transform.localScale = new Vector3(0.4f, 0.5f, 0.2f);
+
+        activeBomb = bombObj.GetComponent<BombController>();
+        activeBomb.Init(
+            this,
+            boss,
+            baseDamage,
+            bonusDamagePerHit,
+            explosionEffect,
+            bombTextEffect
+        );
+    }
+
+    public void OnBossHitPlayer()
+    {
+        if (activeBomb != null)
+        {
+            activeBomb.AddDamage();
+        }
     }
 }

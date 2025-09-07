@@ -4991,10 +4991,10 @@ GameObject:
   m_Component:
   - component: {fileID: 348730225763019330}
   - component: {fileID: 7418748829526979287}
-  - component: {fileID: 7313126568994708189}
   - component: {fileID: 4318211140608618056}
+  - component: {fileID: -1650345176293754080}
   m_Layer: 6
-  m_Name: VFXBullet
+  m_Name: VFXCannon
   m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5010,7 +5010,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.373}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5098618587416516087}
@@ -5043,22 +5043,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &7313126568994708189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4220850484020903645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e52076de782adf478330b0f469cfb6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeTime: 5
-  hitEffectPrefab: {fileID: 1180563287864539590, guid: fef4b4907ec28944a9101b24f59c2715, type: 3}
 --- !u!136 &4318211140608618056
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5082,6 +5068,20 @@ CapsuleCollider:
   m_Height: 0.1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0.1}
+--- !u!114 &-1650345176293754080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4220850484020903645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f83353babd7a5924c97af3ed94a3f360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionEffectPrefab: {fileID: 4593184484909914552, guid: 2e1e9506f5904a64b81744324fb7cd50, type: 3}
+  damage: 40
 --- !u!1 &5544182433205064921
 GameObject:
   m_ObjectHideFlags: 0
@@ -5110,7 +5110,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 348730225763019330}
