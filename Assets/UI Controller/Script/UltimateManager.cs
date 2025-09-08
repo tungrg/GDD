@@ -49,8 +49,8 @@ public class UltimateManager : MonoBehaviour
         if (index < 0 || index >= skills.Length) return;
 
         currentSkill = skills[index];
-        selectedSkillIcon.sprite = currentSkill.skillIcon;
-        selectedSkillIcon.enabled = true;
+
+        StartCoroutine(AnimateSkillIcon(skills[index].skillIcon));
 
         ultimateButton.interactable = true;
         skillSelectPanel.SetActive(false);
@@ -62,6 +62,33 @@ public class UltimateManager : MonoBehaviour
 
         if (hpBoss != null)
             hpBoss.SetActive(true);
+    }
+
+    private IEnumerator AnimateSkillIcon(Sprite icon)
+    {
+        GameObject tempIconObj = new GameObject("TempSkillIcon");
+        tempIconObj.transform.SetParent(skillSelectPanel.transform.parent, false);
+        Image tempIcon = tempIconObj.AddComponent<Image>();
+        tempIcon.sprite = icon;
+        tempIcon.rectTransform.sizeDelta = new Vector2(150, 150); 
+
+        Vector3 startPos = skillSelectPanel.transform.position;
+        Vector3 endPos = ultimateButton.transform.position;
+
+        float t = 0f;
+        float duration = 1f; 
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            tempIcon.transform.position = Vector3.Lerp(startPos, endPos, t);
+            yield return null;
+        }
+
+        Destroy(tempIconObj);
+
+        selectedSkillIcon.sprite = icon;
+        selectedSkillIcon.enabled = true;
     }
 
     void UseUltimate()
@@ -89,6 +116,16 @@ public class UltimateManager : MonoBehaviour
                 IronArmorSkill armor = FindAnyObjectByType<IronArmorSkill>();
                 if (armor != null) armor.Activate(this);
                 else Debug.LogError("IronArmorSkill chưa gắn vào Player!");
+                break;
+
+            case "Combat Drone":
+                CombatDroneSkill drone = FindAnyObjectByType<CombatDroneSkill>();
+                if (drone != null) drone.Activate();
+                else Debug.LogError("CombatDroneSkill chưa gắn vào Player!");
+
+                BuffDrone buff = FindAnyObjectByType<BuffDrone>();
+                if (buff != null) buff.Activate();
+                else Debug.LogError("BuffDrone chưa gắn vào Player!");
                 break;
 
             default:

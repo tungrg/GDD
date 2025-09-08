@@ -1874,6 +1874,8 @@ GameObject:
   - component: {fileID: 2194329535551672437}
   - component: {fileID: 3170183269008898454}
   - component: {fileID: 451188058284879523}
+  - component: {fileID: 402624041482451554}
+  - component: {fileID: 8276077860600766954}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -2082,8 +2084,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e634e9bedbdebb24baa23f078a965d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  beamLength: 30
+  damage: 5
+  beamLength: 50
   beamDuration: 1
   recoilForce: 15
   beamPrefab: {fileID: 1758900490174524562, guid: 8beb336c911569447bd6a36200403b88, type: 3}
@@ -2152,6 +2154,44 @@ MonoBehaviour:
   healAmount: 200
   nitroEffectPrefab: {fileID: 2787556212050310887, guid: 57970c6bb711ec24b8d98424b1806f3b, type: 3}
   effectOffset: {x: 0, y: 0.5, z: -1}
+--- !u!114 &402624041482451554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472208180353868292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42613d72c7f1d574daf86357139a276b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dronePrefab: {fileID: 1055158821788749275, guid: 2da1a3453a09ce24ba68d83f7af48846, type: 3}
+  player: {fileID: 4664287703952193726}
+  followDistance: 2
+  heightOffset: 2
+  hoverAmplitude: 0.3
+  hoverFrequency: 2
+  duration: 20
+  bulletPrefab: {fileID: 2419406605355029615, guid: 50a1b47cc373b63439dc5d0de532150a, type: 3}
+  firePoint: {fileID: 0}
+  fireForce: 15
+  shootInterval: 2
+  explosionDamage: 10
+  stunDuration: 2
+--- !u!114 &8276077860600766954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472208180353868292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd2bf0884fd946438a3cdfce53ab5f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 20
 --- !u!1 &5602210230165127554
 GameObject:
   m_ObjectHideFlags: 0

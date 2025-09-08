@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -25,8 +26,12 @@ public class PlayerMove : MonoBehaviour
     private PlayerStats stats;
     private bool isDashing = false;
 
-    // 👇 Thêm Animator
-    public Animator animator;
+    [HideInInspector] public Animator animator;
+
+    private int maxDashCount = 1;
+    private int currentDashes = 1;
+
+    private bool isFrozen = false;
 
     void Start()
     {
@@ -37,30 +42,38 @@ public class PlayerMove : MonoBehaviour
         capsule = GetComponent<CapsuleCollider>();
         stats = GetComponent<PlayerStats>();
 
-        dashButton.onClick.AddListener(Dash);
-        dashText.gameObject.SetActive(false);
-        dashImage = dashButton.GetComponent<Image>();
+        if (dashButton != null)
+        {
+            dashButton.onClick.AddListener(Dash);
+            dashImage = dashButton.GetComponent<Image>();
+        }
 
-        animator = GetComponent<Animator>(); // lấy Animator
+        if (dashText != null) dashText.gameObject.SetActive(false);
+
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
+        if (isFrozen)
+        {
+            if (animator) animator.SetFloat("Speed", 0f);
+            return; 
+        }
+
         if (!isDashing)
         {
             float h = joystick.Horizontal + Input.GetAxisRaw("Horizontal");
             float v = joystick.Vertical + Input.GetAxisRaw("Vertical");
             Vector3 move = new Vector3(h, 0, v);
 
-            // 👇 nuôi tham số Speed cho Blend Tree 1D
             float inputMag = Mathf.Clamp01(new Vector2(h, v).magnitude);
-            if (animator) animator.SetFloat("Speed", inputMag, 0.1f, Time.deltaTime); // damping mượt
+            if (animator) animator.SetFloat("Speed", inputMag, 0.1f, Time.deltaTime);
 
             if (move.magnitude > 0.1f && isGrounded)
             {
                 Vector3 moveDir = move.normalized * stats.currentMoveSpeed * Time.deltaTime;
                 Vector3 targetPos = rb.position + moveDir;
-
                 rb.MovePosition(targetPos);
 
                 Quaternion targetRot = Quaternion.LookRotation(new Vector3(move.x, 0, move.z));
@@ -76,29 +89,44 @@ public class PlayerMove : MonoBehaviour
         if (dashTimer > 0)
         {
             dashTimer -= Time.deltaTime;
-            dashText.text = Mathf.Ceil(dashTimer).ToString();
+            if (dashText != null) dashText.text = Mathf.Ceil(dashTimer).ToString();
 
             if (dashTimer <= 0)
             {
-                dashText.gameObject.SetActive(false);
-                dashButton.interactable = true;
+                if (dashText != null) dashText.gameObject.SetActive(false);
+                if (dashButton != null) dashButton.interactable = true;
                 SetButtonAlpha(1f);
+
+                currentDashes = maxDashCount;
             }
         }
     }
 
     void Dash()
     {
-        if (dashTimer > 0 || isDashing) return;
+        if (isFrozen) return; 
+        if (isDashing) return;
+        if (currentDashes <= 0) return;
+
+        currentDashes--;
 
         Vector3 dashDir = new Vector3(joystick.Horizontal, 0, joystick.Vertical);
         if (dashDir.magnitude < 0.1f)
             dashDir = transform.forward;
 
         StartCoroutine(DashCoroutine(dashDir.normalized));
+
+        if (currentDashes <= 0)
+        {
+            // bắt đầu CD khi hết dash
+            dashTimer = dashCooldown;
+            if (dashButton != null) dashButton.interactable = false;
+            SetButtonAlpha(0.4f);
+            if (dashText != null) dashText.gameObject.SetActive(true);
+        }
     }
 
-    System.Collections.IEnumerator DashCoroutine(Vector3 dir)
+    IEnumerator DashCoroutine(Vector3 dir)
     {
         isDashing = true;
 
@@ -133,11 +161,6 @@ public class PlayerMove : MonoBehaviour
         rb.MovePosition(end);
 
         isDashing = false;
-
-        dashTimer = dashCooldown;
-        dashButton.interactable = false;
-        SetButtonAlpha(0.4f);
-        dashText.gameObject.SetActive(true);
     }
 
     void SetButtonAlpha(float alpha)
@@ -160,5 +183,23 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground1"))
             isGrounded = false;
+    }
+
+    public void SetMaxDashCount(int count)
+    {
+        maxDashCount = count;
+        currentDashes = count;
+    }
+
+    public int GetCurrentDashes() => currentDashes;
+    public int GetMaxDashes() => maxDashCount;
+
+    public void SetFrozen(bool frozen)
+    {
+        isFrozen = frozen;
+        if (frozen)
+        {
+            if (animator) animator.SetFloat("Speed", 0f);
+        }
     }
 }
