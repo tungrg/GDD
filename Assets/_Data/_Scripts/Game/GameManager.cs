@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     [Header("Game Currency")]
     [SerializeField] private GameCurrency gameCurrency; // Reference tới GameCurrency asset
     
+    [Header("Level Progress")]
+    [SerializeField] private LevelProgressManager levelProgressManager; // THÊM MỚI: Reference trực tiếp
+    
     [Header("Test UI")]
     [SerializeField] private Slider healthSlider;           
     [SerializeField] private TextMeshProUGUI healthText;    
@@ -21,35 +24,18 @@ public class GameManager : MonoBehaviour
     [Header("Test Parameters")]
     [SerializeField] private float currentHealthPercentage = 100f;
     
-    // Singleton pattern để dễ truy cập
-    private static GameManager instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = FindFirstObjectByType<GameManager>();
-            return instance;
-        }
-    }
+    // BỎ SINGLETON PATTERN vì mỗi scene có GameManager riêng
+    public static GameManager Instance { get; private set; }
     
     // Property để truy cập vàng
     public int TotalGold => gameCurrency != null ? gameCurrency.TotalGold : 0;
     public GameCurrency Currency => gameCurrency;
+    public LevelProgressManager ProgressManager => levelProgressManager; // THÊM MỚI
     
     void Awake()
     {
-        // Singleton setup
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Giữ GameManager qua scenes
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // ĐƠN GIẢN HÓA SINGLETON - không DontDestroyOnLoad
+        Instance = this;
         
         // Load GameCurrency nếu chưa assign
         if (gameCurrency == null)
@@ -58,6 +44,16 @@ public class GameManager : MonoBehaviour
             if (gameCurrency == null)
             {
                 Debug.LogError("GameCurrency asset not found in Resources! Please create one.");
+            }
+        }
+        
+        // Load LevelProgressManager nếu chưa assign
+        if (levelProgressManager == null)
+        {
+            levelProgressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (levelProgressManager == null)
+            {
+                Debug.LogError("LevelProgressManager asset not found in Resources! Please assign manually.");
             }
         }
         
@@ -75,6 +71,23 @@ public class GameManager : MonoBehaviour
         
         SetupUI();
         UpdateDisplay();
+        
+        // Truyền ProgressManager cho GameResultManager nếu có
+        var resultManager = GameResultManager.Instance;
+        if (resultManager != null && levelProgressManager != null)
+        {
+            resultManager.SetProgressManager(levelProgressManager);
+            Debug.Log("GameManager: Passed LevelProgressManager to GameResultManager");
+        }
+    }
+    
+    void OnDestroy()
+    {
+        // Clear instance khi destroy
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
     
     /// <summary>
@@ -240,7 +253,7 @@ public class GameManager : MonoBehaviour
                 resultManager.ShowGameResult(currentLevelData, currentHealthPercentage, claimableGold);
             }
             
-            // Thông báo ProgressManager
+            // Thông báo ProgressManager - SỬ DỤNG REFERENCE TRỰC TIẾP
             UpdateProgressManager();
         }
         else
@@ -256,17 +269,19 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// SỬA LẠI: Sử dụng reference trực tiếp thay vì Resources.Load
+    /// </summary>
     private void UpdateProgressManager()
     {
-        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-        if (progressManager != null)
+        if (levelProgressManager != null)
         {
             Debug.Log($"Notifying ProgressManager about level {currentLevelData.levelIndex} completion...");
-            progressManager.OnLevelCompleted(currentLevelData.levelIndex, currentLevelData.StarsEarned);
+            levelProgressManager.OnLevelCompleted(currentLevelData.levelIndex, currentLevelData.StarsEarned);
         }
         else
         {
-            Debug.LogWarning("LevelProgressManager not found in Resources!");
+            Debug.LogError("LevelProgressManager not assigned!");
         }
     }
     
@@ -293,7 +308,36 @@ public class GameManager : MonoBehaviour
             
             if (Input.GetKeyDown(KeyCode.T)) TestDirectScoreUpdate();
             if (Input.GetKeyDown(KeyCode.G)) DebugGoldSystem();
-            if (Input.GetKeyDown(KeyCode.R)) TestSpendGold(); // Test spend gold
+            if (Input.GetKeyDown(KeyCode.R)) TestSpendGold();
+            if (Input.GetKeyDown(KeyCode.P)) DebugProgressManager(); // THÊM MỚI: Debug progress manager
+        }
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Debug LevelProgressManager
+    /// </summary>
+    [ContextMenu("Debug Progress Manager")]
+    public void DebugProgressManager()
+    {
+        Debug.Log($"=== LEVEL PROGRESS MANAGER DEBUG ===");
+        
+        if (levelProgressManager != null)
+        {
+            Debug.Log($"Max Unlocked Level: {levelProgressManager.MaxUnlockedLevel}");
+            
+            if (currentLevelData != null)
+            {
+                int nextLevel = currentLevelData.levelIndex + 1;
+                bool isNextUnlocked = levelProgressManager.IsLevelUnlocked(nextLevel);
+                var nextLevelData = levelProgressManager.GetLevelData(nextLevel);
+                
+                Debug.Log($"Current Level: {currentLevelData.levelIndex}");
+                Debug.Log($"Next Level {nextLevel}: exists = {nextLevelData != null}, unlocked = {isNextUnlocked}");
+            }
+        }
+        else
+        {
+            Debug.LogError("LevelProgressManager not assigned!");
         }
     }
     

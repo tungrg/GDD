@@ -138,7 +138,7 @@ public class GameResultManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Hiển thị Lose panel
+    /// Hiển thị Lose panel - TRUYỀN PROGRESS MANAGER
     /// </summary>
     private void ShowLosePanel(GameResultData data)
     {
@@ -155,11 +155,10 @@ public class GameResultManager : MonoBehaviour
         var losePopup = losePanel.GetComponent<LosePopup>();
         if (losePopup != null)
         {
-            // TRUYỀN PROGRESS MANAGER CHO LOSE POPUP NẾU CẦN
+            // TRUYỀN PROGRESS MANAGER CHO LOSE POPUP
             if (progressManager != null)
             {
-                // LosePopup cũng có thể cần ProgressManager cho Next Level button
-                // losePopup.SetProgressManager(progressManager);
+                losePopup.SetProgressManager(progressManager);
             }
             
             losePopup.ConfigureResult(data);

@@ -6,82 +6,95 @@ using UnityEngine.UI;
 // This class is responsible for popup management. Popups follow the traditional behavior of
 // automatically blocking the input on elements behind it and adding a background texture.
 public class Popup : MonoBehaviour
+{
+    public Color backgroundColor = new Color(10.0f / 255.0f, 10.0f / 255.0f, 10.0f / 255.0f, 0.6f);
+
+    private GameObject m_background;
+
+    public void Open()
     {
-        public Color backgroundColor = new Color(10.0f / 255.0f, 10.0f / 255.0f, 10.0f / 255.0f, 0.6f);
+        AddBackground();
+    }
 
-        private GameObject m_background;
+    public void Close()
+    {
+        var animator = GetComponent<Animator>();
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Open"))
+            animator.Play("Close");
 
-        public void Open()
-        {
-            AddBackground();
-        }
+        RemoveBackground();
+        StartCoroutine(RunPopupDestroy());
+    }
 
-        public void Close()
-        {
-            var animator = GetComponent<Animator>();
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Open"))
-                animator.Play("Close");
+    // We destroy the popup automatically 0.5 seconds after closing it.
+    // The destruction is performed asynchronously via a coroutine. If you
+    // want to destroy the popup at the exact time its closing animation is
+    // finished, you can use an animation event instead.
+    private IEnumerator RunPopupDestroy()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(m_background);
+        Destroy(gameObject);
+    }
 
-            RemoveBackground();
-            StartCoroutine(RunPopupDestroy());
-        }
+    private void AddBackground()
+    {
+        var bgTex = new Texture2D(1, 1);
+        bgTex.SetPixel(0, 0, backgroundColor);
+        bgTex.Apply();
 
-        // We destroy the popup automatically 0.5 seconds after closing it.
-        // The destruction is performed asynchronously via a coroutine. If you
-        // want to destroy the popup at the exact time its closing animation is
-        // finished, you can use an animation event instead.
-        private IEnumerator RunPopupDestroy()
-        {
-            yield return new WaitForSeconds(0.5f);
-            Destroy(m_background);
-            Destroy(gameObject);
-        }
+        m_background = new GameObject("PopupBackground");
+        var image = m_background.AddComponent<Image>();
+        var rect = new Rect(0, 0, bgTex.width, bgTex.height);
+        var sprite = Sprite.Create(bgTex, rect, new Vector2(0.5f, 0.5f), 1);
+        image.material.mainTexture = bgTex;
+        image.sprite = sprite;
+        var newColor = image.color;
+        image.color = newColor;
+        image.canvasRenderer.SetAlpha(0.0f);
+        image.CrossFadeAlpha(1.0f, 0.4f, false);
 
-        private void AddBackground()
-        {
-            var bgTex = new Texture2D(1, 1);
-            bgTex.SetPixel(0, 0, backgroundColor);
-            bgTex.Apply();
+        var canvas = GameObject.Find("Canvas");
+        m_background.transform.localScale = new Vector3(1, 1, 1);
+        m_background.GetComponent<RectTransform>().sizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
+        m_background.transform.SetParent(canvas.transform, false);
+        m_background.transform.SetSiblingIndex(transform.GetSiblingIndex());
+    }
 
-            m_background = new GameObject("PopupBackground");
-            var image = m_background.AddComponent<Image>();
-            var rect = new Rect(0, 0, bgTex.width, bgTex.height);
-            var sprite = Sprite.Create(bgTex, rect, new Vector2(0.5f, 0.5f), 1);
-            image.material.mainTexture = bgTex;
-            image.sprite = sprite;
-            var newColor = image.color;
-            image.color = newColor;
-            image.canvasRenderer.SetAlpha(0.0f);
-            image.CrossFadeAlpha(1.0f, 0.4f, false);
+    private void RemoveBackground()
+    {
+        var image = m_background.GetComponent<Image>();
+        if (image != null)
+            image.CrossFadeAlpha(0.0f, 0.2f, false);
+    }
+    public void PlayAgain()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
-            var canvas = GameObject.Find("Canvas");
-            m_background.transform.localScale = new Vector3(1, 1, 1);
-            m_background.GetComponent<RectTransform>().sizeDelta = canvas.GetComponent<RectTransform>().sizeDelta;
-            m_background.transform.SetParent(canvas.transform, false);
-            m_background.transform.SetSiblingIndex(transform.GetSiblingIndex());
-        }
-
-        private void RemoveBackground()
-        {
-            var image = m_background.GetComponent<Image>();
-            if (image != null)
-                image.CrossFadeAlpha(0.0f, 0.2f, false);
-        }
-        public void PlayAgain()
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-        public void LoadScene(string sceneName)
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(sceneName);
-        }
+    public void LoadScene(string sceneName)
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneName);
+    }
 
     public void SceneMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Level");
+    }
+    
+    public void QuitGame()
+    {
+        Debug.Log("Quitting game...");
+        
+#if UNITY_EDITOR
+        // Trong Unity Editor
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // Trong build
+        Application.Quit();
+#endif
     }
 }

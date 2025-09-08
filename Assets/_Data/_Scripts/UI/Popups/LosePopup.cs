@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
+public class LosePopup : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI levelNameText;
@@ -18,11 +18,39 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
     [Header("Lock Level Popup")]
     public GameObject lockLevelPopupPrefab;  // Prefab đơn giản
     
+    [Header("Progress Manager")]
+    [SerializeField] private LevelProgressManager progressManager; // THÊM MỚI: Reference trực tiếp
+    
     private GameResultData resultData;
     
     void Start()
     {
         SetupButtons();
+        
+        // Tự động load LevelProgressManager nếu chưa assign
+        if (progressManager == null)
+        {
+            progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (progressManager == null)
+            {
+                Debug.LogError("LevelProgressManager not found! Please assign manually or place in Resources folder.");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Set LevelProgressManager từ bên ngoài
+    /// </summary>
+    public void SetProgressManager(LevelProgressManager manager)
+    {
+        progressManager = manager;
+        Debug.Log("LosePopup: LevelProgressManager assigned");
+        
+        // Cập nhật lại button states nếu đã có result data
+        if (resultData != null)
+        {
+            UpdateButtonStates();
+        }
     }
     
     /// <summary>
@@ -42,7 +70,7 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
         if (goldText != null)
             goldText.text = "0"; // Lose = 0 vàng
         
-        // Cập nhật button states
+        // Cập nhật button states SAU KHI có data
         UpdateButtonStates();
     }
     
@@ -59,6 +87,13 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
             
         if (menuButton != null)
             menuButton.onClick.AddListener(OnMenuClicked);
+        
+        // ĐẶT BUTTON VỀ TRẠNG THÁI MẶC ĐỊNH (enabled) khi setup
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.interactable = true;
+            Debug.Log("Next Level button set to interactable by default");
+        }
     }
     
     /// <summary>
@@ -66,18 +101,22 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
     /// </summary>
     private void UpdateButtonStates()
     {
-        // Kiểm tra xem có level tiếp theo không
-        if (nextLevelButton != null)
+        if (nextLevelButton == null || resultData == null)
         {
-            bool hasNextLevel = CheckHasNextLevel();
-            nextLevelButton.interactable = hasNextLevel;
-            
-            // Có thể thay đổi màu hoặc text của button
-            var buttonText = nextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
-            if (buttonText != null)
-            {
-                buttonText.color = hasNextLevel ? Color.white : Color.gray;
-            }
+            Debug.LogWarning("UpdateButtonStates: Missing button or result data");
+            return;
+        }
+        
+        bool hasNextLevel = CheckHasNextLevel();
+        nextLevelButton.interactable = hasNextLevel;
+        
+        Debug.Log($"UpdateButtonStates: Next level available = {hasNextLevel}, button interactable = {nextLevelButton.interactable}");
+        
+        // Thay đổi visual để báo hiệu trạng thái
+        var buttonText = nextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
+        if (buttonText != null)
+        {
+            buttonText.color = hasNextLevel ? Color.white : Color.gray;
         }
     }
     
@@ -86,16 +125,26 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
     /// </summary>
     private bool CheckHasNextLevel()
     {
-        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-        if (progressManager != null)
+        if (progressManager == null)
         {
-            var nextLevelData = progressManager.GetLevelData(resultData.levelIndex + 1);
-            if (nextLevelData != null)
-            {
-                return progressManager.IsLevelUnlocked(resultData.levelIndex + 1);
-            }
+            Debug.LogWarning("CheckHasNextLevel: ProgressManager is null!");
+            return false;
         }
-        return false;
+        
+        if (resultData == null)
+        {
+            Debug.LogWarning("CheckHasNextLevel: ResultData is null!");
+            return false;
+        }
+        
+        int nextLevelIndex = resultData.levelIndex + 1;
+        var nextLevelData = progressManager.GetLevelData(nextLevelIndex);
+        bool hasNextLevel = nextLevelData != null;
+        bool isUnlocked = hasNextLevel && progressManager.IsLevelUnlocked(nextLevelIndex);
+        
+        Debug.Log($"CheckHasNextLevel: Next level {nextLevelIndex} - exists: {hasNextLevel}, unlocked: {isUnlocked}");
+        
+        return hasNextLevel && isUnlocked;
     }
     
     /// <summary>
@@ -104,7 +153,6 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
     private void OnRestartClicked()
     {
         Debug.Log("Restarting level...");
-        // LOẠI BỎ Time.timeScale = 1f;
         
         // Ẩn panel trước khi reload
         gameObject.SetActive(false);
@@ -115,40 +163,54 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
     }
     
     /// <summary>
-    /// Xử lý khi click Next Level
+    /// Xử lý khi click Next Level - SỬA LẠI LOGIC GIỐNG WINPOPUP
     /// </summary>
     private void OnNextLevelClicked()
     {
-        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-        if (progressManager != null)
+        Debug.Log("=== NEXT LEVEL BUTTON CLICKED (LOSE POPUP) ===");
+        
+        if (progressManager == null)
         {
-            int nextLevelIndex = resultData.levelIndex + 1;
-            var nextLevelData = progressManager.GetLevelData(nextLevelIndex);
+            Debug.LogError("OnNextLevelClicked: ProgressManager is null!");
+            return;
+        }
+        
+        if (resultData == null)
+        {
+            Debug.LogError("OnNextLevelClicked: ResultData is null!");
+            return;
+        }
+        
+        int nextLevelIndex = resultData.levelIndex + 1;
+        Debug.Log($"Current level: {resultData.levelIndex}, Next level: {nextLevelIndex}");
+        
+        var nextLevelData = progressManager.GetLevelData(nextLevelIndex);
+        if (nextLevelData == null)
+        {
+            Debug.LogError($"Next level data not found for level {nextLevelIndex}!");
+            return;
+        }
+        
+        bool isUnlocked = progressManager.IsLevelUnlocked(nextLevelIndex);
+        Debug.Log($"Next level {nextLevelIndex} unlock status: {isUnlocked}");
+        
+        if (isUnlocked)
+        {
+            // Level đã mở - chuyển sang level tiếp theo
+            Debug.Log($"Loading next level {nextLevelIndex} - Scene: {nextLevelData.sceneName}");
             
-            if (nextLevelData != null)
-            {
-                bool isUnlocked = progressManager.IsLevelUnlocked(nextLevelIndex);
-                
-                if (isUnlocked)
-                {
-                    // Level đã mở - chuyển sang level tiếp theo
-                    Debug.Log($"Loading next level {nextLevelIndex}...");
-                    // LOẠI BỎ Time.timeScale = 1f;
-                    
-                    PlayerPrefs.SetInt("current_level", nextLevelData.levelIndex);
-                    SceneManager.LoadScene(nextLevelData.sceneName);
-                }
-                else
-                {
-                    // Level bị khóa - hiển thị lock popup đơn giản
-                    Debug.Log($"Level {nextLevelIndex} is locked!");
-                    ShowLockLevelPopup();
-                }
-            }
-            else
-            {
-                Debug.Log("No more levels available!");
-            }
+            // Cập nhật current level trong PlayerPrefs
+            PlayerPrefs.SetInt("current_level", nextLevelData.levelIndex);
+            PlayerPrefs.Save();
+            
+            // Load scene
+            SceneManager.LoadScene(nextLevelData.sceneName);
+        }
+        else
+        {
+            // Level bị khóa - hiển thị lock popup
+            Debug.LogWarning($"Level {nextLevelIndex} is locked! Showing lock popup.");
+            ShowLockLevelPopup();
         }
     }
     
@@ -184,7 +246,7 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
             });
         }
         
-        Debug.Log("Showed simple lock popup");
+        Debug.Log("Showed lock level popup");
     }
     
     /// <summary>
@@ -193,7 +255,6 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
     private void OnMenuClicked()
     {
         Debug.Log("Returning to level select...");
-        // LOẠI BỎ Time.timeScale = 1f;
         
         // Load level select scene
         SceneManager.LoadScene("Level");

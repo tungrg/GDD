@@ -4403,6 +4403,7 @@ MonoBehaviour:
   nextLevelButton: {fileID: 9105931613719361850}
   menuButton: {fileID: 7757922260368967652}
   lockLevelPopupPrefab: {fileID: 178356, guid: 44e4d6560f81b4b938e0dc3c972a4b5e, type: 3}
+  progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
 --- !u!1 &6323125730880640248
 GameObject:
   m_ObjectHideFlags: 0
