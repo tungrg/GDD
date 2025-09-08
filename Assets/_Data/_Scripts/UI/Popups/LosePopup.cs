@@ -196,6 +196,6 @@ public class LosePopup : MonoBehaviour  // Không inherit Popup nữa
         // LOẠI BỎ Time.timeScale = 1f;
         
         // Load level select scene
-        SceneManager.LoadScene("LevelSelect");
+        SceneManager.LoadScene("Level");
     }
 }

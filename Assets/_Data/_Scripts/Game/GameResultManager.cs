@@ -3,8 +3,11 @@ using UnityEngine;
 public class GameResultManager : MonoBehaviour
 {
     [Header("Result Panels")]
-    public GameObject winPanel;      // Panel Win có sẵn trong scene
-    public GameObject losePanel;     // Panel Lose có sẵn trong scene
+    public GameObject winPanel;      
+    public GameObject losePanel;     
+    
+    [Header("Progress Manager")]
+    [SerializeField] private LevelProgressManager progressManager; // THÊM MỚI: Reference trực tiếp
     
     private static GameResultManager instance;
     public static GameResultManager Instance
@@ -33,6 +36,25 @@ public class GameResultManager : MonoBehaviour
     {
         // Đảm bảo các panels bị ẩn khi start
         HideAllPanels();
+        
+        // Tự động load LevelProgressManager nếu chưa assign
+        if (progressManager == null)
+        {
+            progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (progressManager == null)
+            {
+                Debug.LogError("LevelProgressManager not found! Please assign manually or place in Resources folder.");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// THÊM MỚI: Set LevelProgressManager từ bên ngoài
+    /// </summary>
+    public void SetProgressManager(LevelProgressManager manager)
+    {
+        progressManager = manager;
+        Debug.Log("GameResultManager: LevelProgressManager assigned");
     }
     
     /// <summary>
@@ -57,15 +79,18 @@ public class GameResultManager : MonoBehaviour
         int stars = levelData.StarsForScore(score);
         bool isWin = stars > 0;
         
-        // Tạo result data với claimable gold đã được tính trước
-        var resultData = new GameResultData(
-            levelData.levelIndex,
-            $"Level {levelData.levelIndex}",
-            score,
-            stars,
-            isWin,
-            claimableGold // Truyền trực tiếp claimable gold
-        );
+        // Ẩn tất cả panels trước
+        HideAllPanels();
+        
+        // Tạo result data với cách đơn giản hơn
+        var resultData = new GameResultData();
+        resultData.levelIndex = levelData.levelIndex;
+        resultData.levelName = $"Level {levelData.levelIndex}";
+        resultData.score = score;
+        resultData.starsEarned = stars;
+        resultData.isWin = isWin;
+        resultData.goldEarned = claimableGold;
+        resultData.canClaimGold = isWin && claimableGold > 0;
         
         // Hiển thị panel tương ứng
         if (isWin)
@@ -79,15 +104,9 @@ public class GameResultManager : MonoBehaviour
         
         Debug.Log($"Game Result: {(isWin ? "WIN" : "LOSE")} - Score: {score}, Stars: {stars}, Gold: {claimableGold}");
     }
-
-    // Giữ lại overload cũ để backward compatibility
-    public void ShowGameResult(LevelData levelData, float healthPercentage)
-    {
-        ShowGameResult(levelData, healthPercentage, 0);
-    }
     
     /// <summary>
-    /// Hiển thị Win panel
+    /// Hiển thị Win panel - TRUYỀN PROGRESS MANAGER
     /// </summary>
     private void ShowWinPanel(GameResultData data)
     {
@@ -104,6 +123,12 @@ public class GameResultManager : MonoBehaviour
         var winPopup = winPanel.GetComponent<WinPopup>();
         if (winPopup != null)
         {
+            // TRUYỀN PROGRESS MANAGER TRƯỚC KHI CONFIGURE
+            if (progressManager != null)
+            {
+                winPopup.SetProgressManager(progressManager);
+            }
+            
             winPopup.ConfigureResult(data);
         }
         else
@@ -130,6 +155,13 @@ public class GameResultManager : MonoBehaviour
         var losePopup = losePanel.GetComponent<LosePopup>();
         if (losePopup != null)
         {
+            // TRUYỀN PROGRESS MANAGER CHO LOSE POPUP NẾU CẦN
+            if (progressManager != null)
+            {
+                // LosePopup cũng có thể cần ProgressManager cho Next Level button
+                // losePopup.SetProgressManager(progressManager);
+            }
+            
             losePopup.ConfigureResult(data);
         }
         else
@@ -144,30 +176,5 @@ public class GameResultManager : MonoBehaviour
     public void HideResultPanels()
     {
         HideAllPanels();
-        // LOẠI BỎ Time.timeScale = 1f;
-    }
-    
-    /// <summary>
-    /// Thêm vàng vào inventory
-    /// </summary>
-    private void AddGold(int amount)
-    {
-        if (amount <= 0) return;
-        
-        // Lưu vàng vào PlayerPrefs (hoặc hệ thống save của bạn)
-        int currentGold = PlayerPrefs.GetInt("player_gold", 0);
-        currentGold += amount;
-        PlayerPrefs.SetInt("player_gold", currentGold);
-        PlayerPrefs.Save();
-        
-        Debug.Log($"Added {amount} gold. Total: {currentGold}");
-    }
-    
-    /// <summary>
-    /// Get số vàng hiện tại
-    /// </summary>
-    public int GetCurrentGold()
-    {
-        return PlayerPrefs.GetInt("player_gold", 0);
     }
 }

@@ -423,6 +423,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6146843488614855076, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -562,6 +566,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 90037879}
   losePanel: {fileID: 1783910972}
+  progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
 --- !u!1 &198204285
 GameObject:
   m_ObjectHideFlags: 0
