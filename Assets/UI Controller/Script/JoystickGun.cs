@@ -94,7 +94,6 @@ public class JoystickGun : MonoBehaviour
                             if (ms != null) ms.Cast(lastDirection);
                             SetUltimateMode(false, UltimateType.None);
                             FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
-                            FindAnyObjectByType<BossManager>()?.OnPlayerAttack();
                             break;
 
                         case UltimateType.RailgunBurst:
@@ -102,7 +101,6 @@ public class JoystickGun : MonoBehaviour
                             if (rb != null) rb.Cast(firePoint.position, lastDirection);
                             SetUltimateMode(false, UltimateType.None);
                             FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
-                            FindAnyObjectByType<BossManager>()?.OnPlayerAttack();
                             break;
                     }
                 }
@@ -151,9 +149,6 @@ public class JoystickGun : MonoBehaviour
             if (b != null)
                 b.damage = stats.currentAttackPower;
         }
-        BossManager boss = FindAnyObjectByType<BossManager>();
-        if (boss != null)
-            boss.OnPlayerAttack();
     }
 
     bool IsTouchingCancelZone()

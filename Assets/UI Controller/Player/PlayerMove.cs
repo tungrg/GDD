@@ -55,10 +55,16 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        if (isFrozen)
+        if (GameManager.Instance.HasState(GameState.PlayerSkillLock))
         {
+            if (dashButton != null) dashButton.interactable = false;
             if (animator) animator.SetFloat("Speed", 0f);
-            return; 
+            return;
+        }
+        else
+        {
+            if (dashTimer <= 0 && !isDashing)
+                dashButton.interactable = true;
         }
 
         if (!isDashing)

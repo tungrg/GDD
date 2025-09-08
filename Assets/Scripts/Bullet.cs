@@ -38,7 +38,11 @@ public class Bullet : MonoBehaviour
                 GameObject effect = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
                 Destroy(effect, 1f);
             }
-
+            BossManager boss = FindAnyObjectByType<BossManager>();
+            if (boss != null)
+            {
+                boss.OnPlayerHitByBoss();
+            }
             Destroy(gameObject);
         }
         else if (!other.CompareTag("Enemy") && !other.isTrigger) // tránh phá chính boss/clone
