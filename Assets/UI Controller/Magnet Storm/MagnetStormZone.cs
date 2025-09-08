@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-using System.Collections.Generic;
 
 public class MagnetStormZone : MonoBehaviour
 {
@@ -16,8 +15,6 @@ public class MagnetStormZone : MonoBehaviour
     public float stunDuration = 1.5f;
     public float slowDuration = 3f;
     public float slowMultiplier = 0.5f;
-
-    private Dictionary<GameObject, Coroutine> activeCC = new Dictionary<GameObject, Coroutine>();
 
     private void Start()
     {
@@ -42,14 +39,14 @@ public class MagnetStormZone : MonoBehaviour
                 if (boss != null)
                 {
                     boss.TakeDamage(damage);
-                    ApplyCC(boss.gameObject);
+                    StartCoroutine(ApplyStunAndSlow(boss.gameObject));
                 }
 
                 BossCloneManager clone = hit.GetComponent<BossCloneManager>();
                 if (clone != null)
                 {
                     clone.TakeDamage(damage);
-                    ApplyCC(clone.gameObject);
+                    StartCoroutine(ApplyStunAndSlow(clone.gameObject));
                 }
 
                 ManaPlayer playerMana = FindFirstObjectByType<ManaPlayer>();
@@ -63,31 +60,33 @@ public class MagnetStormZone : MonoBehaviour
         }
     }
 
-    private void ApplyCC(GameObject target)
-    {
-        if (activeCC.ContainsKey(target))
-        {
-            StopCoroutine(activeCC[target]); // Hủy coroutine cũ
-            activeCC.Remove(target);
-        }
-        activeCC[target] = StartCoroutine(ApplyStunAndSlow(target));
-    }
-
     private IEnumerator ApplyStunAndSlow(GameObject target)
     {
         NavMeshAgent agent = target.GetComponent<NavMeshAgent>();
         if (agent != null)
         {
             float originalSpeed = agent.speed;
+
             agent.isStopped = true;
+            agent.speed = 0f;
             yield return new WaitForSeconds(stunDuration);
-            agent.isStopped = false;
-            agent.speed = originalSpeed * slowMultiplier;
-            yield return new WaitForSeconds(slowDuration);
+
             if (agent != null)
+            {
+                agent.isStopped = false;
+                agent.speed = originalSpeed * slowMultiplier;
+            }
+
+            yield return new WaitForSeconds(slowDuration);
+
+            if (agent != null)
+            {
                 agent.speed = originalSpeed;
+                agent.isStopped = false;
+            }
         }
     }
+
 
     private void OnDrawGizmosSelected()
     {
