@@ -582,7 +582,7 @@ GameObject:
   m_Layer: 0
   m_Name: RightPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -594,12 +594,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 129719562}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.14, y: 2.79, z: 5.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 45.39859, y: -0.78, z: -22.596537}
+  m_LocalScale: {x: 1.6065795, y: 1, z: 0.2290839}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6130310561553379062}
+  m_Father: {fileID: 1186250684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &144557327
 PrefabInstance:
@@ -4590,6 +4590,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1984415592}
+  - {fileID: 129719563}
   - {fileID: 843196050}
   - {fileID: 6121932718415492428}
   - {fileID: 8476644499935078290}
@@ -5552,6 +5554,7 @@ GameObject:
   - component: {fileID: 1505749301}
   - component: {fileID: 1505749302}
   - component: {fileID: 1505749303}
+  - component: {fileID: 1505749304}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5586,10 +5589,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c31af023cad76f42a11b3378a0e28c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boatPool: {fileID: 1841975875}
-  speed: 3
-  leftPoint: {fileID: 1984415592}
-  rightPoint: {fileID: 129719563}
 --- !u!114 &1505749303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5606,6 +5605,22 @@ MonoBehaviour:
   zoomInFOV: 35
   zoomOutFOV: 60
   zoomDuration: 2
+--- !u!114 &1505749304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505749300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5aeead1e9a7f47418f143bae4577703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boatPool: {fileID: 1841975875}
+  speed: 5
+  leftPoint: {fileID: 1984415592}
+  rightPoint: {fileID: 129719563}
 --- !u!1 &1507186067
 GameObject:
   m_ObjectHideFlags: 0
@@ -6883,7 +6898,7 @@ GameObject:
   m_Layer: 0
   m_Name: LeftPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -6895,12 +6910,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984415591}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.55, y: 2.83, z: -17.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.3007545, y: -0.74, z: -27.865467}
+  m_LocalScale: {x: 1.6065795, y: 1, z: 0.2290839}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6130310561553379062}
+  m_Father: {fileID: 1186250684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2038796918
 PrefabInstance:
@@ -8189,13 +8204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4547576468722717743, guid: 59783ab13c774554c8a57e3065c2591d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1984415592}
-    - targetCorrespondingSourceObject: {fileID: 4547576468722717743, guid: 59783ab13c774554c8a57e3065c2591d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 129719563}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59783ab13c774554c8a57e3065c2591d, type: 3}
 --- !u!1001 &6751336789283869662

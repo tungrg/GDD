@@ -45,21 +45,6 @@ public class BossManager : BossBase
             else agent.isStopped = false;
         }
     }
-
-    private bool isBusy = false;
-
-    public void SetBusy(bool value)
-    {
-        isBusy = value;
-        if (agent != null)
-        {
-            if (value) agent.isStopped = true;
-            else agent.isStopped = false;
-        }
-    }
-
-
-
     public bool CanTriggerRecovery()
     {
         if (recoveryTriggered) return false;
