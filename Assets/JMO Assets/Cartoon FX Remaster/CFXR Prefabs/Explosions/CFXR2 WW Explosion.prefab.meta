@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 513525a25b16ab842b39d6f1d77de303
+guid: 75fa01c52a082d2479d6a203bfc70193
 PrefabImporter:
   externalObjects: {}
   userData: 
@@ -10,6 +10,6 @@ AssetOrigin:
   productId: 109565
   packageName: Cartoon FX Remaster Free
   packageVersion: R 1.5.0
-  assetPath: Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Explosions/CFXR Explosion
-    1.prefab
+  assetPath: Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Explosions/CFXR2
+    WW Explosion.prefab
   uploadId: 756876

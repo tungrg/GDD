@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 895e102521e081e4f804d2114d620c1e, type: 3}
+  m_Name: SkillMolotovCocktail
+  m_EditorClassIdentifier: 
+  skillName: 
+  cooldown: 5
+  molotovPrefab: {fileID: 6181021834569158936, guid: 8bb099b555da4ff48adf06b19b367479, type: 3}
+  molotovCount: 1
+  throwHeight: 5
+  fallDuration: 1.5
+  spawnOffset: 1
+  rotationSpeed: -720
