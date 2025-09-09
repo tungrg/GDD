@@ -110,7 +110,7 @@ public class PlayerMove : MonoBehaviour
 
     void Dash()
     {
-        if (isFrozen) return; 
+        if (isFrozen) return;
         if (isDashing) return;
         if (currentDashes <= 0) return;
 
@@ -178,6 +178,13 @@ public class PlayerMove : MonoBehaviour
             dashImage.color = c;
         }
     }
+    public Vector3 GetMoveDirection()
+    {
+        float h = joystick.Horizontal + Input.GetAxisRaw("Horizontal");
+        float v = joystick.Vertical + Input.GetAxisRaw("Vertical");
+        return new Vector3(h, 0, v).normalized;
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
