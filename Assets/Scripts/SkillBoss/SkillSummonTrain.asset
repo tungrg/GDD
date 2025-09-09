@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7bb29efa5c13884f96a218045dcb25c, type: 3}
+  m_Name: SkillSummonTrain
+  m_EditorClassIdentifier: 
+  skillName: 
+  cooldown: 25
+  trainPrefab: {fileID: 3744547650054197815, guid: c72a673d93e37b04a95de4917cee158d, type: 3}
+  trainSpeed: 40
+  damage: 30
+  stunDuration: 1.5
+  railwayPrefab: {fileID: 526877715757409630, guid: 49dfaec5b80e3f64baaf31588bbdafad, type: 3}
+  railwayDuration: 2
+  trainCount: 4
+  minDelay: 0.5
+  maxDelay: 1

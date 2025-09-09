@@ -150,54 +150,65 @@ public class BossManager : BossBase
 
     private IEnumerator RotateTowardsPlayerThenShoot()
     {
-        // Xoay ngay lập tức về phía player
+        // Xoay về phía player
         Vector3 dir = (player.position - transform.position);
         dir.y = 0;
         if (dir != Vector3.zero)
-        {
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-        }
 
         yield return new WaitForSeconds(0.5f);
 
-        // Tính hướng bắn
-        Vector3 shootDir = (player.position - firePoint.position);
+        // Bắn viên đầu tiên
+        ShootBulletAt(player.position);
+
+        // Kiểm tra Rattlesnake Instinct để bắn viên thứ hai nếu player trong vùng
+        if (Data != null && Data.skills != null)
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill is SkillRattlesnakeInstinct rattlesnake && rattlesnake.ShouldDoubleAttack(this))
+                {
+                    Debug.Log("🐍 Rattlesnake Instinct: Bắn viên thứ 2!");
+                    yield return new WaitForSeconds(0.2f);
+                    ShootBulletAt(player.position);
+                }
+            }
+        }
+    }
+
+    private void ShootBulletAt(Vector3 targetPosition)
+    {
+        Vector3 shootDir = targetPosition - firePoint.position;
+
         shootDir.y = 0;
         shootDir.Normalize();
 
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDir));
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
         if (bulletScript != null)
         {
             float finalDamage = Data.damageAtk;
-
-            if (Data != null && Data.skills != null)
+            if (Data.skills != null)
             {
                 foreach (var skill in Data.skills)
                 {
                     if (skill is SkillRevengeShot revenge)
-                    {
                         finalDamage = revenge.ModifyBulletDamage(this, finalDamage, bullet);
-                    }
                 }
             }
-
             bulletScript.SetDamage(finalDamage);
         }
 
         if (rb != null)
-        {
-#if UNITY_6000_0_OR_NEWER
+    #if UNITY_6000_0_OR_NEWER
             rb.linearVelocity = shootDir * fireForce;
-#else
+    #else
             rb.velocity = shootDir * fireForce;
-#endif
-        }
-
+    #endif
     }
+
 
     public void TakeDamage(float amount)
     {
@@ -299,6 +310,19 @@ public class BossManager : BossBase
             if (skill is Teleportation bombSkill)
             {
                 bombSkill.OnBossHitPlayer();
+            }
+        }
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (Data != null && Data.skills != null)
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill is SkillRattlesnakeInstinct rattlesnake)
+                {
+                    rattlesnake.DrawDebugZone(this);
+                }
             }
         }
     }

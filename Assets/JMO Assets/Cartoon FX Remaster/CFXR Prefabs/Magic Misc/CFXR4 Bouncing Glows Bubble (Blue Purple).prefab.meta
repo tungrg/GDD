@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 513525a25b16ab842b39d6f1d77de303
+guid: 27b6b795c2e1d9442adfb7cb01537383
 PrefabImporter:
   externalObjects: {}
   userData: 
@@ -10,6 +10,6 @@ AssetOrigin:
   productId: 109565
   packageName: Cartoon FX Remaster Free
   packageVersion: R 1.5.0
-  assetPath: Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Explosions/CFXR Explosion
-    1.prefab
+  assetPath: Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Magic Misc/CFXR4
+    Bouncing Glows Bubble (Blue Purple).prefab
   uploadId: 756876
