@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Component quản lý hiển thị sao cho level buttons
+/// Tự động tìm star images và cập nhật màu dựa trên số sao đạt được
+/// </summary>
 public class LevelStarDisplay : MonoBehaviour
 {
     [Header("Star Colors")]
@@ -24,11 +28,11 @@ public class LevelStarDisplay : MonoBehaviour
     }
     
     /// <summary>
-    /// Tự động tìm star images trong children
+    /// Tự động tìm star images trong children dựa trên tên
+    /// Tìm theo pattern: LeftStar/Star1, MiddleStar/Star2, RightStar/Star3
     /// </summary>
     private void AutoFindStarImages()
     {
-        // Tìm theo tên hoặc tag
         if (leftStar == null)
             leftStar = transform.Find("LeftStar")?.GetComponent<Image>() ?? 
                       transform.Find("Star1")?.GetComponent<Image>();
@@ -43,8 +47,10 @@ public class LevelStarDisplay : MonoBehaviour
     }
     
     /// <summary>
-    /// Set số sao giống như PlayPopup
+    /// Set số sao hiển thị bằng cách thay đổi màu
+    /// Logic tương tự như trong WinPopup và LosePopup
     /// </summary>
+    /// <param name="starsObtained">Số sao đạt được (0-3)</param>
     public void SetAchievedStars(int starsObtained)
     {
         if (starsObtained == 0)
@@ -74,27 +80,13 @@ public class LevelStarDisplay : MonoBehaviour
     }
     
     /// <summary>
-    /// Ẩn/hiện tất cả sao
+    /// Ẩn/hiện tất cả sao (sử dụng khi level bị khóa)
     /// </summary>
+    /// <param name="visible">True = hiển thị, False = ẩn</param>
     public void SetStarsVisible(bool visible)
     {
         if (leftStar != null) leftStar.gameObject.SetActive(visible);
         if (middleStar != null) middleStar.gameObject.SetActive(visible);
         if (rightStar != null) rightStar.gameObject.SetActive(visible);
     }
-    
-    /// <summary>
-    /// Test method
-    /// </summary>
-    [ContextMenu("Test 1 Star")]
-    public void Test1Star() => SetAchievedStars(1);
-    
-    [ContextMenu("Test 2 Stars")]
-    public void Test2Stars() => SetAchievedStars(2);
-    
-    [ContextMenu("Test 3 Stars")]
-    public void Test3Stars() => SetAchievedStars(3);
-    
-    [ContextMenu("Test 0 Stars")]
-    public void Test0Stars() => SetAchievedStars(0);
 }

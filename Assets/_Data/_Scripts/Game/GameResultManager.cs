@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Quản lý hiển thị kết quả game (Win/Lose popup)
+/// Xử lý việc tính toán và truyền dữ liệu kết quả cho các popup
+/// </summary>
 public class GameResultManager : MonoBehaviour
 {
     [Header("Result Panels")]
@@ -7,7 +11,7 @@ public class GameResultManager : MonoBehaviour
     public GameObject losePanel;     
     
     [Header("Progress Manager")]
-    [SerializeField] private LevelProgressManager progressManager; // THÊM MỚI: Reference trực tiếp
+    [SerializeField] private LevelProgressManager progressManager; // Reference trực tiếp
     
     private static GameResultManager instance;
     public static GameResultManager Instance
@@ -22,6 +26,7 @@ public class GameResultManager : MonoBehaviour
     
     void Awake()
     {
+        // Singleton pattern setup
         if (instance == null)
         {
             instance = this;
@@ -34,31 +39,28 @@ public class GameResultManager : MonoBehaviour
     
     void Start()
     {
-        // Đảm bảo các panels bị ẩn khi start
+        // Đảm bảo các panels bị ẩn khi khởi tạo
         HideAllPanels();
         
-        // Tự động load LevelProgressManager nếu chưa assign
+        // Auto-load LevelProgressManager từ Resources nếu chưa assign
         if (progressManager == null)
         {
             progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-            if (progressManager == null)
-            {
-                Debug.LogError("LevelProgressManager not found! Please assign manually or place in Resources folder.");
-            }
         }
     }
     
     /// <summary>
-    /// THÊM MỚI: Set LevelProgressManager từ bên ngoài
+    /// Set LevelProgressManager từ GameLevelManager
+    /// Được gọi khi GameLevelManager khởi tạo
     /// </summary>
+    /// <param name="manager">LevelProgressManager instance</param>
     public void SetProgressManager(LevelProgressManager manager)
     {
         progressManager = manager;
-        Debug.Log("GameResultManager: LevelProgressManager assigned");
     }
     
     /// <summary>
-    /// Ẩn tất cả panels
+    /// Ẩn tất cả result panels
     /// </summary>
     private void HideAllPanels()
     {
@@ -70,19 +72,23 @@ public class GameResultManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Hiển thị kết quả game với claimable gold đã tính trước
+    /// Hiển thị kết quả game dựa trên LevelData và % máu
+    /// Tính toán điểm số, sao và vàng để hiển thị popup phù hợp
     /// </summary>
+    /// <param name="levelData">Dữ liệu level vừa hoàn thành</param>
+    /// <param name="healthPercentage">% máu còn lại (0-100)</param>
+    /// <param name="claimableGold">Số vàng có thể claim (đã tính trước)</param>
     public void ShowGameResult(LevelData levelData, float healthPercentage, int claimableGold)
     {
-        // Tính toán kết quả cho hiển thị
+        // Tính toán kết quả từ % máu
         int score = levelData.CalculateScoreFromHealth(healthPercentage);
         int stars = levelData.StarsForScore(score);
         bool isWin = stars > 0;
         
-        // Ẩn tất cả panels trước
+        // Ẩn tất cả panels trước khi hiển thị mới
         HideAllPanels();
         
-        // Tạo result data với cách đơn giản hơn
+        // Tạo result data để truyền cho popup
         var resultData = new GameResultData();
         resultData.levelIndex = levelData.levelIndex;
         resultData.levelName = $"Level {levelData.levelIndex}";
@@ -92,7 +98,7 @@ public class GameResultManager : MonoBehaviour
         resultData.goldEarned = claimableGold;
         resultData.canClaimGold = isWin && claimableGold > 0;
         
-        // Hiển thị panel tương ứng
+        // Hiển thị popup tương ứng với kết quả
         if (isWin)
         {
             ShowWinPanel(resultData);
@@ -101,29 +107,25 @@ public class GameResultManager : MonoBehaviour
         {
             ShowLosePanel(resultData);
         }
-        
-        Debug.Log($"Game Result: {(isWin ? "WIN" : "LOSE")} - Score: {score}, Stars: {stars}, Gold: {claimableGold}");
     }
     
     /// <summary>
-    /// Hiển thị Win panel - TRUYỀN PROGRESS MANAGER
+    /// Hiển thị Win panel với dữ liệu kết quả
+    /// Truyền ProgressManager để xử lý next level functionality
     /// </summary>
+    /// <param name="data">Dữ liệu kết quả để hiển thị</param>
     private void ShowWinPanel(GameResultData data)
     {
-        if (winPanel == null)
-        {
-            Debug.LogError("Win panel not assigned!");
-            return;
-        }
+        if (winPanel == null) return;
         
-        // Kích hoạt panel
+        // Kích hoạt win panel
         winPanel.SetActive(true);
         
         // Configure WinPopup component
         var winPopup = winPanel.GetComponent<WinPopup>();
         if (winPopup != null)
         {
-            // TRUYỀN PROGRESS MANAGER TRƯỚC KHI CONFIGURE
+            // Truyền ProgressManager trước khi configure
             if (progressManager != null)
             {
                 winPopup.SetProgressManager(progressManager);
@@ -131,31 +133,25 @@ public class GameResultManager : MonoBehaviour
             
             winPopup.ConfigureResult(data);
         }
-        else
-        {
-            Debug.LogError("WinPopup component not found on winPanel!");
-        }
     }
     
     /// <summary>
-    /// Hiển thị Lose panel - TRUYỀN PROGRESS MANAGER
+    /// Hiển thị Lose panel với dữ liệu kết quả
+    /// Truyền ProgressManager để xử lý next level functionality
     /// </summary>
+    /// <param name="data">Dữ liệu kết quả để hiển thị</param>
     private void ShowLosePanel(GameResultData data)
     {
-        if (losePanel == null)
-        {
-            Debug.LogError("Lose panel not assigned!");
-            return;
-        }
+        if (losePanel == null) return;
         
-        // Kích hoạt panel
+        // Kích hoạt lose panel
         losePanel.SetActive(true);
         
         // Configure LosePopup component
         var losePopup = losePanel.GetComponent<LosePopup>();
         if (losePopup != null)
         {
-            // TRUYỀN PROGRESS MANAGER CHO LOSE POPUP
+            // Truyền ProgressManager cho lose popup
             if (progressManager != null)
             {
                 losePopup.SetProgressManager(progressManager);
@@ -163,14 +159,10 @@ public class GameResultManager : MonoBehaviour
             
             losePopup.ConfigureResult(data);
         }
-        else
-        {
-            Debug.LogError("LosePopup component not found on losePanel!");
-        }
     }
     
     /// <summary>
-    /// Ẩn tất cả result panels (để gọi từ bên ngoài)
+    /// Ẩn tất cả result panels (có thể gọi từ external scripts)
     /// </summary>
     public void HideResultPanels()
     {

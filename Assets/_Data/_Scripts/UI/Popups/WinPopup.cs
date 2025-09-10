@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Popup hiển thị khi thắng level
+/// Xử lý hiển thị điểm số, sao, vàng và các action buttons (restart, next, menu)
+/// </summary>
 public class WinPopup : MonoBehaviour
 {
     [Header("UI References")]
@@ -25,7 +29,7 @@ public class WinPopup : MonoBehaviour
     public Button menuButton;
     
     [Header("Progress Manager")]
-    [SerializeField] private LevelProgressManager progressManager; // THÊM MỚI: Reference trực tiếp
+    [SerializeField] private LevelProgressManager progressManager; // Reference trực tiếp
     
     private GameResultData resultData;
     
@@ -33,24 +37,21 @@ public class WinPopup : MonoBehaviour
     {
         SetupButtons();
         
-        // Tự động load LevelProgressManager nếu chưa assign
+        // Auto-load LevelProgressManager nếu chưa assign
         if (progressManager == null)
         {
             progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-            if (progressManager == null)
-            {
-                Debug.LogError("LevelProgressManager not found! Please assign manually or place in Resources folder.");
-            }
         }
     }
     
     /// <summary>
-    /// THÊM MỚI: Set LevelProgressManager từ bên ngoài
+    /// Set LevelProgressManager từ GameResultManager
+    /// Cần thiết để check unlock status của level tiếp theo
     /// </summary>
+    /// <param name="manager">LevelProgressManager instance</param>
     public void SetProgressManager(LevelProgressManager manager)
     {
         progressManager = manager;
-        Debug.Log("WinPopup: LevelProgressManager assigned");
         
         // Cập nhật lại button states nếu đã có result data
         if (resultData != null)
@@ -60,20 +61,22 @@ public class WinPopup : MonoBehaviour
     }
     
     /// <summary>
-    /// Configure popup với result data
+    /// Configure popup với dữ liệu kết quả từ GameResultManager
+    /// Hiển thị level name, score, gold và số sao đạt được
     /// </summary>
+    /// <param name="data">Dữ liệu kết quả level</param>
     public void ConfigureResult(GameResultData data)
     {
         resultData = data;
         
-        // Hiển thị thông tin
+        // Hiển thị thông tin level
         if (levelNameText != null)
             levelNameText.text = $"{data.levelName} Score:";
             
         if (scoreText != null)
             scoreText.text = data.score.ToString("N0");
             
-        // Hiển thị vàng
+        // Hiển thị vàng nhận được
         if (goldText != null)
         {
             if (data.canClaimGold && data.goldEarned > 0)
@@ -90,27 +93,28 @@ public class WinPopup : MonoBehaviour
             }
         }
         
-        // Hiển thị sao
+        // Hiển thị số sao đạt được
         SetAchievedStars(data.starsEarned);
         
-        // Cập nhật button states SAU KHI có data
+        // Cập nhật trạng thái buttons sau khi có data
         UpdateButtonStates();
     }
     
     /// <summary>
-    /// Set số sao hiển thị (thay đổi sprite thay vì màu)
+    /// Hiển thị số sao đạt được bằng cách thay đổi sprite
+    /// Fallback sang thay đổi màu nếu sprites không có
     /// </summary>
+    /// <param name="starsObtained">Số sao đạt được (0-3)</param>
     private void SetAchievedStars(int starsObtained)
     {
-        // Kiểm tra sprites có được assign không
+        // Kiểm tra có sprites để thay đổi không
         if (enabledStarSprite == null || disabledStarSprite == null)
         {
-            Debug.LogWarning("Star sprites not assigned! Falling back to color change.");
             SetAchievedStarsColor(starsObtained);
             return;
         }
         
-        // Thay đổi sprite cho từng sao
+        // Thay đổi sprite cho từng sao dựa trên số sao đạt được
         if (leftStarImage != null)
         {
             leftStarImage.sprite = starsObtained >= 1 ? enabledStarSprite : disabledStarSprite;
@@ -131,8 +135,10 @@ public class WinPopup : MonoBehaviour
     }
     
     /// <summary>
-    /// Fallback: Set số sao bằng màu (nếu không có sprites)
+    /// Fallback method: Hiển thị sao bằng cách thay đổi màu
+    /// Sử dụng khi không có star sprites
     /// </summary>
+    /// <param name="starsObtained">Số sao đạt được (0-3)</param>
     private void SetAchievedStarsColor(int starsObtained)
     {
         Color enabledColor = Color.yellow;
@@ -149,7 +155,8 @@ public class WinPopup : MonoBehaviour
     }
     
     /// <summary>
-    /// Setup button events
+    /// Setup event listeners cho các action buttons
+    /// Đặt next level button về trạng thái mặc định (interactable = true)
     /// </summary>
     private void SetupButtons()
     {
@@ -162,31 +169,25 @@ public class WinPopup : MonoBehaviour
         if (menuButton != null)
             menuButton.onClick.AddListener(OnMenuClicked);
         
-        // ĐẶT BUTTON VỀ TRẠNG THÁI MẶC ĐỊNH (enabled) khi setup
+        // Đặt next level button về trạng thái mặc định
         if (nextLevelButton != null)
         {
             nextLevelButton.interactable = true;
-            Debug.Log("Next Level button set to interactable by default");
         }
     }
     
     /// <summary>
-    /// Cập nhật trạng thái buttons
+    /// Cập nhật trạng thái của next level button
+    /// Enable nếu có level tiếp theo và đã unlock, disable nếu không
     /// </summary>
     private void UpdateButtonStates()
     {
-        if (nextLevelButton == null || resultData == null)
-        {
-            Debug.LogWarning("UpdateButtonStates: Missing button or result data");
-            return;
-        }
+        if (nextLevelButton == null || resultData == null) return;
         
         bool hasNextLevel = CheckHasNextLevel();
         nextLevelButton.interactable = hasNextLevel;
         
-        Debug.Log($"UpdateButtonStates: Next level available = {hasNextLevel}, button interactable = {nextLevelButton.interactable}");
-        
-        // Thay đổi visual để báo hiệu trạng thái
+        // Thay đổi màu text để báo hiệu trạng thái
         var buttonText = nextLevelButton.GetComponentInChildren<TextMeshProUGUI>();
         if (buttonText != null)
         {
@@ -195,39 +196,28 @@ public class WinPopup : MonoBehaviour
     }
     
     /// <summary>
-    /// Kiểm tra có level tiếp theo không
+    /// Kiểm tra có level tiếp theo và đã unlock chưa
+    /// Sử dụng ProgressManager để validate unlock status
     /// </summary>
+    /// <returns>True nếu có level tiếp theo và đã unlock</returns>
     private bool CheckHasNextLevel()
     {
-        if (progressManager == null)
-        {
-            Debug.LogWarning("CheckHasNextLevel: ProgressManager is null!");
-            return false;
-        }
-        
-        if (resultData == null)
-        {
-            Debug.LogWarning("CheckHasNextLevel: ResultData is null!");
-            return false;
-        }
+        if (progressManager == null || resultData == null) return false;
         
         int nextLevelIndex = resultData.levelIndex + 1;
         var nextLevelData = progressManager.GetLevelData(nextLevelIndex);
         bool hasNextLevel = nextLevelData != null;
         bool isUnlocked = hasNextLevel && progressManager.IsLevelUnlocked(nextLevelIndex);
         
-        Debug.Log($"CheckHasNextLevel: Next level {nextLevelIndex} - exists: {hasNextLevel}, unlocked: {isUnlocked}");
-        
         return hasNextLevel && isUnlocked;
     }
     
     /// <summary>
-    /// Restart level hiện tại
+    /// Xử lý khi click Restart button
+    /// Reload scene hiện tại để chơi lại level
     /// </summary>
     private void OnRestartClicked()
     {
-        Debug.Log("Restarting level...");
-        
         // Ẩn panel trước khi reload
         gameObject.SetActive(false);
         
@@ -237,62 +227,38 @@ public class WinPopup : MonoBehaviour
     }
     
     /// <summary>
-    /// Chuyển sang level tiếp theo - SỬA LẠI LOGIC
+    /// Xử lý khi click Next Level button
+    /// Kiểm tra unlock status và load level tiếp theo nếu được phép
     /// </summary>
     private void OnNextLevelClicked()
     {
-        Debug.Log("=== NEXT LEVEL BUTTON CLICKED ===");
-        
-        if (progressManager == null)
-        {
-            Debug.LogError("OnNextLevelClicked: ProgressManager is null!");
-            return;
-        }
-        
-        if (resultData == null)
-        {
-            Debug.LogError("OnNextLevelClicked: ResultData is null!");
-            return;
-        }
+        if (progressManager == null || resultData == null) return;
         
         int nextLevelIndex = resultData.levelIndex + 1;
-        Debug.Log($"Current level: {resultData.levelIndex}, Next level: {nextLevelIndex}");
-        
         var nextLevelData = progressManager.GetLevelData(nextLevelIndex);
-        if (nextLevelData == null)
-        {
-            Debug.LogError($"Next level data not found for level {nextLevelIndex}!");
-            return;
-        }
+        
+        if (nextLevelData == null) return;
         
         bool isUnlocked = progressManager.IsLevelUnlocked(nextLevelIndex);
-        Debug.Log($"Next level {nextLevelIndex} unlock status: {isUnlocked}");
         
         if (isUnlocked)
         {
-            Debug.Log($"Loading next level {nextLevelIndex} - Scene: {nextLevelData.sceneName}");
-            
+            // Level đã unlock - chuyển sang level tiếp theo
             // Cập nhật current level trong PlayerPrefs
             PlayerPrefs.SetInt("current_level", nextLevelData.levelIndex);
             PlayerPrefs.Save();
             
-            // Load scene
+            // Load scene của level tiếp theo
             SceneManager.LoadScene(nextLevelData.sceneName);
-        }
-        else
-        {
-            Debug.LogWarning($"Level {nextLevelIndex} is locked! Cannot proceed.");
-            // TODO: Hiển thị lock popup nếu cần
         }
     }
     
     /// <summary>
-    /// Trở về menu level select
+    /// Xử lý khi click Menu button
+    /// Trở về level select scene
     /// </summary>
     private void OnMenuClicked()
     {
-        Debug.Log("Returning to level select...");
-        
         // Load level select scene
         SceneManager.LoadScene("Level");
     }

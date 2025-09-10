@@ -2,21 +2,25 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
+/// <summary>
+/// Component quản lý countdown animation trước khi bắt đầu level
+/// Hiển thị "3, 2, 1, Battle!" với smooth animation effects
+/// </summary>
 public class CountDownDisplay : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI countdownText; // Text để hiển thị đếm ngược
+    [SerializeField] private TextMeshProUGUI countdownText; // Text hiển thị countdown
     [SerializeField] private GameObject countdownPanel; // Panel chứa text (optional)
     
     [Header("Animation Settings")]
     [SerializeField] private float countdownDuration = 1f; // Thời gian mỗi số
-    [SerializeField] private float scaleUpSize = 1.5f; // Kích thước to lên
-    [SerializeField] private float normalSize = 1f; // Kích thước bình thường
+    [SerializeField] private float scaleUpSize = 1.5f; // Scale khi phóng to
+    [SerializeField] private float normalSize = 1f; // Scale bình thường
     [SerializeField] private float scaleUpTime = 0.3f; // Thời gian scale up
     [SerializeField] private float fadeOutTime = 0.4f; // Thời gian fade out
     
     [Header("Colors")]
-    [SerializeField] private Color numberColor = Color.white; // Màu số đếm
+    [SerializeField] private Color numberColor = Color.white; // Màu số đếm (3,2,1)
     [SerializeField] private Color battleColor = Color.yellow; // Màu chữ "Battle!"
     
     [Header("Audio (Optional)")]
@@ -24,92 +28,90 @@ public class CountDownDisplay : MonoBehaviour
     [SerializeField] private AudioClip countSound; // Âm thanh đếm số
     [SerializeField] private AudioClip battleSound; // Âm thanh "Battle!"
     
-    // Events
-    public System.Action OnCountdownComplete; // Event khi đếm ngược xong
+    // Event được trigger khi countdown hoàn thành
+    public System.Action OnCountdownComplete;
     
     private Vector3 originalScale;
     private bool isCountingDown = false;
     
     void Start()
     {
-        // Tự động tìm text component nếu chưa assign
+        // Auto-find text component nếu chưa assign
         if (countdownText == null)
         {
             countdownText = GetComponentInChildren<TextMeshProUGUI>();
         }
         
-        // Lưu scale gốc
+        // Lưu scale gốc của text
         if (countdownText != null)
         {
             originalScale = countdownText.transform.localScale;
         }
         
-        // Ẩn countdown khi start
+        // Ẩn countdown UI khi khởi tạo
         HideCountdown();
     }
     
     /// <summary>
-    /// Bắt đầu đếm ngược từ 3, 2, 1, Battle!
+    /// Bắt đầu countdown sequence từ 3, 2, 1, Battle!
+    /// Hiển thị countdown panel trước khi bắt đầu animation
     /// </summary>
     public void StartCountdown()
     {
-        if (isCountingDown)
-        {
-            Debug.LogWarning("Countdown is already running!");
-            return;
-        }
+        if (isCountingDown) return;
         
-        // BẬT CANVAS/PANEL COUNTDOWN TRƯỚC KHI BẮT ĐẦU
+        // Bật countdown panel/canvas trước khi bắt đầu animation
         ShowCountdown();
         
         StartCoroutine(CountdownSequence());
     }
     
     /// <summary>
-    /// Coroutine thực hiện đếm ngược
+    /// Coroutine thực hiện toàn bộ countdown sequence
+    /// 3 → 2 → 1 → Battle! với smooth animations
     /// </summary>
     private IEnumerator CountdownSequence()
     {
         isCountingDown = true;
         
-        // Canvas/Panel đã được bật trong StartCountdown()
-        // Không cần ShowCountdown() ở đây nữa
-        
-        // Đếm ngược 3, 2, 1
+        // Đếm ngược từ 3 đến 1
         for (int i = 3; i >= 1; i--)
         {
             yield return StartCoroutine(ShowNumber(i.ToString(), numberColor));
             
-            // Chỉ wait nếu không phải số cuối cùng
+            // Wait giữa các số (trừ số cuối cùng)
             if (i > 1)
             {
                 yield return new WaitForSeconds(countdownDuration - scaleUpTime - 0.2f - fadeOutTime);
             }
         }
         
-        // Hiển thị "Battle!"
+        // Hiển thị "Battle!" với màu khác
         yield return StartCoroutine(ShowNumber("Battle!", battleColor));
-        yield return new WaitForSeconds(countdownDuration * 0.3f); // Battle! hiển thị ngắn hơn
+        yield return new WaitForSeconds(countdownDuration * 0.3f);
         
-        // Ẩn countdown
+        // Ẩn countdown UI
         HideCountdown();
         
         isCountingDown = false;
         
-        // Gọi event hoàn thành
+        // Trigger completion event
         OnCountdownComplete?.Invoke();
-        
-        Debug.Log("Countdown complete! Game can start now.");
     }
     
     /// <summary>
-    /// Hiển thị một số/text với animation
+    /// Hiển thị một số/text với scale + fade animation
+    /// Phase 1: Fade in + Scale up
+    /// Phase 2: Hold
+    /// Phase 3: Fade out + Scale down
     /// </summary>
+    /// <param name="text">Text cần hiển thị</param>
+    /// <param name="color">Màu của text</param>
     private IEnumerator ShowNumber(string text, Color color)
     {
         if (countdownText == null) yield break;
         
-        // Set text và màu
+        // Setup text properties
         countdownText.text = text;
         countdownText.color = new Color(color.r, color.g, color.b, 0f); // Bắt đầu trong suốt
         countdownText.transform.localScale = originalScale;
@@ -117,65 +119,62 @@ public class CountDownDisplay : MonoBehaviour
         // Play sound effect
         PlaySound(text == "Battle!" ? battleSound : countSound);
         
-        // Animation: Fade in + Scale up
+        // Phase 1: Fade in + Scale up với ease out curve
         float elapsed = 0f;
-        
         while (elapsed < scaleUpTime)
         {
             elapsed += Time.deltaTime;
             float progress = elapsed / scaleUpTime;
             
-            // Ease out animation
+            // Ease out animation curve
             float easeProgress = 1f - (1f - progress) * (1f - progress);
             
-            // Scale animation
+            // Scale animation: small → large
             float currentScale = Mathf.Lerp(normalSize, scaleUpSize, easeProgress);
             countdownText.transform.localScale = originalScale * currentScale;
             
-            // Fade in animation
+            // Fade in: transparent → opaque
             float alpha = Mathf.Lerp(0f, 1f, easeProgress);
             countdownText.color = new Color(color.r, color.g, color.b, alpha);
             
             yield return null;
         }
         
-        // Đảm bảo scale và alpha cuối cùng
+        // Ensure final values
         countdownText.transform.localScale = originalScale * scaleUpSize;
         countdownText.color = new Color(color.r, color.g, color.b, 1f);
         
-        // Giữ ở trạng thái lớn một chút
+        // Phase 2: Hold at large size
         yield return new WaitForSeconds(0.2f);
         
-        // Animation: Scale down + Fade out
+        // Phase 3: Fade out + Scale down với ease in curve
         elapsed = 0f;
-        Vector3 startScale = countdownText.transform.localScale;
-        
         while (elapsed < fadeOutTime)
         {
             elapsed += Time.deltaTime;
             float progress = elapsed / fadeOutTime;
             
-            // Ease in animation cho fade out
+            // Ease in animation curve
             float easeProgress = progress * progress;
             
-            // Scale down animation
+            // Scale down: large → small
             float currentScale = Mathf.Lerp(scaleUpSize, normalSize * 0.8f, easeProgress);
             countdownText.transform.localScale = originalScale * currentScale;
             
-            // Fade out animation
+            // Fade out: opaque → transparent
             float alpha = Mathf.Lerp(1f, 0f, easeProgress);
             countdownText.color = new Color(color.r, color.g, color.b, alpha);
             
             yield return null;
         }
         
-        // Đảm bảo hoàn toàn trong suốt ở cuối
+        // Ensure completely transparent at end
         countdownText.color = new Color(color.r, color.g, color.b, 0f);
         countdownText.transform.localScale = originalScale;
     }
     
     /// <summary>
-    /// Hiển thị countdown UI
+    /// Hiển thị countdown UI (panel hoặc text)
     /// </summary>
     private void ShowCountdown()
     {
@@ -205,8 +204,9 @@ public class CountDownDisplay : MonoBehaviour
     }
     
     /// <summary>
-    /// Play sound effect
+    /// Play sound effect cho countdown
     /// </summary>
+    /// <param name="clip">Audio clip cần play</param>
     private void PlaySound(AudioClip clip)
     {
         if (audioSource != null && clip != null)
@@ -225,32 +225,17 @@ public class CountDownDisplay : MonoBehaviour
             StopAllCoroutines();
             isCountingDown = false;
             HideCountdown();
-            
-            Debug.Log("Countdown stopped.");
         }
     }
     
     /// <summary>
-    /// Kiểm tra countdown có đang chạy không
+    /// Property check countdown có đang chạy không
     /// </summary>
     public bool IsCountingDown => isCountingDown;
     
-    // Test methods
-    [ContextMenu("Test Start Countdown")]
-    public void TestStartCountdown()
-    {
-        StartCountdown();
-    }
-    
-    [ContextMenu("Test Stop Countdown")]
-    public void TestStopCountdown()
-    {
-        StopCountdown();
-    }
-    
+    // Development shortcut
     void Update()
     {
-        // Test shortcut
         if (Debug.isDebugBuild && Input.GetKeyDown(KeyCode.C))
         {
             StartCountdown();

@@ -1,10 +1,14 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Component hiển thị số vàng hiện tại trên UI
+/// Lấy dữ liệu trực tiếp từ GameCurrency ScriptableObject
+/// </summary>
 public class GoldDisplay : MonoBehaviour
 {
     [Header("UI Reference")]
-    [SerializeField] private TextMeshProUGUI goldText; // Text để hiển thị vàng
+    [SerializeField] private TextMeshProUGUI goldText; // Text component hiển thị vàng
     
     [Header("Currency Reference")]
     [SerializeField] private GameCurrency gameCurrency; // Reference trực tiếp tới GameCurrency
@@ -14,13 +18,13 @@ public class GoldDisplay : MonoBehaviour
     
     void Start()
     {
-        // Tự động tìm Text component nếu chưa assign
+        // Auto-find Text component nếu chưa assign
         if (goldText == null)
         {
             goldText = GetComponent<TextMeshProUGUI>();
         }
         
-        // Tự động load GameCurrency nếu chưa assign
+        // Auto-load GameCurrency từ Resources nếu chưa assign
         if (gameCurrency == null)
         {
             gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
@@ -32,20 +36,14 @@ public class GoldDisplay : MonoBehaviour
     
     /// <summary>
     /// Cập nhật hiển thị số vàng từ GameCurrency
+    /// Format số theo setting useThousandsSeparator
     /// </summary>
     public void UpdateGoldDisplay()
     {
-        if (goldText == null)
+        if (goldText == null || gameCurrency == null)
         {
-            Debug.LogWarning("GoldDisplay: goldText is not assigned!");
-            return;
-        }
-        
-        // Lấy số vàng trực tiếp từ GameCurrency
-        if (gameCurrency == null)
-        {
-            Debug.LogWarning("GoldDisplay: GameCurrency not found!");
-            goldText.text = "0";
+            if (goldText != null)
+                goldText.text = "0";
             return;
         }
         
@@ -61,8 +59,9 @@ public class GoldDisplay : MonoBehaviour
     }
     
     /// <summary>
-    /// Toggle thousands separator
+    /// Toggle thousands separator setting
     /// </summary>
+    /// <param name="use">True = sử dụng dấu phẩy</param>
     public void SetUseThousandsSeparator(bool use)
     {
         useThousandsSeparator = use;
@@ -70,9 +69,8 @@ public class GoldDisplay : MonoBehaviour
     }
     
     /// <summary>
-    /// Manual refresh (có thể gọi từ button hoặc event)
+    /// Manual refresh gold display (có thể gọi từ external scripts)
     /// </summary>
-    [ContextMenu("Refresh Gold Display")]
     public void RefreshDisplay()
     {
         UpdateGoldDisplay();

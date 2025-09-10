@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// ScriptableObject quản lý tổng vàng của game
+/// Xử lý việc thêm/tiêu vàng với tracking session và persistence
+/// </summary>
 [CreateAssetMenu(fileName = "GameCurrency", menuName = "Game/Game Currency")]
 public class GameCurrency : ScriptableObject
 {
@@ -10,44 +14,41 @@ public class GameCurrency : ScriptableObject
     [SerializeField] private int goldEarnedThisSession = 0; // Vàng nhận được trong session này
     [SerializeField] private string lastGoldSource = ""; // Nguồn vàng cuối cùng
     
-    // Properties
+    // Properties để truy cập từ external scripts
     public int TotalGold => totalGold;
     public int GoldEarnedThisSession => goldEarnedThisSession;
     public string LastGoldSource => lastGoldSource;
     
     /// <summary>
-    /// Add vàng vào tổng
+    /// Thêm vàng vào tổng với tracking source
     /// </summary>
+    /// <param name="amount">Số vàng thêm (phải > 0)</param>
+    /// <param name="source">Nguồn vàng để tracking</param>
     public void AddGold(int amount, string source = "Unknown")
     {
         if (amount <= 0) return;
         
-        int oldGold = totalGold;
         totalGold += amount;
         goldEarnedThisSession += amount;
         lastGoldSource = source;
         
-        // Mark dirty để Unity save thay đổi
+        // Mark dirty để Unity save thay đổi vào asset
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
-        
-        Debug.Log($"[GameCurrency] Added {amount} gold from '{source}': {oldGold} → {totalGold}");
     }
     
     /// <summary>
-    /// Spend vàng (trừ khỏi tổng)
+    /// Tiêu vàng từ tổng với validation
     /// </summary>
+    /// <param name="amount">Số vàng cần tiêu</param>
+    /// <param name="purpose">Mục đích tiêu vàng</param>
+    /// <returns>True nếu đủ vàng để tiêu</returns>
     public bool SpendGold(int amount, string purpose = "Unknown")
     {
         if (amount <= 0) return false;
-        if (totalGold < amount)
-        {
-            Debug.LogWarning($"[GameCurrency] Not enough gold to spend {amount} for '{purpose}'. Current: {totalGold}");
-            return false;
-        }
+        if (totalGold < amount) return false;
         
-        int oldGold = totalGold;
         totalGold -= amount;
         lastGoldSource = $"Spent for {purpose}";
         
@@ -55,28 +56,25 @@ public class GameCurrency : ScriptableObject
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
         
-        Debug.Log($"[GameCurrency] Spent {amount} gold for '{purpose}': {oldGold} → {totalGold}");
         return true;
     }
     
     /// <summary>
-    /// Set vàng trực tiếp (for testing)
+    /// Set vàng trực tiếp (chủ yếu cho testing)
     /// </summary>
+    /// <param name="amount">Số vàng mới</param>
     public void SetGold(int amount)
     {
-        int oldGold = totalGold;
         totalGold = Mathf.Max(0, amount);
         lastGoldSource = "Set directly";
         
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
-        
-        Debug.Log($"[GameCurrency] Set gold directly: {oldGold} → {totalGold}");
     }
     
     /// <summary>
-    /// Reset session stats (gọi khi start game)
+    /// Reset session stats (gọi khi start level mới)
     /// </summary>
     public void ResetSessionStats()
     {
@@ -86,56 +84,14 @@ public class GameCurrency : ScriptableObject
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
-        
-        Debug.Log($"[GameCurrency] Session stats reset. Total gold: {totalGold}");
     }
     
     /// <summary>
-    /// Get debug info string
+    /// Lấy thông tin debug dưới dạng string
     /// </summary>
+    /// <returns>String chứa thông tin debug</returns>
     public string GetDebugInfo()
     {
         return $"Total: {totalGold:N0} | Session: +{goldEarnedThisSession:N0} | Last: {lastGoldSource}";
-    }
-    
-    // Context menu methods for testing
-    [ContextMenu("Add 100 Gold")]
-    public void TestAdd100Gold()
-    {
-        AddGold(100, "Test +100");
-    }
-    
-    [ContextMenu("Add 1000 Gold")]
-    public void TestAdd1000Gold()
-    {
-        AddGold(1000, "Test +1000");
-    }
-    
-    [ContextMenu("Spend 50 Gold")]
-    public void TestSpend50Gold()
-    {
-        SpendGold(50, "Test purchase");
-    }
-    
-    [ContextMenu("Reset Gold")]
-    public void TestResetGold()
-    {
-        SetGold(0);
-    }
-    
-    [ContextMenu("Set 5000 Gold")]
-    public void TestSet5000Gold()
-    {
-        SetGold(5000);
-    }
-    
-    [ContextMenu("Debug Gold Info")]
-    public void DebugGoldInfo()
-    {
-        Debug.Log($"=== GAME CURRENCY DEBUG ===");
-        Debug.Log(GetDebugInfo());
-#if UNITY_EDITOR
-        Debug.Log($"Asset Path: {UnityEditor.AssetDatabase.GetAssetPath(this)}");
-#endif
     }
 }
