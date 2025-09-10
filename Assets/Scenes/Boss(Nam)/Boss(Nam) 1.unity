@@ -3715,6 +3715,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: smokePrefab
+      value: 
+      objectReference: {fileID: 4503612902121041701, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: nitroEffectPrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: smokeLocalOffset.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: smokeLocalOffset.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2045534424329395915, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.07
@@ -6113,7 +6129,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.5
+  m_VoxelSize: 0.50666666
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 8f8450b03b4816142bd1d1ddab4bffc8, type: 2}
   m_BuildHeightMesh: 0
