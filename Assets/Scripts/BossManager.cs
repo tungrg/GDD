@@ -6,8 +6,10 @@ public class BossManager : BossBase
 {
     [Header("References")]
     public Transform player;
+    public GameObject playerPrefab;
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public Transform bossModel;
 
     [Header("Movement Settings")]
     public float moveRadius = 5f;
@@ -20,12 +22,35 @@ public class BossManager : BossBase
 
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
+    private bool recoveryTriggered = false;
 
     [Header("UI")]
     public GameObject uiPanel;
     public GameObject hpBoss;
     private NavMeshAgent agent;
     public Animator animator;
+
+    [Header("Effects")]
+    public GameObject healEffectPrefab;
+    public ParticleSystem SkillRevengeShotVFX;
+
+    private bool isBusy = false;
+
+    public void SetBusy(bool value)
+    {
+        isBusy = value;
+        if (agent != null)
+        {
+            if (value) agent.isStopped = true;
+            else agent.isStopped = false;
+        }
+    }
+    public bool CanTriggerRecovery()
+    {
+        if (recoveryTriggered) return false;
+        recoveryTriggered = true;
+        return true;
+    }
 
     private void Start()
     {
@@ -40,6 +65,11 @@ public class BossManager : BossBase
         if (Data != null)
         {
             CurrentHealth = Data.health;
+            BossHealth bossHealth = GetComponent<BossHealth>();
+            if (bossHealth != null)
+            {
+                bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+            }
         }
 
         agent = GetComponent<NavMeshAgent>();
@@ -79,6 +109,12 @@ public class BossManager : BossBase
 
         while (gameStarted)
         {
+            if (isBusy)
+            {
+                yield return null;
+                continue;
+            }
+
             Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
             agent.SetDestination(destination);
 
@@ -89,14 +125,14 @@ public class BossManager : BossBase
 
             yield return new WaitForSeconds(waitAtPoint);
 
-            // Gọi coroutine quay mặt & bắn
-            ShootAtPlayer();
+            if (!isBusy)
+                ShootAtPlayer();
 
             yield return new WaitForSeconds(waitBeforeShoot);
         }
     }
 
-    private Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
+    public Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
     {
         Vector3 randomPos = center + Random.insideUnitSphere * radius;
         if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
@@ -114,39 +150,65 @@ public class BossManager : BossBase
 
     private IEnumerator RotateTowardsPlayerThenShoot()
     {
-        // Xoay ngay lập tức về phía player
+        // Xoay về phía player
         Vector3 dir = (player.position - transform.position);
         dir.y = 0;
         if (dir != Vector3.zero)
-        {
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-        }
 
         yield return new WaitForSeconds(0.5f);
 
-        // Tính hướng bắn
-        Vector3 shootDir = (player.position - firePoint.position);
+        // Bắn viên đầu tiên
+        ShootBulletAt(player.position);
+
+        // Kiểm tra Rattlesnake Instinct để bắn viên thứ hai nếu player trong vùng
+        if (Data != null && Data.skills != null)
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill is SkillRattlesnakeInstinct rattlesnake && rattlesnake.ShouldDoubleAttack(this))
+                {
+                    Debug.Log("🐍 Rattlesnake Instinct: Bắn viên thứ 2!");
+                    yield return new WaitForSeconds(0.2f);
+                    ShootBulletAt(player.position);
+                }
+            }
+        }
+    }
+
+    private void ShootBulletAt(Vector3 targetPosition)
+    {
+        Vector3 shootDir = targetPosition - firePoint.position;
+
         shootDir.y = 0;
         shootDir.Normalize();
 
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDir));
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-
         Bullet bulletScript = bullet.GetComponent<Bullet>();
+
         if (bulletScript != null)
         {
-            bulletScript.SetDamage(Data.damageAtk);
+            float finalDamage = Data.damageAtk;
+            if (Data.skills != null)
+            {
+                foreach (var skill in Data.skills)
+                {
+                    if (skill is SkillRevengeShot revenge)
+                        finalDamage = revenge.ModifyBulletDamage(this, finalDamage, bullet);
+                }
+            }
+            bulletScript.SetDamage(finalDamage);
         }
 
         if (rb != null)
-        {
-#if UNITY_6000_0_OR_NEWER
+    #if UNITY_6000_0_OR_NEWER
             rb.linearVelocity = shootDir * fireForce;
-#else
+    #else
             rb.velocity = shootDir * fireForce;
-#endif
-        }
+    #endif
     }
+
 
     public void TakeDamage(float amount)
     {
@@ -173,13 +235,31 @@ public class BossManager : BossBase
                 }
             }
         }
+        if (!recoveryTriggered && CurrentHealth <= Data.health * 0.5f)
+        {
+            Debug.Log("Recovery kich hoat");
+            foreach (var skill in Data.skills)
+            {
+                if (skill is Recovery recoverySkill)
+                {
+                    recoverySkill.Use(this);
+                }
+            }
+        }
+        // Gọi passive RevengeShot
+        foreach (var skill in Data.skills)
+        {
+            if (skill is SkillRevengeShot revenge)
+            {
+                revenge.OnBossDamaged(this);
+            }
+        }
 
         if (CurrentHealth <= 0)
         {
             Die();
         }
     }
-
     private void Die()
     {
         BossCloneManager clone = FindAnyObjectByType<BossCloneManager>();
@@ -198,7 +278,7 @@ public class BossManager : BossBase
             agent.velocity = Vector3.zero;
         }
 
-        if (animator != null) 
+        if (animator != null)
             animator.SetTrigger("die");
 
         StartCoroutine(ShowUIAfterDelay());
@@ -206,8 +286,44 @@ public class BossManager : BossBase
 
     private IEnumerator ShowUIAfterDelay()
     {
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(1f);
+
         uiPanel.SetActive(true);
-        Time.timeScale = 0; 
+
+        Time.timeScale = 0;
+    }
+    public void Heal(float amount)
+    {
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, Data.health);
+        Debug.Log($"Boss healed: {CurrentHealth}/{Data.health}");
+
+        BossHealth bossHealth = GetComponent<BossHealth>();
+        if (bossHealth != null)
+        {
+            bossHealth.UpdateHealthUI(CurrentHealth, Data.health);
+        }
+    }
+    public void OnPlayerHitByBoss()
+    {
+        foreach (var skill in Data.skills)
+        {
+            if (skill is Teleportation bombSkill)
+            {
+                bombSkill.OnBossHitPlayer();
+            }
+        }
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (Data != null && Data.skills != null)
+        {
+            foreach (var skill in Data.skills)
+            {
+                if (skill is SkillRattlesnakeInstinct rattlesnake)
+                {
+                    rattlesnake.DrawDebugZone(this);
+                }
+            }
+        }
     }
 }

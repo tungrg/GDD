@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3233855988464874920}
   - component: {fileID: 8573636575638989166}
   - component: {fileID: 8592476575094323729}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7193398, y: 0, z: 0, w: 0.6946584}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 348730225763019330}
@@ -4780,7 +4780,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4f2e6c00c35c1d94abf15453d511cadc, type: 2}
+  - {fileID: 2100000, guid: d210ab4530b06204982c8e178bde8566, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4843,7 +4843,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5787574269700493319}
   - component: {fileID: 1824851500398460008}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4859,7 +4859,7 @@ Transform:
   m_GameObject: {fileID: 1139370813888183985}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.028}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4914,7 +4914,7 @@ TrailRenderer:
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.2
+    widthMultiplier: 0.4
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -4993,7 +4993,7 @@ GameObject:
   - component: {fileID: 7418748829526979287}
   - component: {fileID: 7313126568994708189}
   - component: {fileID: 4318211140608618056}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: VFXBullet
   m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
@@ -5009,7 +5009,7 @@ Transform:
   m_GameObject: {fileID: 4220850484020903645}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.373}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5093,7 +5093,7 @@ GameObject:
   - component: {fileID: 5098618587416516087}
   - component: {fileID: 4554559220979089561}
   - component: {fileID: 3714550526985097837}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}

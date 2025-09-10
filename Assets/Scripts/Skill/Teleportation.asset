@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d79b3d51866ca40ad5969ed2aaa224, type: 3}
+  m_Name: Teleportation
+  m_EditorClassIdentifier: 
+  skillName: 
+  cooldown: 20
+  teleportEffect: {fileID: 5184371879822970307, guid: 673349bb813b9f5469d38b0a986e17b2, type: 3}
+  bombPrefab: {fileID: 7105956024688538642, guid: 94c3bdabdc496394da7558f9fe4a7ca3, type: 3}
+  explosionEffect: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
+  bombTextEffect: {fileID: 5339739117810204693, guid: 26e1cb216e3635e4a820f58a1118d6b9, type: 3}
+  bombDuration: 10
+  baseDamage: 70
+  bonusDamagePerHit: 20

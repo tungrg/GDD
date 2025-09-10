@@ -66,15 +66,27 @@ public class MagnetStormZone : MonoBehaviour
         if (agent != null)
         {
             float originalSpeed = agent.speed;
+
             agent.isStopped = true;
+            agent.speed = 0f;
             yield return new WaitForSeconds(stunDuration);
-            agent.isStopped = false;
-            agent.speed = originalSpeed * slowMultiplier;
-            yield return new WaitForSeconds(slowDuration);
+
             if (agent != null)
+            {
+                agent.isStopped = false;
+                agent.speed = originalSpeed * slowMultiplier;
+            }
+
+            yield return new WaitForSeconds(slowDuration);
+
+            if (agent != null)
+            {
                 agent.speed = originalSpeed;
+                agent.isStopped = false;
+            }
         }
     }
+
 
     private void OnDrawGizmosSelected()
     {

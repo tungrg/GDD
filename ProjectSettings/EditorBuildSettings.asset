@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Trung.unity
     guid: 69b5bb0d81477e44f82faaf16ebb6343
   - enabled: 1
+    path: Assets/Scenes/Boss(Nam)/Boss(Nam) 1.unity
+    guid: c0c9ecafc8668e24997ebba715089c12
+  - enabled: 0
     path: Assets/Scenes/Boss(Nam)/Boss(Nam).unity
     guid: 528e16ccf52d07b4498758e152f57067
   - enabled: 1

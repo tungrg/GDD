@@ -7,8 +7,9 @@ public abstract class SkillBoss : ScriptableObject
     public string skillName;
     public float cooldown = 5f;
 
-    public void StartSkill(BossManager boss)
+    public virtual void StartSkill(BossManager boss)
     {
+        if (!GameManager.Instance.CanUseSkill()) return;
         boss.StartCoroutine(SkillRoutine(boss));
     }
 
@@ -19,13 +20,19 @@ public abstract class SkillBoss : ScriptableObject
         while (true)
         {
             yield return new WaitForSeconds(cooldown); // chờ hồi chiêu
-            Activate(boss); // dùng skill
+            if (GameManager.Instance != null && GameManager.Instance.CanUseSkill())
+            {
+                Activate(boss);
+            }
         }
     }
 
     protected abstract void Activate(BossManager boss);
     public void Use(BossManager boss)
     {
-        Activate(boss);
+        if (GameManager.Instance != null && GameManager.Instance.CanUseSkill())
+        {
+            Activate(boss);
+        }
     }
 }
