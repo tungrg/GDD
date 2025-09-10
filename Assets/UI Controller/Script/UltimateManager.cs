@@ -4,11 +4,33 @@ using System.Collections;
 
 public class UltimateManager : MonoBehaviour
 {
+    public static UltimateManager Instance;
+    
+    private void Awake()
+    {
+        // Singleton pattern với DontDestroyOnLoad
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            
+            // Load skill data ngay khi UltimateManager được khởi tạo
+            LoadSkillData();
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+    
     [System.Serializable]
     public class Skill
     {
         public string skillName;
         public Sprite skillIcon;
+        public int priceSkill;
+        public bool unlock = false;
     }
 
     [Header("Skills")]
@@ -26,11 +48,40 @@ public class UltimateManager : MonoBehaviour
     private Skill currentSkill;
     private JoystickGun joystick;
     private bool isOnCooldown = false;
-
     private Sprite defaultIcon;
+
+    // Load skill data khi game start
+    private void LoadSkillData()
+    {
+        Debug.Log("UltimateManager: Loading skill data...");
+        
+        // Đảm bảo skill đầu tiên luôn unlock
+        SetFirstSkillUnlocked();
+        
+        // Load từ SaveLoadManager
+        SaveLoadManager.LoadSkills(skills);
+        
+        Debug.Log("UltimateManager: Skill data loaded successfully!");
+    }
+    
+    // Đảm bảo skill đầu tiên luôn unlock
+    private void SetFirstSkillUnlocked()
+    {
+        if (skills != null && skills.Length > 0)
+        {
+            skills[0].unlock = true;
+            Debug.Log("First skill '" + skills[0].skillName + "' auto unlocked!");
+        }
+    }
 
     void Start()
     {
+        if (skillSelectPanel == null || selectedSkillIcon == null || ultimateButton == null)
+        {
+            Debug.Log("UltimateManager: UI components are not assigned!");
+            return;
+        }
+
         skillSelectPanel.SetActive(true);
         selectedSkillIcon.enabled = false;
 
@@ -47,6 +98,13 @@ public class UltimateManager : MonoBehaviour
     public void SelectSkill(int index)
     {
         if (index < 0 || index >= skills.Length) return;
+        
+        // Kiểm tra skill đã unlock chưa
+        if (!skills[index].unlock)
+        {
+            Debug.Log("Skill " + skills[index].skillName + " chưa được mở khóa!");
+            return;
+        }
 
         currentSkill = skills[index];
 
@@ -157,5 +215,44 @@ public class UltimateManager : MonoBehaviour
             mana.AddMana(manaRestore);
 
         Debug.Log("Ultimate đã kết thúc, hồi " + manaRestore + " mana.");
+    }
+    
+    // Public method để lưu skill data (gọi từ ShopManager khi mua skill)
+    public void SaveSkillData()
+    {
+        SaveLoadManager.SaveSkills(skills);
+    }
+    
+    // Public method để unlock skill
+    public void UnlockSkill(int index)
+    {
+        if (index >= 0 && index < skills.Length)
+        {
+            skills[index].unlock = true;
+            Debug.Log("Skill unlocked: " + skills[index].skillName);
+            
+            // Auto save khi unlock skill
+            SaveSkillData();
+        }
+    }
+    
+    // Public methods để truy cập skill data
+    public Skill GetSkill(int index)
+    {
+        if (index >= 0 && index < skills.Length)
+            return skills[index];
+        return null;
+    }
+    
+    public int GetSkillCount()
+    {
+        return skills != null ? skills.Length : 0;
+    }
+    
+    public bool IsSkillUnlocked(int index)
+    {
+        if (index >= 0 && index < skills.Length)
+            return skills[index].unlock;
+        return false;
     }
 }
