@@ -18,7 +18,7 @@ MonoBehaviour:
   trainSpeed: 40
   damage: 30
   stunDuration: 1.5
-  railwayPrefab: {fileID: 526877715757409630, guid: 49dfaec5b80e3f64baaf31588bbdafad, type: 3}
+  railwayPrefab: {fileID: 526877715757409630, guid: dde53a6d027a8254d829af26868b417f, type: 3}
   railwayDuration: 2
   trainCount: 4
   minDelay: 0.5
