@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fe7c6492acd22468ab30c0c630a193, type: 3}
   m_Name: GameCurrency
   m_EditorClassIdentifier: 
-  totalGold: 150
+  totalGold: 400
   goldEarnedThisSession: 0
-  lastGoldSource: Session started
+  lastGoldSource: Spent for Buy Railgun Burst

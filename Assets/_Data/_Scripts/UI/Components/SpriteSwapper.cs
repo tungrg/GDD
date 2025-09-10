@@ -7,7 +7,7 @@ public class SpriteSwapper : MonoBehaviour
     public Sprite enabledSprite;
     public Sprite disabledSprite;
 
-    private bool m_swapped = true;
+    public bool m_swapped = true;
 
     private Image m_image;
 
