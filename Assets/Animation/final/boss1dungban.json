@@ -1,0 +1,316 @@
+﻿{
+    "boss1dungban": {
+        "Version": "1.10.1822.1",
+        "Scene": {
+            "Name": true,
+            "SupportShaderSelect": true
+        },
+        "Export Directory": "E:/JOB/game/final2",
+        "Object": {
+            "boss1dungban": {
+                "Generation": "AccuRig",
+                "Physics": {
+                    "Collision Shapes": {
+                        "tripo_node_22a042e6_1a8b_48f8_8a3c_5ca4b7f98ccb_1": {
+                            "": {
+                                "Bone Active": false,
+                                "Bound Type": "Box",
+                                "Bound Axis": "Y",
+                                "Margin": 0.800000011920929,
+                                "Friction": 0.05000000074505806,
+                                "Elasticity": 0.5,
+                                "WorldTranslate": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "WorldRotationQ": [
+                                    0.0,
+                                    0.0,
+                                    0.0,
+                                    1.0
+                                ],
+                                "WorldScale": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "Extent": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ]
+                            }
+                        }
+                    }
+                },
+                "Meshes": {
+                    "Boole_Mat_006": {
+                        "Materials": {
+                            "Mat_003": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    106.7876205444336,
+                                    118.65303039550781,
+                                    193.8000030517578
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    106.7876205444336,
+                                    118.65303039550781,
+                                    193.8000030517578
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    3.2313599586486818,
+                                    50.087608337402347,
+                                    53.54999923706055
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    3.2313599586486818,
+                                    50.087608337402347,
+                                    53.54999923706055
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat_001": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    65.00000762939453,
+                                    70.9999008178711,
+                                    119.99993896484375
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    65.00000762939453,
+                                    70.9999008178711,
+                                    119.99993896484375
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat_002": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    52.0001106262207,
+                                    86.0000228881836,
+                                    112.00007629394531
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    52.0001106262207,
+                                    86.0000228881836,
+                                    112.00007629394531
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat_004": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    24.000089645385743,
+                                    228.00009155273438,
+                                    42.000030517578128
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    24.000089645385743,
+                                    228.00009155273438,
+                                    42.000030517578128
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat_005": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    68.99993896484375,
+                                    253.00003051757813,
+                                    112.00007629394531
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    68.99993896484375,
+                                    253.00003051757813,
+                                    112.00007629394531
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat_006": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    38.000099182128909,
+                                    193.00006103515626,
+                                    0.0
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    38.000099182128909,
+                                    193.00006103515626,
+                                    0.0
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            },
+                            "Mat_007": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    49.9998893737793,
+                                    255.0,
+                                    28.999874114990236
+                                ],
+                                "Ambient Color": [
+                                    12.973380088806153,
+                                    12.973380088806153,
+                                    12.973380088806153
+                                ],
+                                "Specular Color": [
+                                    49.9998893737793,
+                                    255.0,
+                                    28.999874114990236
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {}
+                            }
+                        }
+                    },
+                    "tripo_node_22a042e6_1a8b_48f8_8a3c_5ca4b7f98ccb_1": {
+                        "Materials": {
+                            "Mat": {
+                                "Material Type": "Pbr",
+                                "MultiUV Index": 0,
+                                "Two Side": true,
+                                "Diffuse Color": [
+                                    204.0,
+                                    204.0,
+                                    204.0
+                                ],
+                                "Ambient Color": [
+                                    12.973402976989746,
+                                    12.973402976989746,
+                                    12.973402976989746
+                                ],
+                                "Specular Color": [
+                                    204.0,
+                                    204.0,
+                                    204.0
+                                ],
+                                "Opacity": 1.0,
+                                "Self Illumination": 0.0,
+                                "Textures": {
+                                    "Metallic": {
+                                        "Texture Path": "./textures/boss1dungban/tripo_node_22a042e6_1a8b_48f8_8a3c_5ca4b7f98ccb_1/tripo_node_22a042e6_1a8b_48f8_8a3c_5ca4b7f98ccb_1/Mat/Mat_metallic.png",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "Base Color": {
+                                        "Texture Path": "Mat_Diffuse.png",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "Roughness": {
+                                        "Texture Path": "./textures/boss1dungban/tripo_node_22a042e6_1a8b_48f8_8a3c_5ca4b7f98ccb_1/tripo_node_22a042e6_1a8b_48f8_8a3c_5ca4b7f98ccb_1/Mat/Mat_roughness.png",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    },
+                                    "Opacity": {
+                                        "Texture Path": "Mat_Opacity.png",
+                                        "Strength": 100.0,
+                                        "Offset": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "Tiling": [
+                                            1.0,
+                                            1.0
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
