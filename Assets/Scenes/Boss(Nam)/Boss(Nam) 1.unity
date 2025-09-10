@@ -3710,6 +3710,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: smokePrefab
+      value: 
+      objectReference: {fileID: 4503612902121041701, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: nitroEffectPrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: smokeLocalOffset.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 451188058284879523, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
+      propertyPath: smokeLocalOffset.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2045534424329395915, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.07
@@ -3806,10 +3822,6 @@ PrefabInstance:
       propertyPath: playerRb
       value: 
       objectReference: {fileID: 1466360242}
-    - target: {fileID: 8067789774827959248, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8643151858426491138, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: dashText
       value: 

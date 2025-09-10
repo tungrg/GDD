@@ -2011,7 +2011,7 @@ MonoBehaviour:
   maxHP: 300
   currentHP: 0
   maxMana: 100
-  currentMana: 0
+  currentMana: 50
   baseMoveSpeed: 5
   currentMoveSpeed: 0
   baseFireCooldown: 2
@@ -2070,7 +2070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 6884366404448989457, guid: 459e9e8e0d80aee48bcfc44429e27ab3, type: 3}
   firePoint: {fileID: 2045534424329395915}
-  playerRb: {fileID: 0}
+  playerRb: {fileID: 462249545640525471}
   throwForce: 15
 --- !u!114 &2194329535551672437
 MonoBehaviour:
@@ -2084,7 +2084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e634e9bedbdebb24baa23f078a965d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 50
   beamLength: 50
   beamDuration: 1
   recoilForce: 15
@@ -2152,8 +2152,11 @@ MonoBehaviour:
   moveSpeedBoost: 10
   fireCooldownOverride: 0.2
   healAmount: 200
-  nitroEffectPrefab: {fileID: 2787556212050310887, guid: 57970c6bb711ec24b8d98424b1806f3b, type: 3}
-  effectOffset: {x: 0, y: 0.5, z: -1}
+  nitroEffectPrefab: {fileID: 0}
+  nitroLocalOffset: {x: 0, y: 0.5, z: -1}
+  smokePrefab: {fileID: 4503612902121041701, guid: 5a936c83b1746f14f9100db745e94f04, type: 3}
+  smokeLocalOffset: {x: 0, y: 0.35, z: 0}
+  smokeCleanupDelay: 2
 --- !u!114 &402624041482451554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2774,7 +2777,7 @@ Transform:
   m_GameObject: {fileID: 6945612107358001772}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.122, z: 0.71}
+  m_LocalPosition: {x: 0.07, y: 1.33, z: 0.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
