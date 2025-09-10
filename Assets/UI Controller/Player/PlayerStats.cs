@@ -75,4 +75,13 @@ public class PlayerStats : MonoBehaviour
         gameOverUI.SetActive(true);
         Time.timeScale = 0;
     }
+    public void ApplyMoveSpeedModifier(float multiplier)
+    {
+        currentMoveSpeed = baseMoveSpeed * multiplier;
+    }
+
+    public void ResetMoveSpeed()
+    {
+        currentMoveSpeed = baseMoveSpeed;
+    }
 }
