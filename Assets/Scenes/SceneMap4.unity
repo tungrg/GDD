@@ -1820,14 +1820,24 @@ MonoBehaviour:
   skills:
   - skillName: Magnet Storm
     skillIcon: {fileID: 21300000, guid: 6dc7417d194136b4f88e900f2a377f04, type: 3}
+    priceSkill: 0
+    unlock: 0
   - skillName: Railgun Burst
     skillIcon: {fileID: 21300000, guid: 678fec91019c8804ca72c74d29ac5353, type: 3}
+    priceSkill: 0
+    unlock: 0
   - skillName: Iron Armor
     skillIcon: {fileID: 21300000, guid: 1cf5e26fba3c3354987141b357a8ba55, type: 3}
+    priceSkill: 0
+    unlock: 0
   - skillName: Nitro Boots
     skillIcon: {fileID: 21300000, guid: 14b90c3ec6a89994782c6b894562a2a8, type: 3}
+    priceSkill: 0
+    unlock: 0
   - skillName: Combat Drone
     skillIcon: {fileID: 21300000, guid: 1ca7831b68d7bcb4682b40d3a608abff, type: 3}
+    priceSkill: 0
+    unlock: 0
   skillSelectPanel: {fileID: 1161566370}
   selectedSkillIcon: {fileID: 197527065}
   ultimateButton: {fileID: 197527062}
@@ -5882,6 +5892,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1275848279}
     m_Modifications:
+    - target: {fileID: 379105126096120202, guid: 8a43811bc7047d547afa3b429470bdfb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: SceneMap5
+      objectReference: {fileID: 0}
     - target: {fileID: 1137936738443880505, guid: 8a43811bc7047d547afa3b429470bdfb, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
