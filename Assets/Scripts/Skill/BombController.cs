@@ -66,6 +66,7 @@ public class BombController : MonoBehaviour
                 if (ph != null)
                 {
                     ph.TakeDamage(totalDamage);
+                    Debug.Log(totalDamage);
                 }
             }
         }
@@ -78,6 +79,6 @@ public class BombController : MonoBehaviour
         if (bombTextEffect != null)
             Instantiate(bombTextEffect, transform.position + Vector3.up * 2, Quaternion.identity);
 
-        //pool.ReturnObject("C4", gameObject);
+        pool.ReturnObject("C4", gameObject);
     }
 }
