@@ -14,6 +14,7 @@ public class CannonSkill : SkillBoss
     public float delayBetweenShots = 1f;
     public int damage = 40;
 
+
     protected override void Activate(BossManager boss)
     {
         boss.StartCoroutine(CannonRoutine(boss));
@@ -23,6 +24,10 @@ public class CannonSkill : SkillBoss
     {
         boss.SetBusy(true);
         GameManager.Instance.AddState(GameState.BossSkillLock);
+        if (boss.animator != null)
+        {
+            boss.animator.SetTrigger("cannonSkill");
+        }
         if (boss.player != null)
         {
             Vector3 dir = (boss.player.position - boss.transform.position);
