@@ -34,6 +34,10 @@ public class BossManager : BossBase
     public GameObject healEffectPrefab;
     public ParticleSystem SkillRevengeShotVFX;
 
+    [Header("Cameras")]
+    public Camera mainCamera;
+    public Camera bossCamera;
+
     private bool isBusy = false;
 
     public void SetBusy(bool value)
@@ -80,6 +84,8 @@ public class BossManager : BossBase
         if (uiPanel != null)
             uiPanel.SetActive(false);
         animator = GetComponent<Animator>();
+        animator.SetBool("isAttack", false);
+        animator.SetBool("isMoving", false);
     }
 
     public void StartBossBattle()
@@ -118,17 +124,24 @@ public class BossManager : BossBase
             Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
             agent.SetDestination(destination);
 
+            animator.SetBool("isMoving", true);
+
             while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
             {
                 yield return null;
             }
 
+            animator.SetBool("isMoving", false);
+
             yield return new WaitForSeconds(waitAtPoint);
+
+            animator.SetBool("isAttack", true);
 
             if (!isBusy)
                 ShootAtPlayer();
 
             yield return new WaitForSeconds(waitBeforeShoot);
+            animator.SetBool("isAttack", false);
         }
     }
 
@@ -202,11 +215,11 @@ public class BossManager : BossBase
         }
 
         if (rb != null)
-    #if UNITY_6000_0_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
             rb.linearVelocity = shootDir * fireForce;
-    #else
+#else
             rb.velocity = shootDir * fireForce;
-    #endif
+#endif
     }
 
 
@@ -281,17 +294,44 @@ public class BossManager : BossBase
         if (animator != null)
             animator.SetTrigger("die");
 
-        StartCoroutine(ShowUIAfterDelay());
+        SwitchToBossCamera();
+        StartCoroutine(PlayDeathSequence());
     }
 
-    private IEnumerator ShowUIAfterDelay()
+    private IEnumerator PlayDeathSequence()
     {
-        yield return new WaitForSeconds(1f);
+        Time.timeScale = 0.3f;
+        float dieAnimLength = 2f;
+        if (animator != null)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            dieAnimLength = stateInfo.length;
+        }
+
+
+        yield return new WaitForSecondsRealtime(dieAnimLength);
+        if (mainCamera != null) mainCamera.gameObject.SetActive(true);
+        if (bossCamera != null) bossCamera.gameObject.SetActive(false);
+
+        Time.timeScale = 0f;
 
         uiPanel.SetActive(true);
-
-        Time.timeScale = 0;
     }
+    private void SwitchToBossCamera()
+    {
+        if (mainCamera != null) mainCamera.gameObject.SetActive(false);
+        if (bossCamera != null) bossCamera.gameObject.SetActive(true);
+    }
+
+
+    // private IEnumerator ShowUIAfterDelay()
+    // {
+    //     yield return new WaitForSeconds(1.5f);
+
+    //     uiPanel.SetActive(true);
+
+    //     Time.timeScale = 0;
+    // }
     public void Heal(float amount)
     {
         CurrentHealth = Mathf.Min(CurrentHealth + amount, Data.health);
