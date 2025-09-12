@@ -1,12 +1,17 @@
 using System.Collections;
+using Unity.AppUI.UI;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    
+
     public static GameManager Instance { get; private set; }
 
     public GameState CurrentState { get; private set; } = GameState.Normal;
+
+    public GameObject pauseUiPanel;
+    public GameObject modalQuit;
+    //public Button pausebtn;
 
     private void Awake()
     {
@@ -33,5 +38,28 @@ public class GameManager : MonoBehaviour
         return !HasState(GameState.BossSkillLock);
     }
 
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        pauseUiPanel.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 0;
+        modalQuit.SetActive(true);
+    }
+
+    public void PlayGame()
+    {
+        Time.timeScale = 0;
+        modalQuit.SetActive(false);
+    }
+
+    public void ResumeGame()
+    {
+        pauseUiPanel.SetActive(false);
+        Time.timeScale = 1;
+    }
 
 }

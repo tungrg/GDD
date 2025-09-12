@@ -90,7 +90,6 @@ public class BossManager : BossBase
 
     public void StartBossBattle()
     {
-        Debug.LogWarning("⚠ StartBossBattle() HAS BEEN CALLED", this);
         if (!gameStarted)
         {
             gameStarted = true;
@@ -100,8 +99,6 @@ public class BossManager : BossBase
 
     private IEnumerator BossBehaviorLoop()
     {
-        yield return new WaitForSeconds(3f);
-
         if (Data != null)
         {
             foreach (var skill in Data.skills)
@@ -171,10 +168,8 @@ public class BossManager : BossBase
 
         yield return new WaitForSeconds(0.5f);
 
-        // Bắn viên đầu tiên
         ShootBulletAt(player.position);
 
-        // Kiểm tra Rattlesnake Instinct để bắn viên thứ hai nếu player trong vùng
         if (Data != null && Data.skills != null)
         {
             foreach (var skill in Data.skills)
@@ -259,7 +254,7 @@ public class BossManager : BossBase
                 }
             }
         }
-        // Gọi passive RevengeShot
+
         foreach (var skill in Data.skills)
         {
             if (skill is SkillRevengeShot revenge)
@@ -280,6 +275,12 @@ public class BossManager : BossBase
         {
             clone.Die();
         }
+        UltimateManager ultimate = FindFirstObjectByType<UltimateManager>();
+        if (ultimate != null)
+        {
+            ultimate.settingsPanel.SetActive(false);
+        }
+
         hpBoss.SetActive(false);
 
         gameStarted = false;

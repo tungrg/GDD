@@ -7258,6 +7258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: 0d02c955b35ed40599bb4aca60216d75, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
 --- !u!224 &551741517927076381 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2864486697453313632, guid: c2de0605e80bf4d5ab6cf8ffb6b6e072, type: 3}
@@ -7710,6 +7711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: 44811c534dd5c4c96935f7375ce24944, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
 --- !u!224 &1143369824312011466 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2864486697453313632, guid: 29ea53df5ea6f44a8b3269f2d044afab, type: 3}
@@ -8801,6 +8803,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: bb40f8af572004e14a9f514f828af95e, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
 --- !u!1001 &6953779405174755329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9208,6 +9211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: c80ad0f5bc8d143378e1c7bd05fe5fe1, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
 --- !u!1001 &7498499196068368549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9607,6 +9611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: 8fae70e9c41ab478596ae383659c8b13, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
 --- !u!224 &5445369796825096758 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2864486697453313632, guid: 15e2f4e3ec37f4b349b9bf52a685047a, type: 3}
@@ -9767,6 +9772,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: f2f4580479a744a0688440b82c21ddd5, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
 --- !u!224 &6179887490849001382 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2864486697453313632, guid: e3cc799eb64ca416dbc837b0036622ae, type: 3}
@@ -10054,3 +10060,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enabledSprite: {fileID: 21300000, guid: cd6e33ef05ee44c2e8dc45d3ef9dfcb4, type: 3}
   disabledSprite: {fileID: 21300000, guid: b4b024c6ca6464483b99578de7edfd49, type: 3}
+  m_swapped: 1
