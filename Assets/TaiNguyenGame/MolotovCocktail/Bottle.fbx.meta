@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 3f723d3c5c4feb3438f58f736c827daa
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323950
+  packageName: Food Pack - Low Poly Assets
+  packageVersion: 1.0
+  assetPath: Assets/Adrift Team/Food Pack - Low Poly Assets/Food/Bottle.fbx
+  uploadId: 769158
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -30,7 +37,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -105,10 +112,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323950
-  packageName: Food Pack - Low Poly Assets
-  packageVersion: 1.0
-  assetPath: Assets/Adrift Team/Food Pack - Low Poly Assets/Food/Bottle.fbx
-  uploadId: 769158
