@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class UltimateManager : MonoBehaviour
 {
     public static UltimateManager Instance;
-    
+
     private void Awake()
     {
         // Singleton pattern với DontDestroyOnLoad
@@ -13,7 +14,7 @@ public class UltimateManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            
+
             // Load skill data ngay khi UltimateManager được khởi tạo
             LoadSkillData();
         }
@@ -23,7 +24,7 @@ public class UltimateManager : MonoBehaviour
             return;
         }
     }
-    
+
     [System.Serializable]
     public class Skill
     {
@@ -41,6 +42,8 @@ public class UltimateManager : MonoBehaviour
     public Image selectedSkillIcon;
     public Button ultimateButton;
     public GameObject hpBoss;
+    public GameObject settingsPanel;
+    public TMP_Text countdownText;
 
     [Header("Cooldown")]
     public float ultimateCooldown = 20f;
@@ -50,20 +53,22 @@ public class UltimateManager : MonoBehaviour
     private bool isOnCooldown = false;
     private Sprite defaultIcon;
 
+
+
     // Load skill data khi game start
     private void LoadSkillData()
     {
         Debug.Log("UltimateManager: Loading skill data...");
-        
+
         // Đảm bảo skill đầu tiên luôn unlock
         SetFirstSkillUnlocked();
-        
+
         // Load từ SaveLoadManager
         SaveLoadManager.LoadSkills(skills);
-        
+
         Debug.Log("UltimateManager: Skill data loaded successfully!");
     }
-    
+
     // Đảm bảo skill đầu tiên luôn unlock
     private void SetFirstSkillUnlocked()
     {
@@ -82,6 +87,7 @@ public class UltimateManager : MonoBehaviour
             return;
         }
 
+        settingsPanel.SetActive(false);
         skillSelectPanel.SetActive(true);
         selectedSkillIcon.enabled = false;
 
@@ -98,7 +104,7 @@ public class UltimateManager : MonoBehaviour
     public void SelectSkill(int index)
     {
         if (index < 0 || index >= skills.Length) return;
-        
+
         // Kiểm tra skill đã unlock chưa
         if (!skills[index].unlock)
         {
@@ -114,12 +120,58 @@ public class UltimateManager : MonoBehaviour
         skillSelectPanel.SetActive(false);
         Debug.Log("Đã chọn kỹ năng: " + currentSkill.skillName);
 
+        if (hpBoss != null)
+            hpBoss.SetActive(true);
+
+        StartCoroutine(StartBattleWithCountdown());
+    }
+    private IEnumerator StartBattleWithCountdown()
+    {
+        if (countdownText == null)
+        {
+            Debug.LogWarning("Countdown Text chưa được gán!");
+            yield break;
+        }
+
+        countdownText.gameObject.SetActive(true);
+
+        for (int i = 3; i > 0; i--)
+        {
+            yield return StartCoroutine(ShowTextWithEffect(i.ToString()));
+        }
+
+        yield return StartCoroutine(ShowTextWithEffect("START!"));
+
+        countdownText.gameObject.SetActive(false);
+        settingsPanel.SetActive(true);
+
         BossManager boss = FindFirstObjectByType<BossManager>();
         if (boss != null)
             boss.StartBossBattle();
+    }
 
-        if (hpBoss != null)
-            hpBoss.SetActive(true);
+    private IEnumerator ShowTextWithEffect(string text)
+    {
+        countdownText.text = text;
+        countdownText.color = new Color(1, 1, 1, 1);
+        countdownText.rectTransform.localScale = Vector3.one * 0.5f;
+
+        float t = 0f;
+        float duration = 1f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float progress = t / duration;
+
+            float scale = Mathf.Lerp(0.5f, 1.5f, progress);
+            countdownText.rectTransform.localScale = Vector3.one * scale;
+
+            float alpha = Mathf.Lerp(1f, 0f, progress);
+            countdownText.color = new Color(1, 1, 1, alpha);
+
+            yield return null;
+        }
     }
 
     private IEnumerator AnimateSkillIcon(Sprite icon)
@@ -128,13 +180,13 @@ public class UltimateManager : MonoBehaviour
         tempIconObj.transform.SetParent(skillSelectPanel.transform.parent, false);
         Image tempIcon = tempIconObj.AddComponent<Image>();
         tempIcon.sprite = icon;
-        tempIcon.rectTransform.sizeDelta = new Vector2(150, 150); 
+        tempIcon.rectTransform.sizeDelta = new Vector2(150, 150);
 
         Vector3 startPos = skillSelectPanel.transform.position;
         Vector3 endPos = ultimateButton.transform.position;
 
         float t = 0f;
-        float duration = 1f; 
+        float duration = 1f;
 
         while (t < 1f)
         {
@@ -216,13 +268,13 @@ public class UltimateManager : MonoBehaviour
 
         Debug.Log("Ultimate đã kết thúc, hồi " + manaRestore + " mana.");
     }
-    
+
     // Public method để lưu skill data (gọi từ ShopManager khi mua skill)
     public void SaveSkillData()
     {
         SaveLoadManager.SaveSkills(skills);
     }
-    
+
     // Public method để unlock skill
     public void UnlockSkill(int index)
     {
@@ -230,12 +282,12 @@ public class UltimateManager : MonoBehaviour
         {
             skills[index].unlock = true;
             Debug.Log("Skill unlocked: " + skills[index].skillName);
-            
+
             // Auto save khi unlock skill
             SaveSkillData();
         }
     }
-    
+
     // Public methods để truy cập skill data
     public Skill GetSkill(int index)
     {
@@ -243,12 +295,12 @@ public class UltimateManager : MonoBehaviour
             return skills[index];
         return null;
     }
-    
+
     public int GetSkillCount()
     {
         return skills != null ? skills.Length : 0;
     }
-    
+
     public bool IsSkillUnlocked(int index)
     {
         if (index >= 0 && index < skills.Length)

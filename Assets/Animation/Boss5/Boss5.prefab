@@ -1498,7 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9c3e482d6080c40bba98cac26555c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossData: {fileID: 11400000, guid: 8327817fb594c0144ad16cf5b0a1b23c, type: 2}
+  bossData: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
   player: {fileID: 0}
   playerPrefab: {fileID: 0}
   bulletPrefab: {fileID: 4220850484020903645, guid: 8f4ec76e40c45124b85daf15571db0ce, type: 3}
@@ -1528,7 +1528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c28be2101c1e0bf45b2b9af6d8d35963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossData: {fileID: 11400000, guid: 8327817fb594c0144ad16cf5b0a1b23c, type: 2}
+  bossData: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
 --- !u!114 &5914765186589717488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1541,7 +1541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ab3ff64aec60a47bad092ae83152fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossData: {fileID: 11400000, guid: 8327817fb594c0144ad16cf5b0a1b23c, type: 2}
+  bossData: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
   healthSlider: {fileID: 1857509545916152935}
   fillImage: {fileID: 1857325026389259962}
 --- !u!195 &5271732699778342874
@@ -1552,7 +1552,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3063260626811466389}
   m_Enabled: 1
-  m_AgentTypeID: -902729914
+  m_AgentTypeID: -1923039037
   m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
@@ -3065,7 +3065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ae6fd9b600d884e866fc1e4dcb28b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boss: {fileID: 8161466466884972463}
+  boss: {fileID: 69069313152870410}
   offset: {x: 0, y: 4, z: 0}
 --- !u!1 &6711224753264194160
 GameObject:
