@@ -11035,6 +11035,7 @@ MonoBehaviour:
     initialSize: 2
   - key: C4
     prefab: {fileID: 4757444569486780002, guid: 7dc7a7091a67d5848b0960593571084d, type: 3}
+    prefab: {fileID: 4757444569486780002, guid: 7dc7a7091a67d5848b0960593571084d, type: 3}
     initialSize: 1
   - key: ExplosionFx
     prefab: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
