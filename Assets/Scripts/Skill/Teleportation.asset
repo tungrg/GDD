@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: 
   cooldown: 20
   teleportEffect: {fileID: 5184371879822970307, guid: 673349bb813b9f5469d38b0a986e17b2, type: 3}
-  bombPrefab: {fileID: 7105956024688538642, guid: 94c3bdabdc496394da7558f9fe4a7ca3, type: 3}
+  bombPrefab: {fileID: 4757444569486780002, guid: 7dc7a7091a67d5848b0960593571084d, type: 3}
   explosionEffect: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
   bombTextEffect: {fileID: 5339739117810204693, guid: 26e1cb216e3635e4a820f58a1118d6b9, type: 3}
   bombDuration: 10
