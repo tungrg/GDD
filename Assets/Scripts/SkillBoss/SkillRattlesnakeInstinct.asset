@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806b95a83d9eda04aad2e62f94d39f0e, type: 3}
   m_Name: SkillRattlesnakeInstinct
   m_EditorClassIdentifier: 
-  skillName: 
+  skillName: SkillRattlesnakeInstinct
   cooldown: 5
   triggerRadius: 25

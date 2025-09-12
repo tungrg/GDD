@@ -81,9 +81,9 @@ public class Teleportation : SkillBoss
         GameObject bombObj = effectPool.GetObject("C4", boss.player.position, Quaternion.identity);
 
         bombObj.transform.SetParent(boss.player);
-        bombObj.transform.localPosition = new Vector3(0f, 0.8f, -0.4f);
-        bombObj.transform.localRotation = Quaternion.identity;
-        bombObj.transform.localScale = new Vector3(0.4f, 0.5f, 0.2f);
+        bombObj.transform.localPosition = new Vector3(-0.05f, 0.9f, -0.25f);
+        bombObj.transform.localRotation = Quaternion.Euler(25f, 6f, -2f);
+        bombObj.transform.localScale = new Vector3(1, 1, 1);
 
         activeBomb = bombObj.GetComponent<BombController>();
         activeBomb.Init(
