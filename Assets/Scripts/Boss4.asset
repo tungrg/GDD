@@ -15,10 +15,10 @@ MonoBehaviour:
   nameBoss: Boss4
   icon: {fileID: 0}
   originalHealth: 200
-  originalSpeed: 3
+  originalSpeed: 5
   originalDamageAtk: 20
   originalSpeedAtk: 2
-  speed: 3
+  speed: 5
   skills:
   - {fileID: 11400000, guid: bee44bca6729e8f4f87fb54408ae9ca8, type: 2}
   - {fileID: 11400000, guid: 1101102ff6743cd4c9edb7cd958d79df, type: 2}

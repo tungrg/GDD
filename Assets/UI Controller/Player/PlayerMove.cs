@@ -142,32 +142,33 @@ public class PlayerMove : MonoBehaviour
         Vector3 p1 = transform.position + capsule.center + Vector3.up * (capsule.height * 0.5f - capsule.radius);
         Vector3 p2 = transform.position + capsule.center - Vector3.up * (capsule.height * 0.5f - capsule.radius);
 
+        Vector3 castDir = new Vector3(dir.x, 0, dir.z);
+
         RaycastHit hit;
-        if (Physics.CapsuleCast(p1, p2, capsule.radius * 0.95f, dir, out hit, dashDistance))
+        if (Physics.CapsuleCast(p1, p2, capsule.radius * 0.95f, castDir, out hit, dashDistance))
         {
-            if (hit.collider.CompareTag("Map"))
-            {
-                maxDistance = hit.distance - 0.1f;
-            }
+            maxDistance = hit.distance - 0.1f;
         }
 
         Vector3 start = rb.position;
-        Vector3 end = start + dir * maxDistance;
+        Vector3 end = start + castDir * maxDistance;
+        end.y = start.y;
 
         float elapsed = 0f;
         while (elapsed < dashDuration)
         {
             float t = elapsed / dashDuration;
             Vector3 targetPos = Vector3.Lerp(start, end, t);
+            targetPos.y = start.y;
             rb.MovePosition(targetPos);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         rb.MovePosition(end);
-
         isDashing = false;
     }
+
 
     void SetButtonAlpha(float alpha)
     {
