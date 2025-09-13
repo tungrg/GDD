@@ -904,7 +904,7 @@ PrefabInstance:
     - target: {fileID: 705227204501422680, guid: 3185efcbdf239fb459487d015375107f, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+      objectReference: {fileID: 11400000, guid: a84a08bddd0668c44805c787f97c2dfb, type: 2}
     - target: {fileID: 4822174634263888965, guid: 3185efcbdf239fb459487d015375107f, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -960,7 +960,7 @@ PrefabInstance:
     - target: {fileID: 6710064384581959859, guid: 3185efcbdf239fb459487d015375107f, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+      objectReference: {fileID: 11400000, guid: a84a08bddd0668c44805c787f97c2dfb, type: 2}
     - target: {fileID: 6722283752068443527, guid: 3185efcbdf239fb459487d015375107f, type: 3}
       propertyPath: m_AgentTypeID
       value: 287145453
@@ -972,7 +972,7 @@ PrefabInstance:
     - target: {fileID: 8474440501179155764, guid: 3185efcbdf239fb459487d015375107f, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+      objectReference: {fileID: 11400000, guid: a84a08bddd0668c44805c787f97c2dfb, type: 2}
     - target: {fileID: 8474440501179155764, guid: 3185efcbdf239fb459487d015375107f, type: 3}
       propertyPath: mainCamera
       value: 
@@ -9622,7 +9622,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.5
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: b07b7d3cd84a54749acdebffbb497ef2, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 1fb04558f05999c4bbb8f7f0d7788b33, type: 2}
   m_BuildHeightMesh: 0
 --- !u!114 &1936743750 stripped
 MonoBehaviour:

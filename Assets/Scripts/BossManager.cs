@@ -10,6 +10,7 @@ public class BossManager : BossBase
     public GameObject bulletPrefab;
     public Transform firePoint;
     public Transform bossModel;
+    public Transform bossGun;
 
     [Header("Movement Settings")]
     public float moveRadius = 5f;
@@ -27,7 +28,7 @@ public class BossManager : BossBase
     [Header("UI")]
     public GameObject uiPanel;
     public GameObject hpBoss;
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     public Animator animator;
 
     [Header("Effects")]

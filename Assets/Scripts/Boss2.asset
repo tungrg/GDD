@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05b44838532c7849b0d1816c1a9b9b6, type: 3}
   m_Name: Boss2
   m_EditorClassIdentifier: 
-  nameBoss: Boss5
+  nameBoss: BossMap1
   icon: {fileID: 0}
   originalHealth: 200
   originalSpeed: 3
@@ -20,6 +20,6 @@ MonoBehaviour:
   originalSpeedAtk: 2
   speed: 3
   skills:
-  - {fileID: 11400000, guid: fa498bbd4dc256a41b021b984b67e7c0, type: 2}
-  - {fileID: 11400000, guid: c01411ed5f07bcc4a81a6cbd642a23a5, type: 2}
-  - {fileID: 11400000, guid: dbd3c16bf8dc5ba4aa47a692b3fb5ee3, type: 2}
+  - {fileID: 11400000, guid: 9130b97960d647940a65cbe191fc936b, type: 2}
+  - {fileID: 11400000, guid: 8d572646e96c021408d0f47d0157928f, type: 2}
+  - {fileID: 11400000, guid: 8831c81a0b568714a8e9afb5b2d938ed, type: 2}
