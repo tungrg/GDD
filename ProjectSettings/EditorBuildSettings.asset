@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Boss(Nam)/Boss(Nam).unity
     guid: 528e16ccf52d07b4498758e152f57067
   - enabled: 1
-    path: Assets/Scenes/longmap1.unity
+    path: Assets/Scenes/SceneMap1.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/Scenes/SceneMap2.unity
