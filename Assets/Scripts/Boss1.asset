@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a05b44838532c7849b0d1816c1a9b9b6, type: 3}
-  m_Name: Boss5(CLone)
+  m_Name: Boss1
   m_EditorClassIdentifier: 
-  nameBoss: CLone
+  nameBoss: BossMap1
   icon: {fileID: 0}
-  originalHealth: 200
+  originalHealth: 150
   originalSpeed: 3
   originalDamageAtk: 20
   originalSpeedAtk: 2
+  speed: 3
   skills:
-  - {fileID: 11400000, guid: 8d572646e96c021408d0f47d0157928f, type: 2}
-  - {fileID: 11400000, guid: 47d7a3d48aa20f2418687087ae59c50f, type: 2}
+  - {fileID: 11400000, guid: e3b0519d87ca0614496671c6448b03ee, type: 2}
+  - {fileID: 11400000, guid: c01411ed5f07bcc4a81a6cbd642a23a5, type: 2}

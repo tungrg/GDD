@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BossCloneManager : MonoBehaviour
 {
@@ -10,8 +11,11 @@ public class BossCloneManager : MonoBehaviour
     public Transform firePoint;
 
     [Header("Clone Settings")]
-    public float cloneHealth = 60f; // Clone luôn có máu = 60
+    public float maxHealth = 60f;
     private float currentHealth;
+
+    [Header("UI")]
+    public Slider healthSlider;
 
     [Header("Movement Settings")]
     public float moveRadius = 4f;
@@ -23,35 +27,37 @@ public class BossCloneManager : MonoBehaviour
 
     private NavMeshAgent agent;
     private bool isAlive = true;
-    private Transform boss; // để clone né boss
+    private Transform boss; // để né boss
     public Animator animator;
 
     private void Start()
     {
-        // tìm player
+        // Tìm player
         if (player == null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
         }
 
-        // setup máu = 60 (luôn cố định)
-        currentHealth = cloneHealth;
-        Debug.Log($"[Clone Spawned] HP: {currentHealth}/{cloneHealth}");
+        currentHealth = maxHealth;
 
-        // setup agent
+        // Setup agent
         agent = GetComponent<NavMeshAgent>();
         if (agent == null) agent = gameObject.AddComponent<NavMeshAgent>();
-
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; 
-        agent.avoidancePriority = 99; // Ưu tiên thấp => nhường đường
+        agent.avoidancePriority = 99;
 
+        // Tìm boss chính để né
         BossManager bm = FindAnyObjectByType<BossManager>();
         if (bm != null) boss = bm.transform;
 
-        // bắt đầu hành vi clone
-        StartCoroutine(CloneBehaviorLoop());
+        // Animator
         animator = GetComponent<Animator>();
+
+        // Update UI
+        UpdateHealthUI();
+
+        StartCoroutine(CloneBehaviorLoop());
     }
 
     private IEnumerator CloneBehaviorLoop()
@@ -60,55 +66,55 @@ public class BossCloneManager : MonoBehaviour
 
         while (isAlive)
         {
-            // chọn điểm random nhưng tránh boss
             Vector3 destination = GetRandomPointAvoidBoss(transform.position, moveRadius, boss, 2f);
             agent.SetDestination(destination);
 
-            // đợi đến khi tới nơi
-            while (agent != null && agent.isOnNavMesh &&
-      (agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
+            if (animator != null) animator.SetBool("isAttack", false);
+
+            while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
             {
+                if (animator != null) animator.SetBool("isMoving", true);
                 yield return null;
             }
 
+            if (animator != null) animator.SetBool("isMoving", false);
+
             yield return new WaitForSeconds(waitAtPoint);
 
-            // bắn player
+            if (animator != null) animator.SetBool("isAttack", true);
             ShootAtPlayer();
             yield return new WaitForSeconds(waitBeforeShoot);
+            if (animator != null) animator.SetBool("isAttack", false);
         }
     }
 
     private Vector3 GetRandomPointAvoidBoss(Vector3 center, float radius, Transform boss, float minDistance = 2f)
     {
-        for (int i = 0; i < 10; i++) // thử 10 lần
+        for (int i = 0; i < 10; i++)
         {
             Vector3 randomPos = center + Random.insideUnitSphere * radius;
             if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
             {
-                // né boss ra tối thiểu minDistance
                 if (boss == null || Vector3.Distance(hit.position, boss.position) > minDistance)
                     return hit.position;
             }
         }
-        return center; // fallback
+        return center;
     }
 
     private void ShootAtPlayer()
     {
         if (player == null || bulletPrefab == null || firePoint == null) return;
 
-        Vector3 dir = (player.position - transform.position).normalized;
-        dir.y = 0;
-
-        // xoay clone
+        // Hướng nhìn cố định trên trục Y
+        Vector3 dir = (player.position - transform.position);
+        dir.y = 0; // cố định Y
         if (dir != Vector3.zero)
-        {
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-        }
 
+        // Hướng bắn cố định trục Y
         Vector3 shootDir = (player.position - firePoint.position);
-        shootDir.y = 0;
+        shootDir.y = 0; // cố định Y
         shootDir.Normalize();
 
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDir));
@@ -116,41 +122,48 @@ public class BossCloneManager : MonoBehaviour
 
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         if (bulletScript != null)
-        {
-            bulletScript.SetDamage(5f); // clone bắn yếu hơn boss chính
-        }
+            bulletScript.SetDamage(5f);
 
         if (rb != null)
-        {
-#if UNITY_6000_0_OR_NEWER
+    #if UNITY_6000_0_OR_NEWER
             rb.linearVelocity = shootDir * fireForce;
-#else
+    #else
             rb.velocity = shootDir * fireForce;
-#endif
-        }
+    #endif
     }
 
+
+    // 🔹 Chỉ cần 1 hàm TakeDamage duy nhất
     public void TakeDamage(float amount)
     {
         if (!isAlive) return;
-        BossCloneHealth health = GetComponent<BossCloneHealth>();
-        if (health != null)
-        {
-            health.TakeDamage(amount);
-        }
-        currentHealth -= amount;
-        Debug.Log($"[Clone Damaged] HP: {currentHealth}/{cloneHealth}");
 
-        if (currentHealth <= 0)
+        currentHealth -= amount;
+        UpdateHealthUI();
+        Debug.Log($"[Clone Damaged] HP: {currentHealth}/{maxHealth}");
+
+        if (currentHealth <= 0) Die();
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (healthSlider != null)
         {
-            Die();
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
         }
     }
 
     public void Die()
     {
         isAlive = false;
-        Debug.Log("[Clone Died]");
-        Destroy(gameObject);
+        if (transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

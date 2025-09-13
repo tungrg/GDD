@@ -15,5 +15,4 @@ MonoBehaviour:
   skillName: 
   cooldown: 0
   damageMultiplier: 2
-  bossVFXTrigger: RevengeShot
-  bulletVFXPrefab: {fileID: 9027514048236820045, guid: effb650189dc5714e9e9801b1cfb3991, type: 3}
+  bulletVFXPrefab: {fileID: 7809144757870230006, guid: 272b5949d5295fd499c60bc4c256a56c, type: 3}

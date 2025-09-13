@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fir tree winter large (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4822431972316174437, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 5307326102620078815, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
       propertyPath: m_LocalPosition.x
       value: -16.04
@@ -319,6 +323,10 @@ PrefabInstance:
     - target: {fileID: 6486319289619685857, guid: c19187e88ee1b3b4cb378248091db269, type: 3}
       propertyPath: m_Name
       value: stone winter small (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6486319289619685857, guid: c19187e88ee1b3b4cb378248091db269, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1283,6 +1291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone winter small 4 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1690045051103409652, guid: 309006272775a284cb304091d91f6697, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 2035609068271087438, guid: 309006272775a284cb304091d91f6697, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
@@ -1305,7 +1317,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2035609068271087438, guid: 309006272775a284cb304091d91f6697, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.99
+      value: 4.2
       objectReference: {fileID: 0}
     - target: {fileID: 2035609068271087438, guid: 309006272775a284cb304091d91f6697, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1728,6 +1740,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: land christmas village (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8772286291578295160, guid: ded46aac8039d5c40a4c8e767640168c, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8772286291578295160, guid: ded46aac8039d5c40a4c8e767640168c, type: 3}
+      propertyPath: m_TagString
+      value: Ground1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2031,7 +2051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8038329817808977089, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 59.502098
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8229809321789915073, guid: 99d25fe8317329245adff2a31b3c1977, type: 3}
       propertyPath: m_Height
@@ -2087,6 +2107,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &290420460
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 882672790}
+    m_Modifications:
+    - target: {fileID: 3704143103309400933, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_Name
+      value: fir tree winter large (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3704143103309400933, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -17.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -26.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+--- !u!4 &290420461 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+  m_PrefabInstance: {fileID: 290420460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &313744942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2098,6 +2184,10 @@ PrefabInstance:
     - target: {fileID: 1884330851195960907, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_Name
       value: fir tree winter bent (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884330851195960907, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalScale.x
@@ -2113,7 +2203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.66
+      value: 18.6
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2121,7 +2211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.26
+      value: 2.41
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3571,6 +3661,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: fir tree winter bent (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1884330851195960907, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 5056527958688450171, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_Size.y
+      value: 7.9707937
+      objectReference: {fileID: 0}
+    - target: {fileID: 5056527958688450171, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_Size.z
+      value: 6.9342546
+      objectReference: {fileID: 0}
+    - target: {fileID: 5056527958688450171, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_Center.y
+      value: 3.9853969
+      objectReference: {fileID: 0}
+    - target: {fileID: 5056527958688450171, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_Center.z
+      value: 1.1791483
+      objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.75
@@ -3585,7 +3695,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.17
+      value: 13.1
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3593,7 +3703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.94
+      value: 3.14
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5332,6 +5442,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 531010455506334077, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.3522333
+      objectReference: {fileID: 0}
+    - target: {fileID: 531010455506334077, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 531010455506334077, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.6
+      objectReference: {fileID: 0}
     - target: {fileID: 870698442283379655, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       propertyPath: m_Layer
       value: 10
@@ -5340,17 +5462,37 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Ground1
       objectReference: {fileID: 0}
+    - target: {fileID: 1345065910845787317, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345065910845787317, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 29.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1864898153233454607, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1864898153233454607, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1864898153233454607, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_TagString
+      value: Ground1
       objectReference: {fileID: 0}
     - target: {fileID: 8478092790448266739, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
+    - target: {fileID: 8478092790448266739, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.9
+      value: -6.5
       objectReference: {fileID: 0}
     - target: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5446,6 +5588,9 @@ PrefabInstance:
       addedObject: {fileID: 8284014495654318432}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: 2
+      addedObject: {fileID: 502548890}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: 3
       addedObject: {fileID: 240825462}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: -1
@@ -5470,7 +5615,22 @@ PrefabInstance:
       addedObject: {fileID: 678647753}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 664885717}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1006198841620223139}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1620298353}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1488059996}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 364243779}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2133264989}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1716803524}
@@ -5521,10 +5681,25 @@ PrefabInstance:
       addedObject: {fileID: 6218475900365952014}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 255260041}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2119545398}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4425080}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 528111218}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 290420461}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 400357294}
+    - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1295756523}
     - targetCorrespondingSourceObject: {fileID: 8478092790448266748, guid: 330ccb941fa6927429b6f863e48b7395, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1592599653}
@@ -5662,9 +5837,21 @@ PrefabInstance:
       value: 0.41
       objectReference: {fileID: 0}
     - target: {fileID: 3087196746544488255, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
+      propertyPath: bossGun
+      value: 
+      objectReference: {fileID: 818087261}
+    - target: {fileID: 3087196746544488255, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
+      propertyPath: uiPanel
+      value: 
+      objectReference: {fileID: 1910957710}
+    - target: {fileID: 3087196746544488255, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+      objectReference: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
+    - target: {fileID: 3087196746544488255, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
+      propertyPath: bossModel
+      value: 
+      objectReference: {fileID: 1217762377}
     - target: {fileID: 3087196746544488255, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
       propertyPath: mainCamera
       value: 
@@ -5680,11 +5867,11 @@ PrefabInstance:
     - target: {fileID: 6062920771947435104, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+      objectReference: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
     - target: {fileID: 6082522621314294989, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: fe3a688f44181ac428deb90cddd0e4cb, type: 2}
+      objectReference: {fileID: 11400000, guid: a1ba5b2bf3553004a84a6174af482838, type: 2}
     - target: {fileID: 7921278469446771129, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17
@@ -5839,7 +6026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5859140971903318875, guid: c19187e88ee1b3b4cb378248091db269, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.2
+      value: -27.5
       objectReference: {fileID: 0}
     - target: {fileID: 5859140971903318875, guid: c19187e88ee1b3b4cb378248091db269, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5872,6 +6059,10 @@ PrefabInstance:
     - target: {fileID: 6486319289619685857, guid: c19187e88ee1b3b4cb378248091db269, type: 3}
       propertyPath: m_Name
       value: stone winter small (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6486319289619685857, guid: c19187e88ee1b3b4cb378248091db269, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11840,6 +12031,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fir tree winter large (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4822431972316174437, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 5307326102620078815, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.560001
@@ -12058,7 +12253,7 @@ GameObject:
   - component: {fileID: 1878794336}
   m_Layer: 0
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14000,7 +14195,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7330507124345532986, guid: 9c1c44295c32097499220bb06cc0e4d2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.869774
+      value: -15.8
       objectReference: {fileID: 0}
     - target: {fileID: 7330507124345532986, guid: 9c1c44295c32097499220bb06cc0e4d2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14008,7 +14203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7330507124345532986, guid: 9c1c44295c32097499220bb06cc0e4d2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -26.774467
+      value: -38.1
       objectReference: {fileID: 0}
     - target: {fileID: 7330507124345532986, guid: 9c1c44295c32097499220bb06cc0e4d2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14042,6 +14237,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone large gray blue 5 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7994137589984897152, guid: 9c1c44295c32097499220bb06cc0e4d2, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14063,6 +14262,10 @@ PrefabInstance:
     - target: {fileID: 4822431972316174437, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
       propertyPath: m_Name
       value: fir tree winter large (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822431972316174437, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     - target: {fileID: 5307326102620078815, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14403,6 +14606,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fir tree winter tilted
       objectReference: {fileID: 0}
+    - target: {fileID: 6605279360179845460, guid: dcb62313c072c8f469f355112770a0c0, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 7052464918299579354, guid: dcb62313c072c8f469f355112770a0c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.398449
@@ -14505,6 +14712,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone winter small 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5733457033153981955, guid: e30eb246df4754a43ac9c36650e478b1, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14522,9 +14733,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: winter well
       objectReference: {fileID: 0}
+    - target: {fileID: 1042661691806131913, guid: 2bf25b41cbc4eb6468355758d530fe36, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 2291189906907908636, guid: 2bf25b41cbc4eb6468355758d530fe36, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.07
+      value: 13.1
       objectReference: {fileID: 0}
     - target: {fileID: 2291189906907908636, guid: 2bf25b41cbc4eb6468355758d530fe36, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14532,7 +14747,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2291189906907908636, guid: 2bf25b41cbc4eb6468355758d530fe36, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.1
+      value: -28.4
       objectReference: {fileID: 0}
     - target: {fileID: 2291189906907908636, guid: 2bf25b41cbc4eb6468355758d530fe36, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14589,7 +14804,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1317564376689862777, guid: bf547e540f6726d48a4cdf977c821bc3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.200001
+      value: 4.1
       objectReference: {fileID: 0}
     - target: {fileID: 1317564376689862777, guid: bf547e540f6726d48a4cdf977c821bc3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14597,7 +14812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1317564376689862777, guid: bf547e540f6726d48a4cdf977c821bc3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3
+      value: -4.7
       objectReference: {fileID: 0}
     - target: {fileID: 1317564376689862777, guid: bf547e540f6726d48a4cdf977c821bc3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14631,6 +14846,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone large gray blue 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5788165685637065625, guid: bf547e540f6726d48a4cdf977c821bc3, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14663,9 +14882,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: fir tree winter large
       objectReference: {fileID: 0}
+    - target: {fileID: 1323897269650940003, guid: e56d6641e32b9254880ba740a298ee50, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 2637512030532516993, guid: e56d6641e32b9254880ba740a298ee50, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.27
+      value: -13.2
       objectReference: {fileID: 0}
     - target: {fileID: 2637512030532516993, guid: e56d6641e32b9254880ba740a298ee50, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14673,7 +14896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2637512030532516993, guid: e56d6641e32b9254880ba740a298ee50, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.040005
+      value: -27.3
       objectReference: {fileID: 0}
     - target: {fileID: 2637512030532516993, guid: e56d6641e32b9254880ba740a298ee50, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14720,9 +14943,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone large gray blue 5
       objectReference: {fileID: 0}
+    - target: {fileID: 289908910052652784, guid: ecec0dab53370334985d70171caf644c, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 7333371959635013416, guid: ecec0dab53370334985d70171caf644c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.910006
+      value: 8.9
       objectReference: {fileID: 0}
     - target: {fileID: 7333371959635013416, guid: ecec0dab53370334985d70171caf644c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14730,7 +14957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7333371959635013416, guid: ecec0dab53370334985d70171caf644c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -26.900003
+      value: -38.2
       objectReference: {fileID: 0}
     - target: {fileID: 7333371959635013416, guid: ecec0dab53370334985d70171caf644c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14822,6 +15049,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wooden winter house 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7504505229812939512, guid: def246c51c48a7d40891e21d41ed49cf, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14838,6 +15069,10 @@ PrefabInstance:
     - target: {fileID: 1884330851195960907, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_Name
       value: fir tree winter bent
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884330851195960907, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     - target: {fileID: 6190773018901743454, guid: 4a6319b369fbbd647abaff156ef92d9e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14896,9 +15131,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: land christmas village (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 298123036508137395, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 298123036508137395, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
+      propertyPath: m_TagString
+      value: Ground1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5422837545162761540, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 5422837545162761540, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.5
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5422837545162761540, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14906,7 +15153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5422837545162761540, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -42.1
+      value: -60.5
       objectReference: {fileID: 0}
     - target: {fileID: 5422837545162761540, guid: 61d6a580cf42d434db31738a5714e81a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14993,6 +15240,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone winter small
       objectReference: {fileID: 0}
+    - target: {fileID: 8662589041104287350, guid: 0936b8972cf8c9b4ebfa6e4ea0922b53, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15028,7 +15279,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1562426873540581585, guid: ba7470bd90ac06d4a93459c094d8f379, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.220467
+      value: -3.2
       objectReference: {fileID: 0}
     - target: {fileID: 1562426873540581585, guid: ba7470bd90ac06d4a93459c094d8f379, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15036,7 +15287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1562426873540581585, guid: ba7470bd90ac06d4a93459c094d8f379, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.888304
+      value: -36.2
       objectReference: {fileID: 0}
     - target: {fileID: 1562426873540581585, guid: ba7470bd90ac06d4a93459c094d8f379, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15070,6 +15321,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone large gray blue 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1615407717596787242, guid: ba7470bd90ac06d4a93459c094d8f379, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15090,7 +15345,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 60891327326822202, guid: e51d957266c2e5547bc44f44002d01ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.060066
+      value: 14.5
       objectReference: {fileID: 0}
     - target: {fileID: 60891327326822202, guid: e51d957266c2e5547bc44f44002d01ae, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15098,7 +15353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 60891327326822202, guid: e51d957266c2e5547bc44f44002d01ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.95197
+      value: -13.6
       objectReference: {fileID: 0}
     - target: {fileID: 60891327326822202, guid: e51d957266c2e5547bc44f44002d01ae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15132,6 +15387,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: stone large gray blue
       objectReference: {fileID: 0}
+    - target: {fileID: 9178309701638013641, guid: e51d957266c2e5547bc44f44002d01ae, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15163,6 +15422,10 @@ PrefabInstance:
     - target: {fileID: 3704143103309400933, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
       propertyPath: m_Name
       value: fir tree winter large (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3704143103309400933, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     - target: {fileID: 8040309032714351473, guid: 1e123d8832fa0db4abd92d1c62e1c95d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15224,7 +15487,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3716557885640407774, guid: 51259b264aee60146951ebc948ab425d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.1000023
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3716557885640407774, guid: 51259b264aee60146951ebc948ab425d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15232,7 +15495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3716557885640407774, guid: 51259b264aee60146951ebc948ab425d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.700005
+      value: -19.4
       objectReference: {fileID: 0}
     - target: {fileID: 3716557885640407774, guid: 51259b264aee60146951ebc948ab425d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15266,6 +15529,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: snowman
       objectReference: {fileID: 0}
+    - target: {fileID: 6648481988335323326, guid: 51259b264aee60146951ebc948ab425d, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15293,9 +15560,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: wooden winter house
       objectReference: {fileID: 0}
+    - target: {fileID: 1807093932143700636, guid: 8ac17b9154bc35b439ef5d11cc5c1a64, type: 3}
+      propertyPath: m_TagString
+      value: Map
+      objectReference: {fileID: 0}
     - target: {fileID: 3249455872694228729, guid: 8ac17b9154bc35b439ef5d11cc5c1a64, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.181131
+      value: 19.2
       objectReference: {fileID: 0}
     - target: {fileID: 3249455872694228729, guid: 8ac17b9154bc35b439ef5d11cc5c1a64, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15303,7 +15574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3249455872694228729, guid: 8ac17b9154bc35b439ef5d11cc5c1a64, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -18.418808
+      value: -29.7
       objectReference: {fileID: 0}
     - target: {fileID: 3249455872694228729, guid: 8ac17b9154bc35b439ef5d11cc5c1a64, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15349,6 +15620,10 @@ PrefabInstance:
     - target: {fileID: 330853331913741513, guid: 6ac6477d1ae8df842b7682a582ad9963, type: 3}
       propertyPath: m_Name
       value: star bethlehem
+      objectReference: {fileID: 0}
+    - target: {fileID: 330853331913741513, guid: 6ac6477d1ae8df842b7682a582ad9963, type: 3}
+      propertyPath: m_TagString
+      value: Map
       objectReference: {fileID: 0}
     - target: {fileID: 3129526522134955034, guid: 6ac6477d1ae8df842b7682a582ad9963, type: 3}
       propertyPath: m_Size.x

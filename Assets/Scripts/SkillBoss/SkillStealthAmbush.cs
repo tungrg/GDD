@@ -19,12 +19,14 @@ public class SkillStealthAmbush : SkillBoss
     {
         // Ẩn model + HP UI
         if (boss.bossModel != null) boss.bossModel.gameObject.SetActive(false);
+        if (boss.bossGun != null) boss.bossGun.gameObject.SetActive(false);
         if (boss.hpBoss != null) boss.hpBoss.SetActive(false);
 
         yield return new WaitForSeconds(stealthDuration);
 
         // Hiện lại model + HP UI
         if (boss.bossModel != null) boss.bossModel.gameObject.SetActive(true);
+        if (boss.bossGun != null) boss.bossGun.gameObject.SetActive(true);
         if (boss.hpBoss != null) boss.hpBoss.SetActive(true);
 
         ShootBullets(boss);
