@@ -12963,6 +12963,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad6d81527f0be55409cf1166254ff6e5, type: 3}
+--- !u!1 &1408695415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2607345498243526721, guid: 8a43811bc7047d547afa3b429470bdfb, type: 3}
+  m_PrefabInstance: {fileID: 949463769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1419589030
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16793,10 +16798,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss3
       objectReference: {fileID: 0}
-    - target: {fileID: 1183490137617037457, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
-      propertyPath: boss
-      value: 
-      objectReference: {fileID: 1844946389}
     - target: {fileID: 1338890349676445989, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17
@@ -16848,7 +16849,7 @@ PrefabInstance:
     - target: {fileID: 5570748794565814331, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: uiPanel
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1408695415}
     - target: {fileID: 5570748794565814331, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: mainCamera
       value: 
@@ -16858,11 +16859,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
---- !u!4 &1844946389 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 804406431156702154, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
-  m_PrefabInstance: {fileID: 1844946388}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1846110440
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19197,6 +19193,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1856342418880077178, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856342418880077178, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856342418880077178, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2677653638155733887, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17
@@ -19237,6 +19245,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4073327650454476903, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4073327650454476903, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717377566008852116, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6215784576541622615, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: m_Name
       value: Boss5
@@ -19244,7 +19264,7 @@ PrefabInstance:
     - target: {fileID: 6243633455187004089, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: uiPanel
       value: 
-      objectReference: {fileID: 1955512483}
+      objectReference: {fileID: 0}
     - target: {fileID: 6243633455187004089, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: mainCamera
       value: 
@@ -19989,3 +20009,4 @@ SceneRoots:
   - {fileID: 1608597900}
   - {fileID: 1844946388}
   - {fileID: 1578938282}
+  - {fileID: 1120827977676619432}
