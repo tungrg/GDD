@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "LevelProgressManager", menuName = "Game/Level Progress Manager")]
 public class LevelProgressManager : ScriptableObject
@@ -48,7 +49,10 @@ public class LevelProgressManager : ScriptableObject
         }
         
         Debug.Log($"Max unlocked level refreshed to: {maxUnlockedLevel}");
-        SaveProgress();
+        
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
     }
     
     /// <summary>
@@ -66,51 +70,25 @@ public class LevelProgressManager : ScriptableObject
     }
     
     /// <summary>
-    /// Lưu tiến độ
+    /// Load data từ save file (gọi từ GameSaveManager)
     /// </summary>
-    private void SaveProgress()
+    public void LoadFromSaveData(int maxLevel, List<GameProgressData.LevelProgressInfo> levelProgresses)
     {
-        PlayerPrefs.SetInt("max_unlocked_level", maxUnlockedLevel);
-        PlayerPrefs.Save();
+        maxUnlockedLevel = maxLevel;
         
-#if UNITY_EDITOR
-        UnityEditor.EditorUtility.SetDirty(this);
-#endif
-    }
-    
-    /// <summary>
-    /// Load tiến độ từ save data và refresh
-    /// </summary>
-    public void LoadProgress()
-    {
-        // Load từ PlayerPrefs
-        int savedMaxLevel = PlayerPrefs.GetInt("max_unlocked_level", 1);
-        
-        // Nhưng vẫn phải kiểm tra lại dựa trên LevelData thực tế
-        RefreshMaxUnlockedLevel();
-        
-        Debug.Log($"Loaded and refreshed progress: Max unlocked level = {maxUnlockedLevel}");
-    }
-    
-    /// <summary>
-    /// Reset toàn bộ tiến độ (for testing)
-    /// </summary>
-    [ContextMenu("Reset All Progress")]
-    public void ResetAllProgress()
-    {
-        maxUnlockedLevel = 1;
-        PlayerPrefs.DeleteKey("max_unlocked_level");
-        
-        // Reset progress của tất cả levels
-        foreach (var level in allLevels)
+        // Apply level data
+        foreach (var progress in levelProgresses)
         {
-            if (level != null)
+            var levelData = GetLevelData(progress.levelIndex);
+            if (levelData != null)
             {
-                level.ResetProgress();
+                levelData.LoadFromSaveData(progress.bestScore, progress.starsEarned, progress.claimedStarGold);
             }
         }
         
-        Debug.Log("All progress reset! Only Level 1 is unlocked.");
+        Debug.Log($"Progress manager loaded: Max level {maxLevel}, {levelProgresses.Count} level data entries");
+        
+        // Update UI
         UpdateAllLevelManagers();
         
 #if UNITY_EDITOR
@@ -126,7 +104,10 @@ public class LevelProgressManager : ScriptableObject
         var levelManagers = FindObjectsByType<LevelManager>(FindObjectsSortMode.None);
         foreach (var manager in levelManagers)
         {
-            manager.RefreshUnlockState();
+            if (manager != null && manager.gameObject != null)
+            {
+                manager.RefreshUnlockState();
+            }
         }
     }
     
@@ -143,6 +124,26 @@ public class LevelProgressManager : ScriptableObject
     }
     
     /// <summary>
+    /// Get tổng số levels
+    /// </summary>
+    public int GetTotalLevels()
+    {
+        return allLevels != null ? allLevels.Length : 0;
+    }
+    
+    /// <summary>
+    /// Load progress từ JSON (gọi khi game start)
+    /// </summary>
+    public void LoadProgress()
+    {
+        var currency = Resources.Load<GameCurrency>("GameCurrency");
+        if (currency != null)
+        {
+            GameSaveManager.LoadGameProgress(currency, this);
+        }
+    }
+    
+    /// <summary>
     /// Kiểm tra level cụ thể có thể unlock không (for testing)
     /// </summary>
     public bool CanUnlockLevel(int levelIndex)
@@ -154,18 +155,13 @@ public class LevelProgressManager : ScriptableObject
     }
     
     /// <summary>
-    /// Unlock level cụ thể (for testing)
+    /// Reset toàn bộ tiến độ (for testing)
     /// </summary>
-    [ContextMenu("Unlock Next Level")]
-    public void UnlockNextLevel()
+    [ContextMenu("Reset All Progress")]
+    public void ResetAllProgress()
     {
-        if (maxUnlockedLevel < allLevels.Length)
-        {
-            maxUnlockedLevel++;
-            SaveProgress();
-            UpdateAllLevelManagers();
-            Debug.Log($"Manually unlocked Level {maxUnlockedLevel}");
-        }
+        GameSaveManager.ResetGameProgress();
+        Debug.Log("All progress reset!");
     }
     
     /// <summary>
@@ -189,16 +185,5 @@ public class LevelProgressManager : ScriptableObject
             
             Debug.Log($"Level {i}: {status} - {stars} stars - {score} points - Can unlock: {canUnlock}");
         }
-    }
-    
-    /// <summary>
-    /// Force refresh tất cả levels (for testing)
-    /// </summary>
-    [ContextMenu("Force Refresh All")]
-    public void ForceRefreshAll()
-    {
-        RefreshMaxUnlockedLevel();
-        UpdateAllLevelManagers();
-        ShowProgressInfo();
     }
 }
