@@ -18,7 +18,7 @@ public class PlayerStats : MonoBehaviour
     public float baseFireCooldown = 1f;
     public float currentFireCooldown;
 
-    public float baseAttackPower = 10f;
+    public float baseAttackPower = 25f;
     public float currentAttackPower;
 
     [Header("Defense")]

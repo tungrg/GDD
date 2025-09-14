@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameBoss: Boss4
   icon: {fileID: 0}
-  originalHealth: 200
+  originalHealth: 600
   originalSpeed: 5
-  originalDamageAtk: 20
+  originalDamageAtk: 30
   originalSpeedAtk: 2
   speed: 5
   skills:
