@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79fe7c6492acd22468ab30c0c630a193, type: 3}
   m_Name: GameCurrency
   m_EditorClassIdentifier: 
-  totalGold: 0
-  goldEarnedThisSession: 0
-  lastGoldSource: Session started
+  totalGold: 950
+  goldEarnedThisSession: 950
+  lastGoldSource: Level 1 - 3 stars

@@ -47,6 +47,8 @@ public class BossManager : BossBase
 
     private bool isBusy = false;
 
+    public GameLevelManager gameLevelManager;
+
     public void SetBusy(bool value)
     {
         isBusy = value;
@@ -347,12 +349,14 @@ public class BossManager : BossBase
         {
 
             PlayerStats playerStats = player.GetComponent<PlayerStats>();
-            float hpPercent = playerStats.GetHealthPercentage() * 100f; ;
-
+            float hpPercent = playerStats.GetHealthPercentage() * 100f;
+            
             int score = currentLevelData.CalculateScoreFromHealth(hpPercent);
             int stars = currentLevelData.StarsForScore(score);
             int claimableGold = currentLevelData.CalculateClaimableGold(stars);
-
+            gameLevelManager = FindAnyObjectByType<GameLevelManager>();
+            gameLevelManager.CompleteLevel(score, stars, hpPercent);
+            
             currentLevelData.UpdateScore(score);
 
             GameResultData resultData = new GameResultData
@@ -372,6 +376,7 @@ public class BossManager : BossBase
         {
             Debug.LogError("❌ BossManager chưa được gán LevelData!");
         }
+        
     }
     public void SwitchToBossCamera()
     {

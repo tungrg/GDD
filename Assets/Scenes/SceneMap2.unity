@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 34740130}
   m_Layer: 10
   m_Name: Terrain
-  m_TagString: Ground1
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -6397,6 +6397,99 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 416834937}
   m_SourcePrefab: {fileID: 100100000, guid: ddb38b23b1fc63a479540a85ad753b8c, type: 3}
+--- !u!1 &683679175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 683679176}
+  - component: {fileID: 683679178}
+  - component: {fileID: 683679177}
+  m_Layer: 10
+  m_Name: Terrain (1)
+  m_TagString: Ground1
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &683679176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683679175}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1384465138}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!154 &683679177
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683679175}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_TerrainData: {fileID: 15600000, guid: 5a18259029819bb4eae49f207b781546, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &683679178
+Terrain:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683679175}
+  m_Enabled: 1
+  serializedVersion: 6
+  m_TerrainData: {fileID: 15600000, guid: 5a18259029819bb4eae49f207b781546, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMinimumLODSimplification: 0
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
+  m_StaticShadowCaster: 0
+  m_IgnoreQualitySettings: 0
+  m_ReflectionProbeUsage: 1
+  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
+  m_ReceiveGI: 1
+  m_ScaleInLightmap: 0.0256
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_RenderingLayerMask: 1
+  m_AllowAutoConnect: 1
+  m_EnableHeightmapRayTracing: 1
+  m_EnableTreesAndDetailsRayTracing: 0
+  m_TreeMotionVectorModeOverride: 3
 --- !u!1 &688462301
 GameObject:
   m_ObjectHideFlags: 0
@@ -7516,7 +7609,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 867, y: -454}
+  m_AnchoredPosition: {x: 850, y: -440}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &821498891 stripped
@@ -7609,6 +7702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830896732}
   - component: {fileID: 830896731}
+  - component: {fileID: 830896733}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7645,6 +7739,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 553185694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &830896733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830896730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d2a7ab2f10d6468fbe16cf5e22c72f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundColor: {r: 0.039215688, g: 0.039215688, b: 0.039215688, a: 0.6}
 --- !u!1 &846378679
 GameObject:
   m_ObjectHideFlags: 0
@@ -10279,12 +10386,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -10374,7 +10481,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 872.69995, y: 455.90002}
+  m_AnchoredPosition: {x: 850, y: 440}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1137522133
@@ -12593,6 +12700,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 34740132}
+  - {fileID: 683679176}
   - {fileID: 1985633671}
   - {fileID: 1403397399}
   - {fileID: 941319488}
@@ -12617,7 +12725,7 @@ GameObject:
   - component: {fileID: 1395996019}
   - component: {fileID: 1395996018}
   m_Layer: 5
-  m_Name: 'Nitro Boots  '
+  m_Name: Nitro Boots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15480,6 +15588,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7140090}
     m_Modifications:
+    - target: {fileID: 365993331127698420, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 830896733}
+    - target: {fileID: 365993331127698420, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayAgain
+      objectReference: {fileID: 0}
     - target: {fileID: 1743849231903872805, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -15563,6 +15679,42 @@ PrefabInstance:
     - target: {fileID: 1890349003788540044, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_Name
       value: ResultGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 2549805844833577959, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 830896733}
+    - target: {fileID: 2549805844833577959, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: LoadScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 2549805844833577959, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: SceneMap3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3933282224343586105, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 830896733}
+    - target: {fileID: 3933282224343586105, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SceneMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5651044681028231861, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 830896733}
+    - target: {fileID: 5651044681028231861, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SceneMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073940277572449400, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 830896733}
+    - target: {fileID: 9073940277572449400, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayAgain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
