@@ -13,7 +13,7 @@ public class UltimateManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
 
             // Load skill data ngay khi UltimateManager được khởi tạo
             LoadSkillData();
