@@ -30,6 +30,9 @@ public class PlayerStats : MonoBehaviour
 
     public bool isImmuneCC = false;
 
+    [Header("Level Data")]
+    public LevelData currentLevelData;
+
     void Start()
     {
         currentHP = maxHP;
@@ -67,7 +70,30 @@ public class PlayerStats : MonoBehaviour
     {
         isDead = true;
         Debug.Log("⚠ Player chết!");
-        //GameResultManager.Instance.ShowLosePanel();
+        if (currentLevelData != null)
+        {
+            float hpPercent = 0f;
+
+            int score = currentLevelData.CalculateScoreFromHealth(hpPercent);
+            int stars = currentLevelData.StarsForScore(score);
+            int claimableGold = currentLevelData.CalculateClaimableGold(stars);
+
+            currentLevelData.UpdateScore(score);
+
+            GameResultData resultData = new GameResultData
+            {
+                levelIndex = currentLevelData.levelIndex,
+                levelName = currentLevelData.sceneName,
+                score = score,
+                starsEarned = stars,
+                isWin = false,
+                goldEarned = claimableGold,
+                canClaimGold = claimableGold > 0
+            };
+
+            GameResultManager.Instance.ShowLosePanel(resultData);
+        }
+        //
         Time.timeScale = 0;
     }
     public void ApplyMoveSpeedModifier(float multiplier)

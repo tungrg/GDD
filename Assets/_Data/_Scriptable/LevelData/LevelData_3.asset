@@ -15,7 +15,7 @@ MonoBehaviour:
   levelIndex: 3
   sceneName: SceneMap3
   starThresholds: 90d0030020a10700b0710b00
-  bestScore: 266667
+  bestScore: 433333
   starsEarned: 1
   star1GoldClaimed: 0
   star2GoldClaimed: 0
