@@ -19,4 +19,4 @@ MonoBehaviour:
   starsEarned: 2
   star1GoldClaimed: 1
   star2GoldClaimed: 1
-  star3GoldClaimed: 0
+  star3GoldClaimed: 1

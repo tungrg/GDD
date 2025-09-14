@@ -1347,7 +1347,7 @@ GameObject:
   - component: {fileID: 937191033}
   - component: {fileID: 937191034}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: GameLevelManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1390,6 +1390,7 @@ MonoBehaviour:
   goldDebugText: {fileID: 492904176}
   completeButton: {fileID: 1045549345}
   currentHealthPercentage: 50
+  playerStats: {fileID: 0}
 --- !u!1 &1002023996
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,7 +1548,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1045549346}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 937191034}
+        m_TargetAssemblyTypeName: GameLevelManager, Assembly-CSharp
+        m_MethodName: CompleteLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1045549346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1664,8 +1677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90709b4c114ad541ba2aea7302ba2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winPanel: {fileID: 1368868652}
-  losePanel: {fileID: 2067452511}
+  winPanel: {fileID: 1582414135}
+  losePanel: {fileID: 1517764093}
   progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
 --- !u!114 &1273173782
 MonoBehaviour:
@@ -1826,11 +1839,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301376116}
   m_CullTransparentMesh: 1
---- !u!1 &1368868652 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3981493743675594868, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
-  m_PrefabInstance: {fileID: 2426933488371782772}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1383908305 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2395232319917993574, guid: abead21af8a17be489cc6290d76ebcb1, type: 3}
@@ -1842,6 +1850,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1517764093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8107655480325725038, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+  m_PrefabInstance: {fileID: 2426933488371782772}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1582414135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 511520691335592267, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+  m_PrefabInstance: {fileID: 2426933488371782772}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1595502568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2191,11 +2209,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781730601}
   m_CullTransparentMesh: 1
---- !u!1 &2067452511 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9120595614427919348, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
-  m_PrefabInstance: {fileID: 2426933488371782772}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2073599677 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1743849231903872805, guid: eee45ac8e49a1574d8994fc308820192, type: 3}

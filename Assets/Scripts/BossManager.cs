@@ -30,6 +30,8 @@ public class BossManager : BossBase
     public GameObject hpBoss;
     public NavMeshAgent agent;
     public Animator animator;
+    public RuntimeAnimatorController defaultController;
+    public RuntimeAnimatorController changeGunController;
 
     [Header("Effects")]
     public GameObject healEffectPrefab;
@@ -38,6 +40,10 @@ public class BossManager : BossBase
     [Header("Cameras")]
     public Camera mainCamera;
     public Camera bossCamera;
+    public Camera bossSkillCamera;
+
+    [Header("Level Data")]
+    public LevelData currentLevelData;
 
     private bool isBusy = false;
 
@@ -55,6 +61,28 @@ public class BossManager : BossBase
         if (recoveryTriggered) return false;
         recoveryTriggered = true;
         return true;
+    }
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+
+        // lưu lại controller mặc định
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            defaultController = animator.runtimeAnimatorController;
+        }
+    }
+
+    public void SwitchAnimator(RuntimeAnimatorController newController)
+    {
+        if (animator == null || newController == null) return;
+        animator.runtimeAnimatorController = newController;
+    }
+
+    public void ResetAnimator()
+    {
+        if (animator == null || defaultController == null) return;
+        animator.runtimeAnimatorController = defaultController;
     }
 
     private void Start()
@@ -317,13 +345,49 @@ public class BossManager : BossBase
 
         Time.timeScale = 0f;
 
-        uiPanel.SetActive(true);
+        if (currentLevelData != null)
+        {
+
+            PlayerStats playerStats = player.GetComponent<PlayerStats>();
+            float hpPercent = playerStats.GetHealthPercentage() * 100f; ;
+
+            int score = currentLevelData.CalculateScoreFromHealth(hpPercent);
+            int stars = currentLevelData.StarsForScore(score);
+            int claimableGold = currentLevelData.CalculateClaimableGold(stars);
+
+            currentLevelData.UpdateScore(score);
+
+            GameResultData resultData = new GameResultData
+            {
+                levelIndex = currentLevelData.levelIndex,
+                levelName = currentLevelData.sceneName,
+                score = score,
+                starsEarned = stars,
+                isWin = true,
+                goldEarned = claimableGold,
+                canClaimGold = claimableGold > 0
+            };
+
+            GameResultManager.Instance.ShowWinPanel(resultData);
+        }
+        else
+        {
+            Debug.LogError("❌ BossManager chưa được gán LevelData!");
+        }
     }
-    private void SwitchToBossCamera()
+    public void SwitchToBossCamera()
     {
         if (mainCamera != null) mainCamera.gameObject.SetActive(false);
         if (bossCamera != null) bossCamera.gameObject.SetActive(true);
+        if (bossSkillCamera != null) bossSkillCamera.gameObject.SetActive(false);
     }
+    public void SwitchToBossSkillCamera()
+    {
+        if (mainCamera != null) mainCamera.gameObject.SetActive(false);
+        if (bossCamera != null) bossCamera.gameObject.SetActive(false);
+        if (bossSkillCamera != null) bossSkillCamera.gameObject.SetActive(true);
+    }
+
 
 
     // private IEnumerator ShowUIAfterDelay()

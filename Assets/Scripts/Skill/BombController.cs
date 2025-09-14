@@ -56,7 +56,7 @@ public class BombController : MonoBehaviour
 
     private void Explode()
     {
-        int totalDamage = baseDamage + extraDamage;
+        int totalDamage = baseDamage; //+ extraDamage;
         if (boss.player != null)
         {
             float distance = Vector3.Distance(transform.position, boss.player.position);

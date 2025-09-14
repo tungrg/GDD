@@ -30,9 +30,6 @@ public class PlayerStats : MonoBehaviour
 
     public bool isImmuneCC = false;
 
-    [Header("References")]
-    public GameObject gameOverUI;
-
     void Start()
     {
         currentHP = maxHP;
@@ -42,8 +39,6 @@ public class PlayerStats : MonoBehaviour
         currentFireCooldown = baseFireCooldown;
         currentAttackPower = baseAttackPower;
         currentArmor = baseArmor;
-        if (gameOverUI != null)
-            gameOverUI.SetActive(false);
     }
 
     public void TakeDamage(float dmg)
@@ -72,7 +67,7 @@ public class PlayerStats : MonoBehaviour
     {
         isDead = true;
         Debug.Log("⚠ Player chết!");
-        gameOverUI.SetActive(true);
+        //GameResultManager.Instance.ShowLosePanel();
         Time.timeScale = 0;
     }
     public void ApplyMoveSpeedModifier(float multiplier)
@@ -83,5 +78,10 @@ public class PlayerStats : MonoBehaviour
     public void ResetMoveSpeed()
     {
         currentMoveSpeed = baseMoveSpeed;
+    }
+    public float GetHealthPercentage()
+    {
+        if (maxHP <= 0) return 0f;
+        return currentHP / maxHP;
     }
 }
