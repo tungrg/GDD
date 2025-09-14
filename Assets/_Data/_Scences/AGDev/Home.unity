@@ -3208,7 +3208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729d3571ed7354ba184275ba6042151c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popupPrefab: {fileID: 109460, guid: 05da44cde2d3f4376b2566dfb0af8288, type: 3}
+  popupPrefab: {fileID: 109460, guid: b88a1265a3b2845cda23f70b186ff84d, type: 3}
 --- !u!224 &2119678920 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5158219654637560062, guid: 7f68c686a62824a9c8ba8ce9c8f62acd, type: 3}
