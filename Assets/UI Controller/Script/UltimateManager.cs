@@ -87,7 +87,7 @@ public class UltimateManager : MonoBehaviour
             return;
         }
 
-        settingsPanel.SetActive(false);
+        settingsPanel.SetActive(true);
         skillSelectPanel.SetActive(true);
         selectedSkillIcon.enabled = false;
 
@@ -113,7 +113,6 @@ public class UltimateManager : MonoBehaviour
         }
 
         currentSkill = skills[index];
-
         StartCoroutine(AnimateSkillIcon(skills[index].skillIcon));
 
         ultimateButton.interactable = true;
@@ -143,7 +142,7 @@ public class UltimateManager : MonoBehaviour
         yield return StartCoroutine(ShowTextWithEffect("START!"));
 
         countdownText.gameObject.SetActive(false);
-        settingsPanel.SetActive(true);
+        //settingsPanel.SetActive(true);
 
         BossManager boss = FindFirstObjectByType<BossManager>();
         if (boss != null)
@@ -213,7 +212,7 @@ public class UltimateManager : MonoBehaviour
                 break;
 
             case "Railgun Burst":
-                joystick.SetUltimateMode(true, JoystickGun.UltimateType.RailgunBurst);
+            joystick.SetUltimateMode(true, JoystickGun.UltimateType.RailgunBurst);
                 break;
 
             case "Nitro Boots":

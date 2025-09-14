@@ -234,7 +234,7 @@ public class WinPopup : MonoBehaviour
     private void OnNextLevelClicked()
     {
         if (progressManager == null || resultData == null) return;
-        
+        Time.timeScale = 1f;
         int nextLevelIndex = resultData.levelIndex + 1;
         var nextLevelData = progressManager.GetLevelData(nextLevelIndex);
         

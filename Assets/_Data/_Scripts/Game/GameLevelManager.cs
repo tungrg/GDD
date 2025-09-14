@@ -158,11 +158,7 @@ public class GameLevelManager : MonoBehaviour
             healthSlider.onValueChanged.AddListener(OnHealthChanged);
         }
 
-        // Setup complete button
-        if (completeButton != null)
-        {
-            completeButton.onClick.AddListener(CompleteLevel);
-        }
+        
     }
 
     /// <summary>
@@ -212,14 +208,13 @@ public class GameLevelManager : MonoBehaviour
     /// Hoàn thành level với % máu hiện tại
     /// Xử lý logic tính điểm, thêm vàng, claim gold milestones và hiển thị kết quả
     /// </summary>
-    public void CompleteLevel()
+    public void CompleteLevel(int score, int star,float hpPercent)
     {
         if (currentLevelData == null) return;
 
         // Tính toán kết quả dựa trên % máu
-        int finalScore = currentLevelData.CalculateScoreFromHealth(currentHealthPercentage);
-        int stars = currentLevelData.StarsForScore(finalScore);
-
+        int finalScore = score;
+        int stars = star;
         // Xử lý khi thắng (có ít nhất 1 sao)
         if (stars > 0)
         {
@@ -241,7 +236,7 @@ public class GameLevelManager : MonoBehaviour
             var resultManager = GameResultManager.Instance;
             if (resultManager != null)
             {
-                resultManager.ShowGameResult(currentLevelData, currentHealthPercentage, claimableGold);
+                resultManager.ShowGameResult(currentLevelData, hpPercent, claimableGold);
             }
 
             // Thông báo ProgressManager để unlock level tiếp theo nếu cần
@@ -253,7 +248,7 @@ public class GameLevelManager : MonoBehaviour
             var resultManager = GameResultManager.Instance;
             if (resultManager != null)
             {
-                resultManager.ShowGameResult(currentLevelData, currentHealthPercentage, 0);
+                resultManager.ShowGameResult(currentLevelData, hpPercent, 0);
             }
         }
     }
