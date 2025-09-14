@@ -36,6 +36,7 @@ public class Teleportation : SkillBoss
         GameManager.Instance.AddState(GameState.PlayerSkillLock);
         GameManager.Instance.AddState(GameState.BossSkillLock);
         Vector3 originalPos = boss.transform.position;
+        boss.SwitchToBossSkillCamera();
 
         GameObject startFx = effectPool.GetObject("TeleportEffect", boss.transform.position, Quaternion.identity);
 
@@ -53,12 +54,11 @@ public class Teleportation : SkillBoss
             boss.transform.position = behindPlayer;
 
         boss.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        CameraZoom.Instance.ZoomIn();
 
-        // if (boss.animator != null)
-        //     boss.animator.SetTrigger("placeBomb");
+        if (boss.animator != null)
+            boss.animator.SetBool("isBomb", true);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4.5f);
 
         PlaceBomb(boss);
 
@@ -71,8 +71,11 @@ public class Teleportation : SkillBoss
 
         effectPool.ReturnObject("TeleportEffect", startFx);
         effectPool.ReturnObject("TeleportEffect", targetFx);
+
+        boss.animator.SetBool("isBomb", false);
+        if (boss.mainCamera != null) boss.mainCamera.gameObject.SetActive(true);
+        if (boss.bossSkillCamera != null) boss.bossSkillCamera.gameObject.SetActive(false);
         boss.SetBusy(false);
-        CameraZoom.Instance.ZoomOut();
         GameManager.Instance.RemoveState(GameState.PlayerSkillLock);
         GameManager.Instance.RemoveState(GameState.BossSkillLock);
     }
@@ -81,9 +84,9 @@ public class Teleportation : SkillBoss
         GameObject bombObj = effectPool.GetObject("C4", boss.player.position, Quaternion.identity);
 
         bombObj.transform.SetParent(boss.player);
-        bombObj.transform.localPosition = new Vector3(-0.05f, 0.9f, -0.25f);
-        bombObj.transform.localRotation = Quaternion.Euler(25f, 6f, -2f);
-        bombObj.transform.localScale = new Vector3(1, 1, 1);
+        bombObj.transform.localPosition = new Vector3(-0.16f, 0.9f, -0.34f);
+        bombObj.transform.localRotation = Quaternion.Euler(9f, 6f, -2f);
+        bombObj.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
         activeBomb = bombObj.GetComponent<BombController>();
         activeBomb.Init(
