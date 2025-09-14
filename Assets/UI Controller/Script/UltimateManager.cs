@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
@@ -65,6 +65,7 @@ public class UltimateManager : MonoBehaviour
 
         // Load từ SaveLoadManager
         SaveLoadManager.LoadSkills(skills);
+        
 
         Debug.Log("UltimateManager: Skill data loaded successfully!");
     }
@@ -132,6 +133,13 @@ public class UltimateManager : MonoBehaviour
             yield break;
         }
 
+        // Disable player shooting during countdown
+        if (joystick != null)
+        {
+            joystick.enabled = false;
+            Debug.Log("Player shooting disabled during countdown");
+        }
+
         countdownText.gameObject.SetActive(true);
 
         for (int i = 3; i > 0; i--)
@@ -142,6 +150,14 @@ public class UltimateManager : MonoBehaviour
         yield return StartCoroutine(ShowTextWithEffect("START!"));
 
         countdownText.gameObject.SetActive(false);
+        
+        // Re-enable player shooting after countdown
+        if (joystick != null)
+        {
+            joystick.enabled = true;
+            Debug.Log("Player shooting enabled - battle started!");
+        }
+
         //settingsPanel.SetActive(true);
 
         BossManager boss = FindFirstObjectByType<BossManager>();
