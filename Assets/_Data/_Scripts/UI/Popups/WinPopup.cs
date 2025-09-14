@@ -223,6 +223,7 @@ public class WinPopup : MonoBehaviour
         
         // Reload scene hiện tại
         string currentScene = SceneManager.GetActiveScene().name;
+        Time.timeScale = 1f; // Reset time scale nếu bị thay đổi
         SceneManager.LoadScene(currentScene);
     }
     
