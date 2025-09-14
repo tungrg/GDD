@@ -26,7 +26,7 @@ public class BossManager : BossBase
     private bool recoveryTriggered = false;
 
     [Header("UI")]
-    public GameObject uiPanel;
+
     public GameObject hpBoss;
     public NavMeshAgent agent;
     public Animator animator;
@@ -110,8 +110,6 @@ public class BossManager : BossBase
         {
             agent = gameObject.AddComponent<NavMeshAgent>();
         }
-        if (uiPanel != null)
-            uiPanel.SetActive(false);
         animator = GetComponent<Animator>();
         animator.SetBool("isAttack", false);
         animator.SetBool("isMoving", false);
