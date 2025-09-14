@@ -135,7 +135,7 @@ public class PlayerMove : MonoBehaviour
     IEnumerator DashCoroutine(Vector3 dir)
     {
         isDashing = true;
-
+        if (animator) animator.SetTrigger("Dash");
         float dashSpeed = dashDistance / dashDuration;
         float maxDistance = dashDistance;
 
@@ -166,6 +166,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         rb.MovePosition(end);
+        if (animator) animator.ResetTrigger("Dash"); 
         isDashing = false;
     }
 
