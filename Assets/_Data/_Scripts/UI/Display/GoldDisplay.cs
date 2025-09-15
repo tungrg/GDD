@@ -34,6 +34,12 @@ public class GoldDisplay : MonoBehaviour
         UpdateGoldDisplay();
     }
     
+    public void Update()
+    {
+        // Liên tục cập nhật hiển thị (nếu cần)
+        UpdateGoldDisplay();
+    }
+    
     /// <summary>
     /// Cập nhật hiển thị số vàng từ GameCurrency
     /// Format số theo setting useThousandsSeparator
@@ -46,7 +52,7 @@ public class GoldDisplay : MonoBehaviour
                 goldText.text = "0";
             return;
         }
-        
+
         // Format và hiển thị số vàng
         if (useThousandsSeparator)
         {

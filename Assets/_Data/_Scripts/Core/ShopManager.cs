@@ -18,6 +18,7 @@ public class ShopManager : MonoBehaviour
     [Header("Shop Settings")]
     public List<SkillUI> skills = new List<SkillUI>();
     public GameCurrency gameCurrency;
+    public LevelProgressManager levelProgressManager;
 
     [Header("UI References")]
     public TextMeshProUGUI goldDisplay;
@@ -75,11 +76,10 @@ public class ShopManager : MonoBehaviour
         if (gameCurrency != null)
         {
             // Tìm LevelProgressManager để save cùng
-            var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-            if (progressManager != null)
+            if (levelProgressManager != null)
             {
                 Debug.Log("ShopManager: Force saving game progress...");
-                GameSaveManager.SaveGameProgress(gameCurrency, progressManager);
+                GameSaveManager.SaveGameProgress(gameCurrency, levelProgressManager);
             }
             else
             {
