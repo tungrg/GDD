@@ -78,19 +78,12 @@ public class LevelData : ScriptableObject
             return Mathf.RoundToInt(Mathf.Lerp(minScore, maxScore, ratio));
         }
         // 25-50%: 1 sao (250k - 499k điểm)
-        else if (healthPercentage >= 25f)
+        else if (healthPercentage > 0f)
         {
             float ratio = (healthPercentage - 25f) / 25f;
             int minScore = starThresholds[0];
             int maxScore = starThresholds[1] - 1;
             return Mathf.RoundToInt(Mathf.Lerp(minScore, maxScore, ratio));
-        }
-        // 0-25%: 0 sao (1 - 249k điểm)
-        else if (healthPercentage > 0f)
-        {
-            float ratio = healthPercentage / 25f;
-            int maxScore = starThresholds[0] - 1;
-            return Mathf.RoundToInt(Mathf.Lerp(1, maxScore, ratio));
         }
         else
         {

@@ -15,7 +15,7 @@ MonoBehaviour:
   nameBoss: Boss5
   icon: {fileID: 0}
   originalHealth: 700
-  originalSpeed: 5
+  originalSpeed: 13
   originalDamageAtk: 35
   originalSpeedAtk: 2
   speed: 5

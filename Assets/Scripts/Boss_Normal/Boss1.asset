@@ -15,9 +15,11 @@ MonoBehaviour:
   nameBoss: BossMap1
   icon: {fileID: 0}
   originalHealth: 330
-  originalSpeed: 4
-  originalDamageAtk: 10
-  originalSpeedAtk: 2
+  originalSpeed: 8
+  originalDamageAtk: 12
+  originalSpeedAtk: 7
   speed: 4
   skills:
   - {fileID: 11400000, guid: 8d572646e96c021408d0f47d0157928f, type: 2}
+  - {fileID: 11400000, guid: 47d7a3d48aa20f2418687087ae59c50f, type: 2}
+  - {fileID: 11400000, guid: 9130b97960d647940a65cbe191fc936b, type: 2}
