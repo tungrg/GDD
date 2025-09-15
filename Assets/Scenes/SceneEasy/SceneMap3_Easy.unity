@@ -15585,7 +15585,7 @@ PrefabInstance:
     - target: {fileID: 5194374138777258393, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: currentLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 127fda92b215b064996bda44372b7fd3, type: 2}
+      objectReference: {fileID: 11400000, guid: ad2fc423d6422dc4ba98aa1f20ddbf2d, type: 2}
     - target: {fileID: 5472208180353868292, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: m_Name
       value: Player
@@ -20776,6 +20776,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1452780472164988609, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: 38fe8472c745687478941a6996e36232, type: 2}
+    - target: {fileID: 5496122209169345661, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: 38fe8472c745687478941a6996e36232, type: 2}
     - target: {fileID: 5915491074514126811, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -20789,6 +20797,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6475956057183767160, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
+      propertyPath: bossData
+      value: 
+      objectReference: {fileID: 11400000, guid: 38fe8472c745687478941a6996e36232, type: 2}
+    - target: {fileID: 6475956057183767160, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 330585545}
@@ -20799,7 +20811,11 @@ PrefabInstance:
     - target: {fileID: 6475956057183767160, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: currentLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 127fda92b215b064996bda44372b7fd3, type: 2}
+      objectReference: {fileID: 11400000, guid: ad2fc423d6422dc4ba98aa1f20ddbf2d, type: 2}
+    - target: {fileID: 6475956057183767160, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
+      propertyPath: gameLevelManager
+      value: 
+      objectReference: {fileID: 1464914597}
     - target: {fileID: 6667156899750151595, guid: 9002cce361eb21e46a05af159fd98dbc, type: 3}
       propertyPath: m_IsActive
       value: 0
