@@ -5852,6 +5852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1841157260}
   losePanel: {fileID: 858837615}
+  hpBossPanel: {fileID: 1510313708}
   progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
 --- !u!114 &457663537
 MonoBehaviour:
@@ -13014,18 +13015,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1627870500}
     m_Modifications:
-    - target: {fileID: 1906911807832900395, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1906911807832900395, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1906911807832900395, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -13056,11 +13045,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13110,16 +13095,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5856343914077492527, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
-      propertyPath: m_Transition
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9029317172120044450, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_Name
       value: Slider - Blue
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8301457393620462251, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -19223,6 +19203,11 @@ PrefabInstance:
       addedObject: {fileID: 1902488136}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+--- !u!1 &1510313708 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6578982347429321483, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+  m_PrefabInstance: {fileID: 1510313707}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1516699151
 PrefabInstance:
   m_ObjectHideFlags: 0

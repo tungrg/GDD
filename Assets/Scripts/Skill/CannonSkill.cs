@@ -24,14 +24,6 @@ public class CannonSkill : SkillBoss
         boss.SetBusy(true);
         GameManager.Instance.AddState(GameState.BossSkillLock);
 
-        boss.SwitchAnimator(boss.changeGunController);
-
-
-        if (boss.animator != null)
-        {
-            boss.animator.SetTrigger("change");
-        }
-
         yield return new WaitForSeconds(2f);
 
         for (int i = 0; i < numberOfShots; i++)
@@ -47,20 +39,8 @@ public class CannonSkill : SkillBoss
             }
             ShootCannonBall(boss);
 
-            if (boss.animator != null)
-            {
-                boss.animator.SetBool("isSkillAttack", true);
-            }
-
             yield return new WaitForSeconds(delayBetweenShots);
-
-            if (boss.animator != null)
-            {
-                boss.animator.SetBool("isSkillAttack", false);
-            }
         }
-
-        boss.ResetAnimator();
 
         boss.SetBusy(false);
         GameManager.Instance.RemoveState(GameState.BossSkillLock);

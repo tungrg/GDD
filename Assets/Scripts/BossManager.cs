@@ -30,8 +30,6 @@ public class BossManager : BossBase
     public GameObject hpBoss;
     public NavMeshAgent agent;
     public Animator animator;
-    public RuntimeAnimatorController defaultController;
-    public RuntimeAnimatorController changeGunController;
 
     [Header("Effects")]
     public GameObject healEffectPrefab;
@@ -68,26 +66,7 @@ public class BossManager : BossBase
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        // lưu lại controller mặc định
-        if (animator != null && animator.runtimeAnimatorController != null)
-        {
-            defaultController = animator.runtimeAnimatorController;
-        }
-        bossData.ResetRuntimeStats();
-
         agent.speed = bossData.speed;
-    }
-
-    public void SwitchAnimator(RuntimeAnimatorController newController)
-    {
-        if (animator == null || newController == null) return;
-        animator.runtimeAnimatorController = newController;
-    }
-
-    public void ResetAnimator()
-    {
-        if (animator == null || defaultController == null) return;
-        animator.runtimeAnimatorController = defaultController;
     }
 
     private void Start()
@@ -353,13 +332,13 @@ public class BossManager : BossBase
 
             PlayerStats playerStats = player.GetComponent<PlayerStats>();
             float hpPercent = playerStats.GetHealthPercentage() * 100f;
-            
+
             int score = currentLevelData.CalculateScoreFromHealth(hpPercent);
             int stars = currentLevelData.StarsForScore(score);
             int claimableGold = currentLevelData.CalculateClaimableGold(stars);
             gameLevelManager = FindAnyObjectByType<GameLevelManager>();
             gameLevelManager.CompleteLevel(score, stars, hpPercent);
-            
+
             currentLevelData.UpdateScore(score);
 
             GameResultData resultData = new GameResultData
@@ -379,7 +358,7 @@ public class BossManager : BossBase
         {
             Debug.LogError("❌ BossManager chưa được gán LevelData!");
         }
-        
+
     }
     public void SwitchToBossCamera()
     {

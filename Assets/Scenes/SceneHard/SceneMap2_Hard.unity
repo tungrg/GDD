@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1713044368}
   losePanel: {fileID: 1713044367}
+  hpBossPanel: {fileID: 2014041742}
   progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
 --- !u!114 &7140092
 MonoBehaviour:
@@ -14986,7 +14987,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 80
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_LocalScale.x
@@ -18660,6 +18661,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
+--- !u!1 &2014041742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1212334254429409327, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
+  m_PrefabInstance: {fileID: 2014041741}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2029319933 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7409858815832340106, guid: 5f0aec804248c89498569024413389ec, type: 3}
