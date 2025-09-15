@@ -27,4 +27,8 @@ public class SceneTransition : MonoBehaviour
         else
             Debug.LogError("No scene assigned for this difficulty!");
     }
+        public void GoHome()
+    {
+        Transition.LoadLevel("Home", duration, color);
+    }
 }
