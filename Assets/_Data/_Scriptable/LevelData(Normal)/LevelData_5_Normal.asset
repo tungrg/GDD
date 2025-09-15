@@ -9,9 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79fe7c6492acd22468ab30c0c630a193, type: 3}
-  m_Name: GameCurrency
+  m_Script: {fileID: 11500000, guid: b5d4226170443564da1b0f0c2ab8f10b, type: 3}
+  m_Name: LevelData_5_Normal
   m_EditorClassIdentifier: 
-  totalGold: 0
-  goldEarnedThisSession: 0
-  lastGoldSource: Session started
+  levelIndex: 5
+  sceneName: SceneMap5_Normal
+  starThresholds: 90d0030020a10700b0710b00
+  bestScore: 0
+  starsEarned: 0
+  star1GoldClaimed: 0
+  star2GoldClaimed: 0
+  star3GoldClaimed: 0

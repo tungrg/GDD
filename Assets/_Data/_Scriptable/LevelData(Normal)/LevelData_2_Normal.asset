@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5d4226170443564da1b0f0c2ab8f10b, type: 3}
-  m_Name: LevelData_5
+  m_Name: LevelData_2_Normal
   m_EditorClassIdentifier: 
-  levelIndex: 5
-  sceneName: SceneMap5
+  levelIndex: 2
+  sceneName: SceneMap2_Normal
   starThresholds: 90d0030020a10700b0710b00
   bestScore: 0
   starsEarned: 0
