@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneEasy/SceneMap1_Easy.unity
     guid: 8cba2598b37bfbd4992ddd88582f4aaa
   - enabled: 1
-    path: Assets/Scenes/SceneEasy/SceneMap2_Easy.unity
+    path: Assets/Scenes/SceneEasy/SceneMap5_Easy.unity
     guid: 7d22ea72ba4059e4e9dc33d439da5485
   - enabled: 1
     path: Assets/Scenes/SceneEasy/SceneMap3_Easy.unity
@@ -30,7 +30,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneEasy/SceneMap4_Easy.unity
     guid: a8e90bd1970dd9f49b12b87d7e35849f
   - enabled: 1
-    path: Assets/Scenes/SceneEasy/SceneMap5_Easy.unity
+    path: Assets/Scenes/SceneEasy/SceneMap2_Easy.unity
     guid: fe0abbe603b51b0419a0b84d27889314
   - enabled: 1
     path: Assets/Scenes/SceneNormal/SceneMap1_Normal.unity

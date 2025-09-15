@@ -1077,7 +1077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1182581980}
   losePanel: {fileID: 54339616}
-  progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  progressManager: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
 --- !u!114 &176672592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10149,6 +10149,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 405943329}
+    - target: {fileID: 1121218754140155717, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
     - target: {fileID: 1743849231903872805, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10249,6 +10253,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 405943329}
+    - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
     - target: {fileID: 9073940277572449400, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -12016,9 +12024,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e053c19e73fe654480a2e034f0992f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelData: {fileID: 11400000, guid: e564ef25bcfeea846a41780d906975c6, type: 2}
+  currentLevelData: {fileID: 11400000, guid: 57126fcf8bcb3c74ba998eb20a16dff3, type: 2}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
-  levelProgressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  levelProgressManager: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
   healthSlider: {fileID: 0}
   healthText: {fileID: 0}
   scoreText: {fileID: 0}
