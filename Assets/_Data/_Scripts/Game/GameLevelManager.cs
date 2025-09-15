@@ -39,25 +39,76 @@ public class GameLevelManager : MonoBehaviour
 
     void Awake()
     {
-        // Thiết lập singleton (không DontDestroyOnLoad vì mỗi scene có manager riêng)
+        // Thiết lập singleton
         Instance = this;
 
+        // Auto-load resources
+        InitializeResources();
+        
+        // *** QUAN TRỌNG: Load game progress NGAY khi Awake ***
+        LoadGameProgress();
+    }
+    
+    /// <summary>
+    /// Khởi tạo các ScriptableObject resources
+    /// </summary>
+    private void InitializeResources()
+    {
         // Auto-load GameCurrency nếu chưa assign
         if (gameCurrency == null)
         {
             gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
+            if (gameCurrency == null)
+            {
+                Debug.LogError("GameCurrency not found in Resources folder!");
+            }
+            else
+            {
+                Debug.Log("GameCurrency loaded from Resources");
+            }
         }
 
         // Auto-load LevelProgressManager nếu chưa assign
         if (levelProgressManager == null)
         {
             levelProgressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (levelProgressManager == null)
+            {
+                Debug.LogError("LevelProgressManager not found in Resources folder!");
+            }
+            else
+            {
+                Debug.Log("LevelProgressManager loaded from Resources");
+            }
         }
-
-        // Reset session stats khi bắt đầu level mới
-        if (gameCurrency != null)
+    }
+    
+    /// <summary>
+    /// Load game progress từ JSON file
+    /// </summary>
+    private void LoadGameProgress()
+    {
+        if (gameCurrency != null && levelProgressManager != null)
         {
+            Debug.Log("=== LOADING GAME PROGRESS ===");
+            
+            // Hiển thị trạng thái trước khi load
+            Debug.Log($"Before load - Gold: {gameCurrency.TotalGold}, Max Level: {levelProgressManager.MaxUnlockedLevel}");
+            
+            // Load từ JSON
+            GameSaveManager.LoadGameProgress(gameCurrency, levelProgressManager);
+            
+            // Hiển thị trạng thái sau khi load
+            Debug.Log($"After load - Gold: {gameCurrency.TotalGold}, Max Level: {levelProgressManager.MaxUnlockedLevel}");
+            
+            // Reset session stats sau khi load
             gameCurrency.ResetSessionStats();
+            
+            Debug.Log("=== GAME PROGRESS LOADED ===");
+        }
+        else
+        {
+            Debug.LogError("Cannot load game progress - missing GameCurrency or LevelProgressManager!");
         }
     }
 
@@ -65,6 +116,7 @@ public class GameLevelManager : MonoBehaviour
     {
         if (playerStats == null)
             playerStats = FindAnyObjectByType<PlayerStats>();
+            
         // Load level data từ PlayerPrefs
         int currentLevel = PlayerPrefs.GetInt("current_level", 1);
         LoadLevelData(currentLevel);
@@ -73,20 +125,58 @@ public class GameLevelManager : MonoBehaviour
         SetupUI();
         UpdateDisplay();
 
-        // Truyền ProgressManager cho GameResultManager để xử lý next level
+        // Truyền ProgressManager cho GameResultManager
         var resultManager = GameResultManager.Instance;
         if (resultManager != null && levelProgressManager != null)
         {
             resultManager.SetProgressManager(levelProgressManager);
         }
+        
+        // Force save để tạo file nếu chưa có
+        ForceSaveProgress();
+    }
+    
+    /// <summary>
+    /// Force save progress (để đảm bảo file được tạo)
+    /// </summary>
+    public void ForceSaveProgress()
+    {
+        if (gameCurrency != null && levelProgressManager != null)
+        {
+            Debug.Log("=== FORCE SAVING PROGRESS ===");
+            GameSaveManager.SaveGameProgress(gameCurrency, levelProgressManager);
+            Debug.Log("=== PROGRESS SAVED ===");
+        }
     }
 
     void OnDestroy()
     {
-        // Clear singleton instance khi destroy
+        // Auto save khi destroy
+        ForceSaveProgress();
+        
+        // Clear singleton instance
         if (Instance == this)
         {
             Instance = null;
+        }
+    }
+    
+    /// <summary>
+    /// Auto save khi app pause/focus lost
+    /// </summary>
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            ForceSaveProgress();
+        }
+    }
+    
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            ForceSaveProgress();
         }
     }
 
@@ -101,6 +191,9 @@ public class GameLevelManager : MonoBehaviour
 
         gameCurrency.AddGold(amount, source);
         UpdateGoldDisplay();
+        
+        // Force save ngay sau khi thêm vàng
+        ForceSaveProgress();
     }
 
     /// <summary>
@@ -117,6 +210,8 @@ public class GameLevelManager : MonoBehaviour
         if (success)
         {
             UpdateGoldDisplay();
+            // Force save ngay sau khi tiêu vàng
+            ForceSaveProgress();
         }
 
         return success;
@@ -150,15 +245,12 @@ public class GameLevelManager : MonoBehaviour
     /// </summary>
     void SetupUI()
     {
-
         // Setup health slider
         if (healthSlider != null)
         {
             healthSlider.value = currentHealthPercentage;
             healthSlider.onValueChanged.AddListener(OnHealthChanged);
         }
-
-        
     }
 
     /// <summary>
@@ -173,20 +265,17 @@ public class GameLevelManager : MonoBehaviour
 
     /// <summary>
     /// Cập nhật tất cả UI hiển thị dựa trên % máu hiện tại
-    /// Tính toán điểm số, số sao và vàng có thể nhận được
     /// </summary>
     void UpdateDisplay()
     {
         if (currentLevelData == null) return;
 
-        // Hiển thị % máu (UI luôn hiển thị 0–100)
+        // Hiển thị % máu
         if (healthText != null)
             healthText.text = $"Health: {currentHealthPercentage:F1}%";
 
-        // Nếu LevelData.CalculateScoreFromHealth() nhận input từ 0–100 thì giữ nguyên
-        // Nếu nó nhận input từ 0–1 thì chia cho 100f
+        // Tính điểm và sao
         int predictedScore = currentLevelData.CalculateScoreFromHealth(currentHealthPercentage);
-
         int predictedStars = currentLevelData.StarsForScore(predictedScore);
 
         // Hiển thị điểm
@@ -206,41 +295,40 @@ public class GameLevelManager : MonoBehaviour
 
     /// <summary>
     /// Hoàn thành level với % máu hiện tại
-    /// Xử lý logic tính điểm, thêm vàng, claim gold milestones và hiển thị kết quả
     /// </summary>
-    public void CompleteLevel(int score, int star,float hpPercent)
+    public void CompleteLevel(int score, int star, float hpPercent)
     {
         if (currentLevelData == null) return;
 
-        // Tính toán kết quả dựa trên % máu
-        int finalScore = score;
-        int stars = star;
+        Debug.Log($"=== COMPLETING LEVEL {currentLevelData.levelIndex} ===");
+        Debug.Log($"Score: {score}, Stars: {star}, HP: {hpPercent}%");
+
         // Xử lý khi thắng (có ít nhất 1 sao)
-        if (stars > 0)
+        if (star > 0)
         {
             // Tính vàng có thể claim TRƯỚC khi update score
-            // (để đảm bảo không bị mất vàng từ các mốc đã đạt trước đó)
-            int claimableGold = currentLevelData.CalculateClaimableGold(stars);
+            int claimableGold = currentLevelData.CalculateClaimableGold(star);
+            Debug.Log($"Claimable gold: {claimableGold}");
 
             // Cập nhật best score và stars earned
-            currentLevelData.UpdateScore(finalScore);
+            currentLevelData.UpdateScore(score);
 
             // Thêm vàng và đánh dấu các mốc đã claim
             if (claimableGold > 0)
             {
-                AddGold(claimableGold, $"Level {currentLevelData.levelIndex} - {stars} stars");
-                currentLevelData.ClaimStarGold(stars);
+                AddGold(claimableGold, $"Level {currentLevelData.levelIndex} - {star} stars");
+                currentLevelData.ClaimStarGold(star);
             }
 
-            // Hiển thị win popup với số vàng vừa nhận
+            // Thông báo ProgressManager để unlock level tiếp theo nếu cần
+            UpdateProgressManager();
+
+            // Hiển thị win popup
             var resultManager = GameResultManager.Instance;
             if (resultManager != null)
             {
                 resultManager.ShowGameResult(currentLevelData, hpPercent, claimableGold);
             }
-
-            // Thông báo ProgressManager để unlock level tiếp theo nếu cần
-            UpdateProgressManager();
         }
         else
         {
@@ -251,11 +339,15 @@ public class GameLevelManager : MonoBehaviour
                 resultManager.ShowGameResult(currentLevelData, hpPercent, 0);
             }
         }
+
+        // Force save sau khi hoàn thành level
+        ForceSaveProgress();
+        
+        Debug.Log("=== LEVEL COMPLETED ===");
     }
 
     /// <summary>
     /// Thông báo ProgressManager về việc hoàn thành level
-    /// Để cập nhật unlock status của các level tiếp theo
     /// </summary>
     private void UpdateProgressManager()
     {
@@ -266,14 +358,12 @@ public class GameLevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Set % máu từ external script (cho testing hoặc gameplay)
+    /// Set % máu từ external script
     /// </summary>
-    /// <param name="percentage">% máu (0-100)</param>
     public void SetHealthPercentage(float percentage)
     {
-        // percentage là % (0–100), nên nếu muốn sync với PlayerStats thì phải nhân 100
         currentHealthPercentage = (playerStats != null)
-            ? playerStats.GetHealthPercentage() * 100f
+            ? playerStats.GetHealthPercentage()
             : percentage;
 
         if (healthSlider != null)
@@ -285,13 +375,47 @@ public class GameLevelManager : MonoBehaviour
     /// <summary>
     /// Set LevelData từ external script
     /// </summary>
-    /// <param name="levelData">LevelData mới</param>
     public void SetLevelData(LevelData levelData)
     {
         currentLevelData = levelData;
         UpdateDisplay();
     }
-
-    // Input shortcuts cho testing trong development build
-
+    
+    /// <summary>
+    /// Testing: Add gold button
+    /// </summary>
+    [ContextMenu("Add 1000 Gold")]
+    public void AddTestGold()
+    {
+        AddGold(1000, "Test");
+    }
+    
+    /// <summary>
+    /// Testing: Show save file info
+    /// </summary>
+    [ContextMenu("Show Save File Info")]
+    public void ShowSaveFileInfo()
+    {
+        Debug.Log(GameSaveManager.GetSaveFileInfo());
+        
+        if (GameSaveManager.HasSaveFile())
+        {
+            Debug.Log("Save file exists!");
+        }
+        else
+        {
+            Debug.Log("No save file found!");
+        }
+    }
+    
+    /// <summary>
+    /// Testing: Reset all progress
+    /// </summary>
+    [ContextMenu("Reset All Progress")]
+    public void ResetAllProgress()
+    {
+        GameSaveManager.ResetGameProgress();
+        LoadGameProgress(); // Reload để update UI
+        UpdateDisplay();
+    }
 }

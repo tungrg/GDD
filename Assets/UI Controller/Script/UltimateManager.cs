@@ -284,21 +284,36 @@ public class UltimateManager : MonoBehaviour
         Debug.Log("Ultimate đã kết thúc, hồi " + manaRestore + " mana.");
     }
 
-    // Public method để lưu skill data (gọi từ ShopManager khi mua skill)
+    /// <summary>
+    /// Public method để lưu skill data (gọi từ ShopManager khi mua skill)
+    /// </summary>
     public void SaveSkillData()
     {
+        Debug.Log("UltimateManager: Saving skill data...");
         SaveLoadManager.SaveSkills(skills);
+        
+        // *** THÊM: Save cả game progress khi save skill ***
+        var currency = Resources.Load<GameCurrency>("GameCurrency");
+        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+        
+        if (currency != null && progressManager != null)
+        {
+            Debug.Log("UltimateManager: Also saving game progress...");
+            GameSaveManager.SaveGameProgress(currency, progressManager);
+        }
     }
 
-    // Public method để unlock skill
+    /// <summary>
+    /// Public method để unlock skill và auto-save
+    /// </summary>
     public void UnlockSkill(int index)
     {
         if (index >= 0 && index < skills.Length)
         {
             skills[index].unlock = true;
             Debug.Log("Skill unlocked: " + skills[index].skillName);
-
-            // Auto save khi unlock skill
+            
+            // Auto save skill data và game progress
             SaveSkillData();
         }
     }

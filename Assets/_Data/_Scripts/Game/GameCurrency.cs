@@ -20,7 +20,7 @@ public class GameCurrency : ScriptableObject
     public string LastGoldSource => lastGoldSource;
     
     /// <summary>
-    /// Thêm vàng vào tổng với tracking source
+    /// Thêm vàng vào tổng với tracking source và auto-save
     /// </summary>
     /// <param name="amount">Số vàng thêm (phải > 0)</param>
     /// <param name="source">Nguồn vàng để tracking</param>
@@ -28,18 +28,24 @@ public class GameCurrency : ScriptableObject
     {
         if (amount <= 0) return;
         
+        int oldGold = totalGold;
         totalGold += amount;
         goldEarnedThisSession += amount;
         lastGoldSource = source;
         
-        // Mark dirty để Unity save thay đổi vào asset
+        Debug.Log($"Added {amount} gold from {source}. Total: {oldGold} → {totalGold}");
+        
+        // Đánh dấu dirty cho Unity Editor
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
+        
+        // Auto-save ngay sau khi thêm vàng
+        TriggerAutoSave();
     }
     
     /// <summary>
-    /// Tiêu vàng từ tổng với validation
+    /// Tiêu vàng từ tổng với validation và auto-save
     /// </summary>
     /// <param name="amount">Số vàng cần tiêu</param>
     /// <param name="purpose">Mục đích tiêu vàng</param>
@@ -49,12 +55,19 @@ public class GameCurrency : ScriptableObject
         if (amount <= 0) return false;
         if (totalGold < amount) return false;
         
+        int oldGold = totalGold;
         totalGold -= amount;
         lastGoldSource = $"Spent for {purpose}";
         
+        Debug.Log($"Spent {amount} gold for {purpose}. Total: {oldGold} → {totalGold}");
+        
+        // Đánh dấu dirty cho Unity Editor
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
+        
+        // Auto-save ngay sau khi tiêu vàng
+        TriggerAutoSave();
         
         return true;
     }
@@ -65,12 +78,18 @@ public class GameCurrency : ScriptableObject
     /// <param name="amount">Số vàng mới</param>
     public void SetGold(int amount)
     {
+        int oldGold = totalGold;
         totalGold = Mathf.Max(0, amount);
         lastGoldSource = "Set directly";
+        
+        Debug.Log($"Set gold directly: {oldGold} → {totalGold}");
         
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
+        
+        // Auto-save sau khi set
+        TriggerAutoSave();
     }
     
     /// <summary>
@@ -81,9 +100,41 @@ public class GameCurrency : ScriptableObject
         goldEarnedThisSession = 0;
         lastGoldSource = "Session started";
         
+        Debug.Log("Currency session stats reset");
+    }
+    
+    /// <summary>
+    /// Load data từ save file (gọi từ GameSaveManager)
+    /// </summary>
+    public void LoadFromSaveData(int totalGold, int sessionGold, string lastSource)
+    {
+        this.totalGold = totalGold;
+        this.goldEarnedThisSession = sessionGold;
+        this.lastGoldSource = lastSource;
+        
+        Debug.Log($"Currency loaded: {totalGold} total, {sessionGold} session, last: {lastSource}");
+        
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
+    }
+    
+    /// <summary>
+    /// Trigger auto-save (tìm LevelProgressManager và save cùng)
+    /// </summary>
+    private void TriggerAutoSave()
+    {
+        // Tìm LevelProgressManager để save cùng
+        var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+        if (progressManager != null)
+        {
+            Debug.Log("GameCurrency: Triggering auto-save...");
+            GameSaveManager.SaveGameProgress(this, progressManager);
+        }
+        else
+        {
+            Debug.LogWarning("GameCurrency: Cannot auto-save - LevelProgressManager not found!");
+        }
     }
     
     /// <summary>
@@ -93,5 +144,15 @@ public class GameCurrency : ScriptableObject
     public string GetDebugInfo()
     {
         return $"Total: {totalGold:N0} | Session: +{goldEarnedThisSession:N0} | Last: {lastGoldSource}";
+    }
+    
+    /// <summary>
+    /// Testing: Force save manually
+    /// </summary>
+    [ContextMenu("Force Save Currency")]
+    public void ForceSave()
+    {
+        TriggerAutoSave();
+        Debug.Log("Currency manually saved!");
     }
 }

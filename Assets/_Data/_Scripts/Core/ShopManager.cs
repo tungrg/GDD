@@ -42,6 +42,8 @@ public class ShopManager : MonoBehaviour
         if (pauseStatus && UltimateManager.Instance != null) 
         {
             UltimateManager.Instance.SaveSkillData();
+            // Force save game progress khi pause
+            ForceSaveGameProgress();
         }
     }
 
@@ -50,6 +52,8 @@ public class ShopManager : MonoBehaviour
         if (!hasFocus && UltimateManager.Instance != null) 
         {
             UltimateManager.Instance.SaveSkillData();
+            // Force save game progress khi focus lost
+            ForceSaveGameProgress();
         }
     }
 
@@ -58,6 +62,29 @@ public class ShopManager : MonoBehaviour
         if (UltimateManager.Instance != null) 
         {
             UltimateManager.Instance.SaveSkillData();
+            // Force save game progress khi destroy
+            ForceSaveGameProgress();
+        }
+    }
+
+    /// <summary>
+    /// Force save game progress (currency + level progress)
+    /// </summary>
+    private void ForceSaveGameProgress()
+    {
+        if (gameCurrency != null)
+        {
+            // Tìm LevelProgressManager để save cùng
+            var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (progressManager != null)
+            {
+                Debug.Log("ShopManager: Force saving game progress...");
+                GameSaveManager.SaveGameProgress(gameCurrency, progressManager);
+            }
+            else
+            {
+                Debug.LogError("LevelProgressManager not found for saving!");
+            }
         }
     }
 
@@ -137,14 +164,25 @@ public class ShopManager : MonoBehaviour
             return;
         }
 
+        Debug.Log($"=== BUYING SKILL: {skill.skillName} ===");
+        Debug.Log($"Price: {skill.priceSkill}, Current Gold: {gameCurrency?.TotalGold}");
+
         if (gameCurrency != null && gameCurrency.SpendGold(skill.priceSkill, "Buy " + skill.skillName))
         {
-            // Unlock skill thông qua UltimateManager (tự động save)
+            Debug.Log($"Gold spent successfully! Remaining: {gameCurrency.TotalGold}");
+            
+            // Unlock skill thông qua UltimateManager (tự động save skill data)
             manager.UnlockSkill(index);
 
+            // Update UI
             if (index < skills.Count) UpdateSkillUI(skills[index], skill, index);
             UpdateGoldDisplay();
             RefreshAllButtonStates();
+            
+            // *** QUAN TRỌNG: Force save game progress ngay sau khi mua skill ***
+            ForceSaveGameProgress();
+            
+            Debug.Log($"=== SKILL PURCHASED & SAVED: {skill.skillName} ===");
         }
         else
         {
@@ -181,5 +219,36 @@ public class ShopManager : MonoBehaviour
     {
         LoadShop();
         UpdateGoldDisplay();
+    }
+    
+    /// <summary>
+    /// Testing: Thêm vàng để test
+    /// </summary>
+    [ContextMenu("Add 1000 Gold for Testing")]
+    public void AddTestGold()
+    {
+        if (gameCurrency != null)
+        {
+            gameCurrency.AddGold(1000, "Test from ShopManager");
+            UpdateGoldDisplay();
+            ForceSaveGameProgress();
+            Debug.Log("Added 1000 gold for testing!");
+        }
+    }
+    
+    /// <summary>
+    /// Testing: Hiển thị thông tin vàng hiện tại
+    /// </summary>
+    [ContextMenu("Show Current Gold Info")]
+    public void ShowGoldInfo()
+    {
+        if (gameCurrency != null)
+        {
+            Debug.Log($"Current Gold Info: {gameCurrency.GetDebugInfo()}");
+        }
+        else
+        {
+            Debug.Log("GameCurrency is null!");
+        }
     }
 }

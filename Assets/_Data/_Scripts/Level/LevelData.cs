@@ -30,6 +30,9 @@ public class LevelData : ScriptableObject
     public bool Star1GoldClaimed => star1GoldClaimed;
     public bool Star2GoldClaimed => star2GoldClaimed;
     public bool Star3GoldClaimed => star3GoldClaimed;
+    
+    // Property để truy cập claimed gold dưới dạng array (for save/load)
+    public bool[] ClaimedStarGold => new bool[] { star1GoldClaimed, star2GoldClaimed, star3GoldClaimed };
 
     /// <summary>
     /// Tính số sao dựa trên điểm số
@@ -144,6 +147,18 @@ public class LevelData : ScriptableObject
     }
     
     /// <summary>
+    /// Tính vàng có thể claim từ HP percentage
+    /// </summary>
+    /// <param name="healthPercentage">% máu còn lại (0-100)</param>
+    /// <returns>Tổng vàng có thể claim</returns>
+    public int CalculateGoldReward(float healthPercentage)
+    {
+        int score = CalculateScoreFromHealth(healthPercentage);
+        int stars = StarsForScore(score);
+        return CalculateClaimableGold(stars);
+    }
+    
+    /// <summary>
     /// Đánh dấu các mốc sao đã claim vàng
     /// Chỉ claim những mốc từ 1 đến starsToClaimUpTo
     /// </summary>
@@ -197,6 +212,36 @@ public class LevelData : ScriptableObject
         star1GoldClaimed = false;
         star2GoldClaimed = false;
         star3GoldClaimed = false;
+        
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
+
+    /// <summary>
+    /// Load data từ save file (gọi từ LevelProgressManager)
+    /// </summary>
+    public void LoadFromSaveData(int bestScore, int starsEarned, bool[] claimedStarGold)
+    {
+        this.bestScore = bestScore;
+        this.starsEarned = starsEarned;
+        
+        // Apply claimed star gold array
+        if (claimedStarGold != null && claimedStarGold.Length >= 3)
+        {
+            this.star1GoldClaimed = claimedStarGold[0];
+            this.star2GoldClaimed = claimedStarGold[1];
+            this.star3GoldClaimed = claimedStarGold[2];
+        }
+        else
+        {
+            // Default values if array is invalid
+            this.star1GoldClaimed = false;
+            this.star2GoldClaimed = false;
+            this.star3GoldClaimed = false;
+        }
+        
+        Debug.Log($"Level {levelIndex} loaded: {starsEarned} stars, {bestScore} points, claimed: [{star1GoldClaimed}, {star2GoldClaimed}, {star3GoldClaimed}]");
         
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
