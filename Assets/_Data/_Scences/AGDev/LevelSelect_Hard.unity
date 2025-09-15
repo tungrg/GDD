@@ -1731,8 +1731,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 524426097}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: PerformTransition
+        m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
+        m_MethodName: GoHome
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1754,7 +1754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55f7eaf6dd2a2478c939f6bb532e39ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: Home
   duration: 0.5
   color: {r: 0.06336865, g: 0.4165338, b: 0.56078434, a: 1}
 --- !u!1001 &533928648
