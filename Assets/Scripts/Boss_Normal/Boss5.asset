@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a05b44838532c7849b0d1816c1a9b9b6, type: 3}
+  m_Name: Boss5
+  m_EditorClassIdentifier: 
+  nameBoss: Boss5
+  icon: {fileID: 0}
+  originalHealth: 700
+  originalSpeed: 3
+  originalDamageAtk: 35
+  originalSpeedAtk: 2
+  speed: 3
+  skills:
+  - {fileID: 11400000, guid: 0bb3b690a996b8340ad8c971a42ddae2, type: 2}
+  - {fileID: 11400000, guid: dbd3c16bf8dc5ba4aa47a692b3fb5ee3, type: 2}
+  - {fileID: 11400000, guid: fa498bbd4dc256a41b021b984b67e7c0, type: 2}
+  - {fileID: 11400000, guid: 886b164bc9781ea469544deb3ad80fb6, type: 2}
