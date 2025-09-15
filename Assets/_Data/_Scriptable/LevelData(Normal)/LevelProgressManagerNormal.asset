@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67c09c5d2ffcf8342aa6f2e5397d133e, type: 3}
-  m_Name: LevelProgressManager
+  m_Name: LevelProgressManagerNormal
   m_EditorClassIdentifier: 
   allLevels:
-  - {fileID: 11400000, guid: e564ef25bcfeea846a41780d906975c6, type: 2}
-  - {fileID: 11400000, guid: 9d25dd2dc52d27e49985c2360d77bef0, type: 2}
-  - {fileID: 11400000, guid: 127fda92b215b064996bda44372b7fd3, type: 2}
-  - {fileID: 11400000, guid: 32feaad67ba0e1f4ba02e3ff19328cb5, type: 2}
-  - {fileID: 11400000, guid: 823193e084204af4f8d6784218da877b, type: 2}
+  - {fileID: 11400000, guid: 5a730c4bb944c3c409d7623f300ee56b, type: 2}
+  - {fileID: 11400000, guid: e0b82c54981cb664386ff5d6b1b55051, type: 2}
+  - {fileID: 11400000, guid: d9fc8a9d04bd1ba489e40a624596c2fa, type: 2}
+  - {fileID: 11400000, guid: 0f8b625ae8f756643924743ea82d9ff2, type: 2}
+  - {fileID: 11400000, guid: 27c1a6c732883cc4f963baee1aa85529, type: 2}
   maxUnlockedLevel: 5

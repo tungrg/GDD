@@ -2716,7 +2716,7 @@ PrefabInstance:
     - target: {fileID: 5194374138777258393, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: currentLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 823193e084204af4f8d6784218da877b, type: 2}
+      objectReference: {fileID: 11400000, guid: 27c1a6c732883cc4f963baee1aa85529, type: 2}
     - target: {fileID: 5472208180353868292, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3341,9 +3341,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e053c19e73fe654480a2e034f0992f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelData: {fileID: 11400000, guid: 823193e084204af4f8d6784218da877b, type: 2}
+  currentLevelData: {fileID: 11400000, guid: 27c1a6c732883cc4f963baee1aa85529, type: 2}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
-  levelProgressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  levelProgressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
   healthSlider: {fileID: 0}
   healthText: {fileID: 0}
   scoreText: {fileID: 0}
@@ -5865,7 +5865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1841157260}
   losePanel: {fileID: 858837615}
-  progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  progressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
 --- !u!114 &457663537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18978,7 +18978,11 @@ PrefabInstance:
     - target: {fileID: 434424255737670633, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: f35b404baf025c147b19c4e560b537b3, type: 2}
+      objectReference: {fileID: 11400000, guid: b91e8d2d77ae43946a5a4c8059e6f721, type: 2}
+    - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: bossGun
+      value: 
+      objectReference: {fileID: 1510313709}
     - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: uiPanel
       value: 
@@ -18986,15 +18990,27 @@ PrefabInstance:
     - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: f35b404baf025c147b19c4e560b537b3, type: 2}
+      objectReference: {fileID: 11400000, guid: b91e8d2d77ae43946a5a4c8059e6f721, type: 2}
+    - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: bossModel
+      value: 
+      objectReference: {fileID: 1510313708}
     - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1177913466}
     - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: playerPrefab
+      value: 
+      objectReference: {fileID: 2610179636996891716, guid: c92f2340d7c248f48ad36746d56ca80c, type: 3}
+    - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: currentLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 823193e084204af4f8d6784218da877b, type: 2}
+      objectReference: {fileID: 11400000, guid: 27c1a6c732883cc4f963baee1aa85529, type: 2}
+    - target: {fileID: 1372079271466085248, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+      propertyPath: gameLevelManager
+      value: 
+      objectReference: {fileID: 268881141}
     - target: {fileID: 1856342418880077178, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -19026,7 +19042,7 @@ PrefabInstance:
     - target: {fileID: 5914765186589717488, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: f35b404baf025c147b19c4e560b537b3, type: 2}
+      objectReference: {fileID: 11400000, guid: b91e8d2d77ae43946a5a4c8059e6f721, type: 2}
     - target: {fileID: 8161466466884972463, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17
@@ -19075,6 +19091,16 @@ PrefabInstance:
       addedObject: {fileID: 1902488136}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+--- !u!4 &1510313708 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5677298545925991632, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+  m_PrefabInstance: {fileID: 1510313707}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1510313709 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7218167794876248815, guid: f67adf63867c1ee46a08930ceb22ae52, type: 3}
+  m_PrefabInstance: {fileID: 1510313707}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1516699151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22779,6 +22805,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1121218754140155717, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
     - target: {fileID: 1169750453555364766, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -23095,6 +23125,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: nextLevelButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
     - target: {fileID: 7008161669082573548, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
