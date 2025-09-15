@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalGold: 0
   goldEarnedThisSession: 0
-  lastGoldSource: Spent for Buy Iron Armor
+  lastGoldSource: Session started

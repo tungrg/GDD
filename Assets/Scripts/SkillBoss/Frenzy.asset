@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Frenzy
   m_EditorClassIdentifier: 
   skillName: Frenzy
-  cooldown: 13
-  moveSpeedMultiplier: 3
-  attackSpeedMultiplier: 3
-  duration: 5
+  cooldown: 1
+  HpMultiplier: 100
+  AtkdMultiplier: 5
+  duration: 0
