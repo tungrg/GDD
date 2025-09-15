@@ -1,15 +1,30 @@
 using UnityEngine;
 
-// This class is responsible for loading the next scene in a transition (the core of
-// this work is performed in the Transition class, though).
 public class SceneTransition : MonoBehaviour
 {
-    public string scene = "<Insert scene name>";
     public float duration = 1.0f;
     public Color color = Color.black;
 
     public void PerformTransition()
     {
-        Transition.LoadLevel(scene, duration, color);
+        string sceneToLoad = "";
+
+        switch (DifficultySelector.SelectedDifficulty)
+        {
+            case DifficultySelector.Difficulty.Easy:
+                sceneToLoad = "LevelSelect_Easy";
+                break;
+            case DifficultySelector.Difficulty.Basic:
+                sceneToLoad = "LevelSelect_Normal";
+                break;
+            case DifficultySelector.Difficulty.Hard:
+                sceneToLoad = "LevelSelect_Hard";
+                break;
+        }
+
+        if (!string.IsNullOrEmpty(sceneToLoad))
+            Transition.LoadLevel(sceneToLoad, duration, color);
+        else
+            Debug.LogError("No scene assigned for this difficulty!");
     }
 }
