@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1713044368}
   losePanel: {fileID: 1713044367}
-  progressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  progressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
 --- !u!114 &7140092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7883,7 +7883,7 @@ PrefabInstance:
     - target: {fileID: 5194374138777258393, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: currentLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 9d25dd2dc52d27e49985c2360d77bef0, type: 2}
+      objectReference: {fileID: 11400000, guid: d9fc8a9d04bd1ba489e40a624596c2fa, type: 2}
     - target: {fileID: 5472208180353868292, guid: e2ee15d628344f14b934a9adee2bb3d5, type: 3}
       propertyPath: m_Name
       value: Player
@@ -8213,9 +8213,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e053c19e73fe654480a2e034f0992f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelData: {fileID: 11400000, guid: 9d25dd2dc52d27e49985c2360d77bef0, type: 2}
+  currentLevelData: {fileID: 11400000, guid: d9fc8a9d04bd1ba489e40a624596c2fa, type: 2}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
-  levelProgressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  levelProgressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
   healthSlider: {fileID: 0}
   healthText: {fileID: 0}
   scoreText: {fileID: 0}
@@ -15620,6 +15620,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: PlayAgain
       objectReference: {fileID: 0}
+    - target: {fileID: 1121218754140155717, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
     - target: {fileID: 1743849231903872805, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -15732,6 +15736,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SceneMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
     - target: {fileID: 9073940277572449400, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -18546,7 +18554,7 @@ PrefabInstance:
     - target: {fileID: 3497759299031239274, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: 1007734347765c6448ee693f3a7dedc7, type: 2}
+      objectReference: {fileID: 11400000, guid: ccb293598d6080142a1cbaaa002f2ca6, type: 2}
     - target: {fileID: 4506245924163780970, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: boss
       value: 
@@ -18558,7 +18566,7 @@ PrefabInstance:
     - target: {fileID: 7161240824911397465, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: 1007734347765c6448ee693f3a7dedc7, type: 2}
+      objectReference: {fileID: 11400000, guid: ccb293598d6080142a1cbaaa002f2ca6, type: 2}
     - target: {fileID: 7583863641533766584, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: bossGun
       value: 
@@ -18570,7 +18578,7 @@ PrefabInstance:
     - target: {fileID: 7583863641533766584, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: bossData
       value: 
-      objectReference: {fileID: 11400000, guid: 1007734347765c6448ee693f3a7dedc7, type: 2}
+      objectReference: {fileID: 11400000, guid: ccb293598d6080142a1cbaaa002f2ca6, type: 2}
     - target: {fileID: 7583863641533766584, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: bossModel
       value: 
@@ -18586,7 +18594,11 @@ PrefabInstance:
     - target: {fileID: 7583863641533766584, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: currentLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 9d25dd2dc52d27e49985c2360d77bef0, type: 2}
+      objectReference: {fileID: 11400000, guid: d9fc8a9d04bd1ba489e40a624596c2fa, type: 2}
+    - target: {fileID: 7583863641533766584, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
+      propertyPath: gameLevelManager
+      value: 
+      objectReference: {fileID: 894448444}
     - target: {fileID: 8898196728232065816, guid: 01cda9a5ed7cd914392f6a2903861678, type: 3}
       propertyPath: m_AgentTypeID
       value: 658490984
