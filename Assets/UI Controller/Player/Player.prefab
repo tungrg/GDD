@@ -2014,7 +2014,7 @@ MonoBehaviour:
   currentMana: 50
   baseMoveSpeed: 5
   currentMoveSpeed: 0
-  baseFireCooldown: 0.5
+  baseFireCooldown: 1
   currentFireCooldown: 0
   baseAttackPower: 10
   currentAttackPower: 0

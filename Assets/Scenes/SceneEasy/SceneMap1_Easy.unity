@@ -1930,7 +1930,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -370
+      value: -488
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: f73b7577f02334921ab0b6a03268b30b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -10146,23 +10146,23 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 250
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1743849231903872805, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_Pivot.x
@@ -10262,27 +10262,27 @@ PrefabInstance:
       objectReference: {fileID: 405943329}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 166.66669
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 416.6667
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5651044681028231861, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -10290,27 +10290,27 @@ PrefabInstance:
       objectReference: {fileID: 405943329}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -166.66666
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 83.333336
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: progressManager
@@ -10318,19 +10318,19 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 300
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9073940277572449400, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -10508,7 +10508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: 1e441b0f575834740b0af814a1419e42, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -270
+      value: -438
       objectReference: {fileID: 0}
     - target: {fileID: 1961820221432312763, guid: 1e441b0f575834740b0af814a1419e42, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
