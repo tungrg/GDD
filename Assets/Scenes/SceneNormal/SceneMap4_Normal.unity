@@ -1603,6 +1603,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 611774667380206818, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1121218754140155717, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: progressManager
       value: 
@@ -1665,19 +1669,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 1706395157145679354, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -65
       objectReference: {fileID: 0}
     - target: {fileID: 1743849231903872805, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_Pivot.x
@@ -1889,19 +1893,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 416.6667
       objectReference: {fileID: 0}
     - target: {fileID: 5269760398605216357, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -65
       objectReference: {fileID: 0}
     - target: {fileID: 5492135804264636674, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1953,19 +1957,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 83.333336
       objectReference: {fileID: 0}
     - target: {fileID: 6689704267665003707, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -65
       objectReference: {fileID: 0}
     - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: progressManager
@@ -2017,19 +2021,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7718640975087897028, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 8496655053840923431, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14173,6 +14177,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
+--- !u!1 &1782681192 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3849156652483022931, guid: 61e9a5ced2d919843baad53f8cedbd7c, type: 3}
+  m_PrefabInstance: {fileID: 1782681191}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1782689572
 GameObject:
   m_ObjectHideFlags: 0
@@ -15900,6 +15909,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 128062189}
   losePanel: {fileID: 128062188}
+  hpBossPanel: {fileID: 1782681192}
   progressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
 --- !u!114 &2086363235
 MonoBehaviour:

@@ -9,6 +9,7 @@ public class GameResultManager : MonoBehaviour
     [Header("Result Panels")]
     public GameObject winPanel;
     public GameObject losePanel;
+    public GameObject hpBossPanel;
 
     [Header("Progress Manager")]
     [SerializeField] private LevelProgressManager progressManager; // Reference trực tiếp
@@ -69,6 +70,8 @@ public class GameResultManager : MonoBehaviour
 
         if (losePanel != null)
             losePanel.SetActive(false);
+
+        hpBossPanel.SetActive(true);
     }
 
     /// <summary>
@@ -142,10 +145,13 @@ public class GameResultManager : MonoBehaviour
     /// <param name="data">Dữ liệu kết quả để hiển thị</param>
     public void ShowLosePanel(GameResultData data)
     {
+        if (hpBossPanel == null) return;
+        hpBossPanel.SetActive(false);
         if (losePanel == null) return;
 
         // Kích hoạt lose panel
         losePanel.SetActive(true);
+
 
         // Configure LosePopup component
         var losePopup = losePanel.GetComponent<LosePopup>();
