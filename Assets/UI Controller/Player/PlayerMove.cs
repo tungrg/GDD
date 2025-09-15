@@ -32,6 +32,7 @@ public class PlayerMove : MonoBehaviour
     private int currentDashes = 1;
 
     private bool isFrozen = false;
+    private bool canMove = false;
 
     void Start()
     {
@@ -55,6 +56,11 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+        if (!canMove)
+        {
+            if (animator) animator.SetFloat("Speed", 0f);
+            return;
+        }
         if (GameManager.Instance.HasState(GameState.PlayerSkillLock))
         {
             if (dashButton != null) dashButton.interactable = false;
@@ -110,6 +116,7 @@ public class PlayerMove : MonoBehaviour
 
     void Dash()
     {
+        if (!canMove) return;
         if (isFrozen) return;
         if (isDashing) return;
         if (currentDashes <= 0) return;
@@ -166,7 +173,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         rb.MovePosition(end);
-        if (animator) animator.ResetTrigger("Dash"); 
+        if (animator) animator.ResetTrigger("Dash");
         isDashing = false;
     }
 
@@ -217,4 +224,9 @@ public class PlayerMove : MonoBehaviour
             if (animator) animator.SetFloat("Speed", 0f);
         }
     }
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+    }
+
 }
