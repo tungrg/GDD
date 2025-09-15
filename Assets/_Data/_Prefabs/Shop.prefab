@@ -115,6 +115,7 @@ MonoBehaviour:
     buttonBuy: {fileID: 348561555637110836}
     buyButton: {fileID: 2613925519749655348}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
+  levelProgressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
   goldDisplay: {fileID: 0}
 --- !u!1 &566178647950588858
 GameObject:
