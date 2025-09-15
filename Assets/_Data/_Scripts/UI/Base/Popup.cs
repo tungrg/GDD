@@ -72,23 +72,31 @@ public class Popup : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    public void LoadScene(string sceneName)
+    public void LoadLevel(string sceneName)
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName);
     }
 
+    public void LoadScene()
+    {
+        int current = SceneManager.GetActiveScene().buildIndex;
+        int next = current + 1;
+        Debug.Log($"[SceneLoader] Next scene: index={next}");
+        Debug.Log($"[SceneLoader] Next scene: index={current}");
+        SceneManager.LoadScene(next);
+    }
+
     public void SceneMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Level");
+        SceneManager.LoadScene(0);
     }
-    
+
     public void QuitGame()
     {
         Debug.Log("Quitting game...");
-        
+
 #if UNITY_EDITOR
         // Trong Unity Editor
         UnityEditor.EditorApplication.isPlaying = false;

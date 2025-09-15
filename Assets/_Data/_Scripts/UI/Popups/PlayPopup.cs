@@ -82,7 +82,7 @@ public class PlayPopup : Popup
     {
         PlayerPrefs.SetInt("current_level", m_levelIndex);
         // Dùng hàm sẵn có trong Popup:
-        LoadScene(m_sceneToLoad);
+        LoadLevel(m_sceneToLoad);
         // Hoặc nếu muốn hiệu ứng fade:
         // Transition.LoadLevel(m_sceneToLoad, 1.0f, Color.black);
     }

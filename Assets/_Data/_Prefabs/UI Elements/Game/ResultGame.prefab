@@ -144,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3107430114183567569, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3107430114183567569, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -160,7 +160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3107430114183567569, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: SceneMap2
+      value: SceneMap2_Normal
       objectReference: {fileID: 0}
     - target: {fileID: 3107430114183567569, guid: 9b58286c6739040c59d9eb8457e0d929, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
