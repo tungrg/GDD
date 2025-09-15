@@ -3,25 +3,51 @@ using System.IO;
 
 public static class GameSaveManager
 {
-    private static string fileName = "GameProgress.json";
-    private static string path = Path.Combine(Application.persistentDataPath, fileName);
-    
+    private static string fileNameEasy = "GameProgressEasy.json";
+    private static string fileNameNormal = "GameProgressNormal.json";
+    private static string fileNameHard = "GameProgressHard.json";
+    private static string pathEasy = Path.Combine(Application.persistentDataPath, fileNameEasy);
+    private static string pathNormal = Path.Combine(Application.persistentDataPath, fileNameNormal);
+    private static string pathHard = Path.Combine(Application.persistentDataPath, fileNameHard);
+    private static string path; // Mặc định Normal
     /// <summary>
     /// Lưu toàn bộ game progress
     /// </summary>
     public static void SaveGameProgress(GameCurrency currency, LevelProgressManager progressManager)
     {
+
+        switch (DifficultySelector.SelectedDifficulty)
+        {
+            case DifficultySelector.Difficulty.Easy:
+                path = pathEasy;
+                break;
+            case DifficultySelector.Difficulty.Basic:
+                path = pathNormal;
+                break;
+            case DifficultySelector.Difficulty.Hard:
+                path = pathHard;
+                break;
+        }
+
+        if (currency == null || progressManager == null)
+        {
+            Debug.LogWarning("Cannot save game progress - missing components");
+            return;
+        }
+
+        // Lưu dữ liệu
+
         try
         {
             // Tạo save data từ current state
             GameProgressData saveData = GameProgressData.CreateFromCurrent(currency, progressManager);
-            
+
             // Convert sang JSON
             string jsonData = JsonUtility.ToJson(saveData, true);
-            
+
             // Ghi vào file
             File.WriteAllText(path, jsonData);
-            
+
             Debug.Log("Game progress saved to: " + path);
             Debug.Log("Save data info:\n" + saveData.GetDebugInfo());
         }
@@ -38,19 +64,31 @@ public static class GameSaveManager
     {
         try
         {
+            switch (DifficultySelector.SelectedDifficulty)
+            {
+                case DifficultySelector.Difficulty.Easy:
+                    path = pathEasy;
+                    break;
+                case DifficultySelector.Difficulty.Basic:
+                    path = pathNormal;
+                    break;
+                case DifficultySelector.Difficulty.Hard:
+                    path = pathHard;
+                    break;
+            }
             if (File.Exists(path))
             {
                 // Đọc file JSON
                 string jsonData = File.ReadAllText(path);
-                
+
                 // Parse JSON
                 GameProgressData saveData = JsonUtility.FromJson<GameProgressData>(jsonData);
-                
+
                 if (saveData != null && saveData.IsValid())
                 {
                     // Áp dụng data vào game
                     saveData.ApplyToGame(currency, progressManager);
-                    
+
                     Debug.Log("Game progress loaded from: " + path);
                     Debug.Log("Loaded data info:\n" + saveData.GetDebugInfo());
                 }
@@ -100,6 +138,18 @@ public static class GameSaveManager
     {
         try
         {
+            switch (DifficultySelector.SelectedDifficulty)
+            {
+                case DifficultySelector.Difficulty.Easy:
+                    path = pathEasy;
+                    break;
+                case DifficultySelector.Difficulty.Basic:
+                    path = pathNormal;
+                    break;
+                case DifficultySelector.Difficulty.Hard:
+                    path = pathHard;
+                    break;
+            }
             if (File.Exists(path))
             {
                 File.Delete(path);

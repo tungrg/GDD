@@ -2008,13 +2008,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d9e8f2fc3468984c99a621f51a327b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 300
+  maxHP: 100
   currentHP: 0
   maxMana: 100
   currentMana: 50
   baseMoveSpeed: 5
   currentMoveSpeed: 0
-  baseFireCooldown: 2
+  baseFireCooldown: 0.5
   currentFireCooldown: 0
   baseAttackPower: 10
   currentAttackPower: 0
@@ -2022,7 +2022,7 @@ MonoBehaviour:
   currentArmor: 0
   isDead: 0
   isImmuneCC: 0
-  gameOverUI: {fileID: 0}
+  currentLevelData: {fileID: 0}
 --- !u!114 &2112090021872157141
 MonoBehaviour:
   m_ObjectHideFlags: 0

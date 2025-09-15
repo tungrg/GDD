@@ -1356,6 +1356,14 @@ PrefabInstance:
       value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 347740575494044511, guid: 83b7083b38d49490682a0c69c7d0eb26, type: 3}
+      propertyPath: m_margin.x
+      value: -14.940735
+      objectReference: {fileID: 0}
+    - target: {fileID: 347740575494044511, guid: 83b7083b38d49490682a0c69c7d0eb26, type: 3}
+      propertyPath: m_margin.z
+      value: -10.918335
+      objectReference: {fileID: 0}
+    - target: {fileID: 347740575494044511, guid: 83b7083b38d49490682a0c69c7d0eb26, type: 3}
       propertyPath: m_fontSizeBase
       value: 46
       objectReference: {fileID: 0}

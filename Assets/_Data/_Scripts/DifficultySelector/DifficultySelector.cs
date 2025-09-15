@@ -7,9 +7,9 @@ public class DifficultySelector : MonoBehaviour
     public Toggle basicToggle;
     public Toggle hardToggle;
 
-    public static Difficulty SelectedDifficulty { get; private set; } = Difficulty.Basic;
+    public static Difficulty SelectedDifficulty { get; private set; } = Difficulty.Easy;
 
-    public enum Difficulty { Easy, Basic, Hard }
+    public  enum Difficulty { Easy, Basic, Hard }
 
     private void Start()
     {
