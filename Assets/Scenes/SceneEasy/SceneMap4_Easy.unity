@@ -1603,6 +1603,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1121218754140155717, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
     - target: {fileID: 1169750453555364766, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1915,6 +1919,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6715021270092202642, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
+      propertyPath: progressManager
+      value: 
+      objectReference: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
     - target: {fileID: 7008161669082573548, guid: eee45ac8e49a1574d8994fc308820192, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13808,9 +13816,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e053c19e73fe654480a2e034f0992f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelData: {fileID: 11400000, guid: 32feaad67ba0e1f4ba02e3ff19328cb5, type: 2}
+  currentLevelData: {fileID: 11400000, guid: 04bc61291c6f17141968217a8a341f6e, type: 2}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
-  levelProgressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
+  levelProgressManager: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
   healthSlider: {fileID: 0}
   healthText: {fileID: 0}
   scoreText: {fileID: 0}
