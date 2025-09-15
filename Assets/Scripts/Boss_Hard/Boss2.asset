@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameBoss: BossMap1
   icon: {fileID: 0}
-  originalHealth: 400
-  originalSpeed: 3
+  originalHealth: 500
+  originalSpeed: 4
   originalDamageAtk: 20
   originalSpeedAtk: 2
-  speed: 3
+  speed: 4
   skills:
   - {fileID: 11400000, guid: 9130b97960d647940a65cbe191fc936b, type: 2}
   - {fileID: 11400000, guid: 8d572646e96c021408d0f47d0157928f, type: 2}

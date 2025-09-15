@@ -67,12 +67,15 @@ public class BossManager : BossBase
     private void Awake()
     {
         animator = GetComponent<Animator>();
-
+        agent = GetComponent<NavMeshAgent>();
         // lưu lại controller mặc định
         if (animator != null && animator.runtimeAnimatorController != null)
         {
             defaultController = animator.runtimeAnimatorController;
         }
+        bossData.ResetRuntimeStats();
+
+        agent.speed = bossData.speed;
     }
 
     public void SwitchAnimator(RuntimeAnimatorController newController)
