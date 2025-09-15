@@ -159,6 +159,9 @@ public class UltimateManager : MonoBehaviour
         }
 
         //settingsPanel.SetActive(true);
+        PlayerMove player = FindAnyObjectByType<PlayerMove>();
+        if (player != null)
+            player.SetCanMove(true);
 
         BossManager boss = FindFirstObjectByType<BossManager>();
         if (boss != null)
