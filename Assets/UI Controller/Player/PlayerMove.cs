@@ -15,6 +15,7 @@ public class PlayerMove : MonoBehaviour
     public float dashDistance = 5f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 3f;
+    public GameObject dashEffectPrefab;
 
     [Header("Audio")]
     public AudioClip footstepClip;
@@ -32,7 +33,8 @@ public class PlayerMove : MonoBehaviour
     private int currentDashes = 1;
     private bool isFrozen = false;
     private bool canMove = false;
-    private AudioSource audioSource;
+    private AudioSource footstepSource;
+    private AudioSource sfxSource;
 
     void Start()
     {
@@ -48,7 +50,10 @@ public class PlayerMove : MonoBehaviour
         }
         if (dashText != null) dashText.gameObject.SetActive(false);
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
+
+        footstepSource = gameObject.AddComponent<AudioSource>();
+        sfxSource = gameObject.AddComponent<AudioSource>();
+        footstepSource.loop = true;
     }
 
     void Update()
@@ -119,7 +124,14 @@ public class PlayerMove : MonoBehaviour
         Vector3 dashDir = new Vector3(joystick.Horizontal, 0, joystick.Vertical);
         if (dashDir.magnitude < 0.1f) dashDir = transform.forward;
         StartCoroutine(DashCoroutine(dashDir.normalized));
-        if (dashClip && audioSource) audioSource.PlayOneShot(dashClip);
+        if (dashClip && sfxSource) sfxSource.PlayOneShot(dashClip);
+
+        if (dashEffectPrefab != null)
+        {
+            Vector3 effectPos = transform.position - transform.forward * 0.5f;
+            Instantiate(dashEffectPrefab, effectPos, transform.rotation);
+        }
+
         if (currentDashes <= 0)
         {
             dashTimer = dashCooldown;
@@ -209,19 +221,19 @@ public class PlayerMove : MonoBehaviour
 
     void PlayFootstep()
     {
-        if (footstepClip && audioSource && !audioSource.isPlaying)
+        if (footstepClip && footstepSource && !footstepSource.isPlaying)
         {
-            audioSource.clip = footstepClip;
-            audioSource.loop = true;
-            audioSource.Play();
+            footstepSource.clip = footstepClip;
+            footstepSource.loop = true;
+            footstepSource.Play();
         }
     }
 
     void StopFootstep()
     {
-        if (audioSource && audioSource.isPlaying && audioSource.clip == footstepClip)
+        if (footstepSource && footstepSource.isPlaying)
         {
-            audioSource.Stop();
+            footstepSource.Stop();
         }
     }
 }
