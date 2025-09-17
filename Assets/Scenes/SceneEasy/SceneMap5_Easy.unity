@@ -8712,7 +8712,7 @@ MonoBehaviour:
   skillSelectPanel: {fileID: 1789940931}
   selectedSkillIcon: {fileID: 912725330}
   ultimateButton: {fileID: 912725327}
-  hpBoss: {fileID: 0}
+  hpBoss: {fileID: 2014041742}
   settingsPanel: {fileID: 884075816}
   countdownText: {fileID: 71543907}
   ultimateCooldown: 20

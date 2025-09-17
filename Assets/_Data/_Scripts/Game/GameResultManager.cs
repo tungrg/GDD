@@ -119,6 +119,8 @@ public class GameResultManager : MonoBehaviour
     /// <param name="data">Dữ liệu kết quả để hiển thị</param>
     public void ShowWinPanel(GameResultData data)
     {
+        if (hpBossPanel == null) return;
+        hpBossPanel.SetActive(false);
         if (winPanel == null) return;
 
         // Kích hoạt win panel

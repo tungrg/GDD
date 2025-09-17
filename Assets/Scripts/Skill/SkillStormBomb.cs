@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 [CreateAssetMenu(fileName = "SkillStormBomb", menuName = "Game/BossSkill/SkillStormBomb")]
 public class SkillStormBomb : SkillBoss
@@ -12,6 +13,12 @@ public class SkillStormBomb : SkillBoss
     public float height = 10f;
     public float minDistance = 1.5f;
 
+    [Header("Timing")]
+    public float markerDelay = 0.5f;
+
+    [Header("Bomb Fall")]
+    public float fallSpeed = 20f;
+
     protected override void Activate(BossManager boss)
     {
         if (boss.player == null || bombPrefab == null) return;
@@ -19,12 +26,9 @@ public class SkillStormBomb : SkillBoss
         Transform player = boss.player;
         List<Vector3> usedPositions = new List<Vector3>();
 
-        for (int i = 0; i < bombCount; i++) // tạo 5 bomb
+        for (int i = 0; i < bombCount; i++)
         {
-            // vị trí random quanh player
             Vector3 groundPos;
-
-            // Lặp cho đến khi tìm được vị trí hợp lệ
             int tries = 0;
             do
             {
@@ -36,23 +40,35 @@ public class SkillStormBomb : SkillBoss
 
             usedPositions.Add(groundPos);
 
-            Vector3 spawnPos = groundPos + Vector3.up * height;
-
-            // spawn marker trên mặt đất
             GameObject marker = null;
             if (markerPrefab != null)
                 marker = Instantiate(markerPrefab, groundPos, Quaternion.identity);
 
-            // spawn bomb trên cao
-            GameObject bomb = Instantiate(bombPrefab, spawnPos, Quaternion.identity);
-
-            // truyền marker vào bomb
-            Bomb bombScript = bomb.GetComponent<Bomb>();
-            if (bombScript != null && marker != null)
-                bombScript.SetMarker(marker);
-
+            boss.StartCoroutine(SpawnBombDelayed(groundPos, marker));
         }
     }
+
+    private IEnumerator SpawnBombDelayed(Vector3 groundPos, GameObject marker)
+    {
+
+        yield return new WaitForSeconds(markerDelay);
+
+        Vector3 spawnPos = groundPos + Vector3.up * height;
+
+        GameObject bomb = Instantiate(bombPrefab, spawnPos, Quaternion.identity);
+
+        Rigidbody rb = bomb.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.useGravity = true;
+            rb.linearVelocity = Vector3.down * fallSpeed;
+        }
+
+        Bomb bombScript = bomb.GetComponent<Bomb>();
+        if (bombScript != null && marker != null)
+            bombScript.SetMarker(marker);
+    }
+
     private bool IsTooClose(Vector3 pos, List<Vector3> usedPositions)
     {
         foreach (var used in usedPositions)

@@ -2478,7 +2478,7 @@ MonoBehaviour:
   skillSelectPanel: {fileID: 1242453998}
   selectedSkillIcon: {fileID: 1848185343}
   ultimateButton: {fileID: 1848185345}
-  hpBoss: {fileID: 0}
+  hpBoss: {fileID: 1782681192}
   settingsPanel: {fileID: 2068737486}
   countdownText: {fileID: 465214610}
   ultimateCooldown: 20
@@ -13470,10 +13470,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 882672790}
     m_Modifications:
-    - target: {fileID: 5307326102620078815, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 9.5
-      objectReference: {fileID: 0}
     - target: {fileID: 1690045051103409652, guid: 309006272775a284cb304091d91f6697, type: 3}
       propertyPath: m_Name
       value: stone winter small 4
@@ -13513,6 +13509,10 @@ PrefabInstance:
     - target: {fileID: 2035609068271087438, guid: 309006272775a284cb304091d91f6697, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5307326102620078815, guid: 455db9c7bcf874a41be6bdeb8a290459, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
