@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Storm Bomb
   cooldown: 10
+  sfx: {fileID: 8300000, guid: 10ea42bdc5298904f9f32b1cf7f37f7d, type: 3}
   bombPrefab: {fileID: 7105956024688538642, guid: 0ef97c279d8cebe4893a015f3281be68, type: 3}
   markerPrefab: {fileID: 5184371879822970307, guid: e759bd1640c0484479bcc3550057dd0f, type: 3}
   bombCount: 10

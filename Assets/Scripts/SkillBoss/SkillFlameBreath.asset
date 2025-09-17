@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: 
   cooldown: 8
+  sfx: {fileID: 8300000, guid: 15a9851e15da2c94aab39f2d57ccb0d3, type: 3}
   radius: 40
   angle: 30
   damage: 1

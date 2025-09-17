@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: 
   cooldown: 5
+  sfx: {fileID: 0}
   molotovPrefab: {fileID: 6181021834569158936, guid: 8bb099b555da4ff48adf06b19b367479, type: 3}
+  markerPrefab: {fileID: 6176073620493924811, guid: 389d14c460c9e8a4787133f51df7310a, type: 3}
   molotovCount: 1
   throwHeight: 5
   fallDuration: 1.5
   spawnOffset: 1
   rotationSpeed: -720
+  preMarkerDelay: 0.5

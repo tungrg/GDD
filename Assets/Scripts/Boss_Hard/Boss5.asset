@@ -18,7 +18,7 @@ MonoBehaviour:
   originalSpeed: 13
   originalDamageAtk: 35
   originalSpeedAtk: 2
-  speed: 5
+  speed: 13
   skills:
   - {fileID: 11400000, guid: 0bb3b690a996b8340ad8c971a42ddae2, type: 2}
   - {fileID: 11400000, guid: dbd3c16bf8dc5ba4aa47a692b3fb5ee3, type: 2}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: 
   cooldown: 10
+  sfx: {fileID: 8300000, guid: 10ea42bdc5298904f9f32b1cf7f37f7d, type: 3}
   bombPrefab: {fileID: 2861767050390951901, guid: 1cd6b154a40c9114c82ddf93cb6e4eda, type: 3}
   markerPrefab: {fileID: 6176073620493924811, guid: 389d14c460c9e8a4787133f51df7310a, type: 3}
   bombCount: 1

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: 
   cooldown: 10
+  sfx: {fileID: 8300000, guid: 9543fb3da30d3304fbd5b34e242110d6, type: 3}
   stealthDuration: 5
   bulletPrefab: {fileID: 4220850484020903645, guid: 7c8db6c6f53e17a428899b025123a2a1, type: 3}
   bulletCount: 30
