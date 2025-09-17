@@ -29344,7 +29344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 5
-  damage: 15
+  damage: 5
   explosionRadius: 2
   explosionVFX: {fileID: 5516973818867784913}
   fireAreaPrefab: {fileID: 5223373965022792949, guid: 8e83120978deabe44aa83c0f16717f21, type: 3}
