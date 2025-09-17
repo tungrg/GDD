@@ -35,6 +35,9 @@ public class BossManager : BossBase
     public GameObject healEffectPrefab;
     public ParticleSystem SkillRevengeShotVFX;
 
+    [Header("Sound")]
+    public AudioSource audioSource;
+
     [Header("Cameras")]
     public Camera mainCamera;
     public Camera bossCamera;
@@ -67,6 +70,10 @@ public class BossManager : BossBase
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = bossData.speed;
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     private void Start()
