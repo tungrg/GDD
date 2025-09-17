@@ -32,6 +32,10 @@ public class JoystickGun : MonoBehaviour
     public bool isUltimateMode = false;
     public UltimateType currentUltimate = UltimateType.None;
 
+    [Header("Sensitivity Settings")]
+    public float aimThreshold = 0.2f;    
+    public float releaseDelay = 0.15f;   
+
     private Vector3 lastDirection;
     private bool isAiming = false;
     private bool cancelPressed = false;
@@ -65,9 +69,8 @@ public class JoystickGun : MonoBehaviour
         float v = joystickGun.Vertical;
         Vector3 dir = new Vector3(h, 0, v);
 
-        if (dir.magnitude > 0.1f)
+        if (dir.magnitude > aimThreshold)
         {
-            // Đang kéo joystick
             isAiming = true;
             lastDirection = dir.normalized;
 
@@ -82,50 +85,12 @@ public class JoystickGun : MonoBehaviour
         }
         else if (isAiming)
         {
-            // Nhả joystick
-            if (!cancelPressed && Time.time >= nextFireTime)
-            {
-                if (isUltimateMode)
-                {
-                    switch (currentUltimate)
-                    {
-                        case UltimateType.MagnetStorm:
-                            MagnetStormSkill ms = FindAnyObjectByType<MagnetStormSkill>();
-                            if (ms != null) ms.Cast(lastDirection);
-                            SetUltimateMode(false, UltimateType.None);
-                            FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
-                            break;
-
-                        case UltimateType.RailgunBurst:
-                            RailgunBurstSkill rb = FindAnyObjectByType<RailgunBurstSkill>();
-                            if (rb != null) rb.Cast(firePoint.position, lastDirection);
-                            SetUltimateMode(false, UltimateType.None);
-                            FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
-                            break;
-                    }
-                }
-                else
-                {
-                    Shoot();
-                }
-
-                if (lastDirection.sqrMagnitude > 0.01f)
-                {
-                    Quaternion targetRot = Quaternion.LookRotation(lastDirection);
-                    player.rotation = targetRot;
-                }
-
-                nextFireTime = Time.time + stats.currentFireCooldown;
-                if (joystickCanvas != null) joystickCanvas.alpha = 0.3f;
-                if (cdText != null) cdText.gameObject.SetActive(true);
-            }
-
+            StartCoroutine(HandleRelease());
             isAiming = false;
             cancelPressed = false;
             aimLine.gameObject.SetActive(false);
             cancelZone.gameObject.SetActive(false);
         }
-
 
         if (cdText != null && cdText.gameObject.activeSelf)
         {
@@ -137,6 +102,45 @@ public class JoystickGun : MonoBehaviour
                 cdText.gameObject.SetActive(false);
                 if (joystickCanvas != null) joystickCanvas.alpha = 1f;
             }
+        }
+    }
+
+    IEnumerator HandleRelease()
+    {
+        yield return new WaitForSeconds(releaseDelay);
+
+        if (!cancelPressed && Time.time >= nextFireTime && lastDirection.sqrMagnitude > 0.01f)
+        {
+            if (isUltimateMode)
+            {
+                switch (currentUltimate)
+                {
+                    case UltimateType.MagnetStorm:
+                        MagnetStormSkill ms = FindAnyObjectByType<MagnetStormSkill>();
+                        if (ms != null) ms.Cast(lastDirection);
+                        SetUltimateMode(false, UltimateType.None);
+                        FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
+                        break;
+
+                    case UltimateType.RailgunBurst:
+                        RailgunBurstSkill rb = FindAnyObjectByType<RailgunBurstSkill>();
+                        if (rb != null) rb.Cast(firePoint.position, lastDirection);
+                        SetUltimateMode(false, UltimateType.None);
+                        FindAnyObjectByType<UltimateManager>()?.OnSkillEnd();
+                        break;
+                }
+            }
+            else
+            {
+                Shoot();
+            }
+
+            Quaternion targetRot = Quaternion.LookRotation(lastDirection);
+            player.rotation = targetRot;
+
+            nextFireTime = Time.time + stats.currentFireCooldown;
+            if (joystickCanvas != null) joystickCanvas.alpha = 0.3f;
+            if (cdText != null) cdText.gameObject.SetActive(true);
         }
     }
 

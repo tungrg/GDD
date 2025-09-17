@@ -9,10 +9,19 @@ public class IronArmorSkill : MonoBehaviour
     public float speedBonus = 2f;
 
     [Header("Visual Effect")]
-    public GameObject ironArmorPrefab;   
-    private GameObject activeEffect;    
+    public GameObject ironArmorPrefab;
+    private GameObject activeEffect;
+
+    [Header("Audio")]
+    public AudioClip activateSound;
+    private AudioSource audioSource;
 
     private PlayerStats player;
+
+    void Start()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
 
     public void Activate(UltimateManager manager)
     {
@@ -21,30 +30,24 @@ public class IronArmorSkill : MonoBehaviour
 
         if (player != null)
             StartCoroutine(IronArmorRoutine(manager));
-        else
-            Debug.LogError("Không tìm thấy PlayerStats trên scene!");
     }
 
     private IEnumerator IronArmorRoutine(UltimateManager manager)
     {
-        Debug.Log("Iron Armor kích hoạt!");
+        if (activateSound) audioSource.PlayOneShot(activateSound);
 
         player.currentArmor += armorBonus;
         player.currentMoveSpeed += speedBonus;
         player.isImmuneCC = true;
 
         if (ironArmorPrefab != null && activeEffect == null)
-        {
             activeEffect = Instantiate(ironArmorPrefab, player.transform.position, Quaternion.identity, player.transform);
-        }
 
         yield return new WaitForSeconds(duration);
 
         player.currentArmor -= armorBonus;
         player.currentMoveSpeed -= speedBonus;
         player.isImmuneCC = false;
-
-        Debug.Log("Iron Armor hết hiệu lực!");
 
         if (activeEffect != null)
         {
@@ -53,6 +56,6 @@ public class IronArmorSkill : MonoBehaviour
         }
 
         if (manager != null)
-            manager.OnSkillEnd(20f);
+            manager.OnSkillEnd(duration);
     }
 }

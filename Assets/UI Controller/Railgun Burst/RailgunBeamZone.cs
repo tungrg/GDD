@@ -10,7 +10,7 @@ public class RailgunBeamZone : MonoBehaviour
     private float length;
     private Gradient color;
 
-    private Transform firePoint; 
+    private Transform firePoint;
     private Vector3 dir;
 
     [Header("Beam Settings")]
@@ -23,6 +23,14 @@ public class RailgunBeamZone : MonoBehaviour
     private GameObject beamEffectInstance;
     private VolumetricLineBehavior vLine;
 
+    [Header("Visual Settings")]
+    [Range(0.05f, 1f)]
+    public float visualWidthScale = 0.3f;
+
+    [Header("Audio Settings")]
+    public AudioClip fireSound;
+    private AudioSource audioSource;
+
     public void Init(Transform firePointTransform, Vector3 direction, float dmg, float dur, float len, Gradient beamColor)
     {
         firePoint = firePointTransform;
@@ -32,6 +40,13 @@ public class RailgunBeamZone : MonoBehaviour
         length = len;
         color = beamColor;
 
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f;
+        audioSource.playOnAwake = false;
+
+        if (fireSound != null)
+            audioSource.PlayOneShot(fireSound);
+
         if (beamEffectPrefab != null)
         {
             beamEffectInstance = Instantiate(beamEffectPrefab, firePoint.position, Quaternion.LookRotation(dir));
@@ -40,6 +55,7 @@ public class RailgunBeamZone : MonoBehaviour
             {
                 vLine.StartPos = Vector3.zero;
                 vLine.EndPos = new Vector3(0, 0, length);
+                vLine.LineWidth *= visualWidthScale;
             }
         }
 

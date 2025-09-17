@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class RailgunBurstSkill : MonoBehaviour
 {
@@ -8,12 +8,16 @@ public class RailgunBurstSkill : MonoBehaviour
     public float beamLength = 30f;
     public float beamDuration = 1f;
     public float recoilForce = 15f;
+    public float chargeTime = 1f; 
 
     [Header("References")]
     public GameObject beamPrefab;
+    public GameObject chargePrefab; 
     public Gradient beamColor;
     public Rigidbody playerRb;
     private PlayerStats playerStats;
+
+    private Transform firePoint;
 
     void Start()
     {
@@ -22,14 +26,33 @@ public class RailgunBurstSkill : MonoBehaviour
 
         if (playerRb == null && playerStats != null)
             playerRb = playerStats.GetComponent<Rigidbody>();
+
+        if (playerStats != null)
+            firePoint = playerStats.transform.Find("FirePoint");
     }
 
     /// <summary>
     /// Gọi khi bắn Railgun Burst.
-    /// Không còn cooldown nội bộ, mỗi lần gọi sẽ luôn bắn.
+    /// Sẽ tạo hiệu ứng tụ năng lượng trước khi bắn beam.
     /// </summary>
     public void Cast(Vector3 startPos, Vector3 dir)
     {
+        StartCoroutine(ChargeAndFire(startPos, dir));
+    }
+
+    private IEnumerator ChargeAndFire(Vector3 startPos, Vector3 dir)
+    {
+        GameObject chargeEffect = null;
+        if (chargePrefab != null && firePoint != null)
+        {
+            chargeEffect = Instantiate(chargePrefab, firePoint.position, firePoint.rotation, firePoint);
+        }
+
+        yield return new WaitForSeconds(chargeTime);
+
+        if (chargeEffect != null)
+            Destroy(chargeEffect);
+
         StartCoroutine(FireBeam(startPos, dir));
 
         if (playerRb != null)
@@ -46,9 +69,9 @@ public class RailgunBurstSkill : MonoBehaviour
     {
         GameObject beam = Instantiate(beamPrefab, startPos, Quaternion.identity);
         RailgunBeamZone zone = beam.GetComponent<RailgunBeamZone>();
-        if (zone != null)
+        if (zone != null && firePoint != null)
         {
-            zone.Init(playerStats.transform.Find("FirePoint"), dir, damage, beamDuration, beamLength, beamColor);
+            zone.Init(firePoint, dir, damage, beamDuration, beamLength, beamColor);
         }
 
         yield return null;
