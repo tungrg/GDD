@@ -29,12 +29,13 @@ public class Bomb : MonoBehaviour
             }
             if (marker != null) Destroy(marker);
             Destroy(gameObject);
-            //Explode();
+            Explode();
         }
         else
         {
             if (marker != null) Destroy(marker);
             Destroy(gameObject);
+            Explode();
         }
     }
 

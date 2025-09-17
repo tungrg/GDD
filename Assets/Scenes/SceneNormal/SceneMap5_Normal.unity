@@ -14653,7 +14653,7 @@ MonoBehaviour:
   skillSelectPanel: {fileID: 1527212046}
   selectedSkillIcon: {fileID: 1717829014}
   ultimateButton: {fileID: 1717829011}
-  hpBoss: {fileID: 0}
+  hpBoss: {fileID: 259556701}
   settingsPanel: {fileID: 1627870497}
   countdownText: {fileID: 1990898452}
   ultimateCooldown: 20

@@ -65,7 +65,7 @@ public class UltimateManager : MonoBehaviour
 
         // Load từ SaveLoadManager
         SaveLoadManager.LoadSkills(skills);
-        
+
 
         Debug.Log("UltimateManager: Skill data loaded successfully!");
     }
@@ -100,10 +100,14 @@ public class UltimateManager : MonoBehaviour
             Debug.LogWarning("UltimateManager: JoystickGun not found!");
 
         defaultIcon = selectedSkillIcon.sprite;
+        if (hpBoss != null)
+            hpBoss.SetActive(false);
     }
 
     public void SelectSkill(int index)
     {
+
+
         if (index < 0 || index >= skills.Length) return;
 
         // Kiểm tra skill đã unlock chưa
@@ -119,9 +123,6 @@ public class UltimateManager : MonoBehaviour
         ultimateButton.interactable = true;
         skillSelectPanel.SetActive(false);
         Debug.Log("Đã chọn kỹ năng: " + currentSkill.skillName);
-
-        if (hpBoss != null)
-            hpBoss.SetActive(true);
 
         StartCoroutine(StartBattleWithCountdown());
     }
@@ -150,7 +151,9 @@ public class UltimateManager : MonoBehaviour
         yield return StartCoroutine(ShowTextWithEffect("START!"));
 
         countdownText.gameObject.SetActive(false);
-        
+        if (hpBoss != null)
+            hpBoss.SetActive(true);
+
         // Re-enable player shooting after countdown
         if (joystick != null)
         {
@@ -231,7 +234,7 @@ public class UltimateManager : MonoBehaviour
                 break;
 
             case "Railgun Burst":
-            joystick.SetUltimateMode(true, JoystickGun.UltimateType.RailgunBurst);
+                joystick.SetUltimateMode(true, JoystickGun.UltimateType.RailgunBurst);
                 break;
 
             case "Nitro Boots":
@@ -294,11 +297,11 @@ public class UltimateManager : MonoBehaviour
     {
         Debug.Log("UltimateManager: Saving skill data...");
         SaveLoadManager.SaveSkills(skills);
-        
+
         // *** THÊM: Save cả game progress khi save skill ***
         var currency = Resources.Load<GameCurrency>("GameCurrency");
         var progressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-        
+
         if (currency != null && progressManager != null)
         {
             Debug.Log("UltimateManager: Also saving game progress...");
@@ -315,7 +318,7 @@ public class UltimateManager : MonoBehaviour
         {
             skills[index].unlock = true;
             Debug.Log("Skill unlocked: " + skills[index].skillName);
-            
+
             // Auto save skill data và game progress
             SaveSkillData();
         }

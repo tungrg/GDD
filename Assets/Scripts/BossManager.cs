@@ -306,7 +306,9 @@ public class BossManager : BossBase
         if (animator != null)
             animator.SetTrigger("die");
 
-        SwitchToBossCamera();
+        // 🔥 Đợi 0.5s rồi mới đổi camera
+        StartCoroutine(SwitchToBossCameraDelayed(0.5f));
+
         StartCoroutine(PlayDeathSequence());
     }
 
@@ -360,6 +362,11 @@ public class BossManager : BossBase
         }
 
     }
+    private IEnumerator SwitchToBossCameraDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SwitchToBossCamera();
+    }
     public void SwitchToBossCamera()
     {
         if (mainCamera != null) mainCamera.gameObject.SetActive(false);
@@ -373,16 +380,6 @@ public class BossManager : BossBase
         if (bossSkillCamera != null) bossSkillCamera.gameObject.SetActive(true);
     }
 
-
-
-    // private IEnumerator ShowUIAfterDelay()
-    // {
-    //     yield return new WaitForSeconds(1.5f);
-
-    //     uiPanel.SetActive(true);
-
-    //     Time.timeScale = 0;
-    // }
     public void Heal(float amount)
     {
         CurrentHealth = Mathf.Min(CurrentHealth + amount, Data.health);
