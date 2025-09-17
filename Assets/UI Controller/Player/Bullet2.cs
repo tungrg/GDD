@@ -10,8 +10,17 @@ public class Bullet2 : MonoBehaviour
     public GameObject hitEnemyEffectPrefab;
     public GameObject hitMapEffectPrefab;
 
+    [Header("Sounds")]
+    public AudioClip spawnSound;   
+    public AudioClip hitSound;    
+
     void Start()
     {
+        if (spawnSound != null)
+        {
+            AudioSource.PlayClipAtPoint(spawnSound, transform.position);
+        }
+
         Destroy(gameObject, lifeTime);
     }
 
@@ -47,8 +56,14 @@ public class Bullet2 : MonoBehaviour
             ManaPlayer playerMana = FindFirstObjectByType<ManaPlayer>();
             if (playerMana != null)
             {
-                playerMana.AddMana(10f);
+                playerMana.AddMana(20f);
             }
+
+            if (hitSound != null)
+            {
+                AudioSource.PlayClipAtPoint(hitSound, hitPos);
+            }
+
             Destroy(gameObject);
         }
         else if (collision.CompareTag("Map"))
@@ -59,6 +74,11 @@ public class Bullet2 : MonoBehaviour
             {
                 GameObject effect = Instantiate(hitMapEffectPrefab, hitPos, Quaternion.identity);
                 Destroy(effect, 1f);
+            }
+
+            if (hitSound != null)
+            {
+                AudioSource.PlayClipAtPoint(hitSound, hitPos);
             }
 
             Destroy(gameObject);

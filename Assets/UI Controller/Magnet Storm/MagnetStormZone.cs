@@ -16,10 +16,16 @@ public class MagnetStormZone : MonoBehaviour
     public float slowDuration = 3f;
     public float slowMultiplier = 0.5f;
 
+    [Header("Audio")]
+    public AudioSource zoneAudio;
+    public AudioSource tickAudio;
+
     private void Start()
     {
         Collider col = GetComponent<Collider>();
         if (col != null) col.isTrigger = true;
+
+        if (zoneAudio != null) zoneAudio.Play();
 
         StartCoroutine(ZoneEffect());
         Destroy(gameObject, duration);
@@ -56,6 +62,8 @@ public class MagnetStormZone : MonoBehaviour
                 }
             }
 
+            if (tickAudio != null) tickAudio.PlayOneShot(tickAudio.clip);
+
             yield return new WaitForSeconds(damageInterval);
         }
     }
@@ -86,7 +94,6 @@ public class MagnetStormZone : MonoBehaviour
             }
         }
     }
-
 
     private void OnDrawGizmosSelected()
     {

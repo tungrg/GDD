@@ -21,6 +21,13 @@ public class CombatDroneSkill : MonoBehaviour
     [Header("Explosion Settings")]
     public float explosionDamage = 10f;
     public float stunDuration = 2f;
+    public GameObject explosionPrefab;
+
+    [Header("Audio Settings")]
+    public AudioClip droneLoopSound;
+    public AudioClip explosionSound;
+    [Range(0f, 2f)] public float explosionVolume = 1.2f;
+    private AudioSource audioSource;
 
     private GameObject droneInstance;
     private PlayerStats playerStats;
@@ -50,6 +57,11 @@ public class CombatDroneSkill : MonoBehaviour
             Transform fp = droneInstance.transform.Find("FirePoint");
             if (fp != null) firePoint = fp;
         }
+
+        audioSource = droneInstance.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f;
+        audioSource.loop = true;
+        if (droneLoopSound) { audioSource.clip = droneLoopSound; audioSource.Play(); }
 
         StartCoroutine(DroneLifeCycle());
     }
@@ -113,6 +125,8 @@ public class CombatDroneSkill : MonoBehaviour
         BossManager boss = FindAnyObjectByType<BossManager>();
         if (boss == null) { Destroy(drone); yield break; }
 
+        if (audioSource) audioSource.Stop();
+
         Vector3 startPos = drone.transform.position;
         Vector3 targetPos = boss.transform.position;
         float t = 0;
@@ -125,6 +139,13 @@ public class CombatDroneSkill : MonoBehaviour
             yield return null;
         }
 
+        if (explosionPrefab)
+        {
+            GameObject fx = Instantiate(explosionPrefab, drone.transform.position, Quaternion.identity);
+            Destroy(fx, 3f); 
+        }
+        if (explosionSound) AudioSource.PlayClipAtPoint(explosionSound, drone.transform.position, explosionVolume);
+
         boss.TakeDamage(explosionDamage);
         StartCoroutine(StunBoss(boss, stunDuration));
         Destroy(drone);
@@ -135,14 +156,9 @@ public class CombatDroneSkill : MonoBehaviour
         var agent = boss.GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (agent != null)
         {
-            float originalSpeed = agent.speed;
             agent.isStopped = true;
-            agent.speed = 0f;
-
             yield return new WaitForSeconds(stunDuration);
-
-            agent.isStopped = false;
-            agent.speed = originalSpeed;
+            agent.isStopped = false; 
         }
     }
 }
