@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: 
   cooldown: 25
+  sfx: {fileID: 8300000, guid: 5c56acedf6064684796e760082ac1d24, type: 3}
   trainPrefab: {fileID: 3744547650054197815, guid: 7d4b513f16e362f4f98179279aff2108, type: 3}
   trainSpeed: 40
   damage: 30

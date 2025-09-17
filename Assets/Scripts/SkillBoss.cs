@@ -6,6 +6,8 @@ public abstract class SkillBoss : ScriptableObject
 {
     public string skillName;
     public float cooldown = 5f;
+    [Header("Audio Settings")]
+    public AudioClip sfx;
 
     public virtual void StartSkill(BossManager boss)
     {
@@ -23,6 +25,7 @@ public abstract class SkillBoss : ScriptableObject
             if (GameManager.Instance != null && GameManager.Instance.CanUseSkill())
             {
                 Activate(boss);
+                PlaySound(boss);
             }
         }
     }
@@ -33,6 +36,15 @@ public abstract class SkillBoss : ScriptableObject
         if (GameManager.Instance != null && GameManager.Instance.CanUseSkill())
         {
             Activate(boss);
+            PlaySound(boss);
         }
     }
+    protected void PlaySound(BossManager boss)
+    {
+        if (sfx != null && boss != null && boss.audioSource != null)
+        {
+            boss.audioSource.PlayOneShot(sfx);
+        }
+    }
+
 }
