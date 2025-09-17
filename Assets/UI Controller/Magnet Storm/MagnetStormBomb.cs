@@ -14,7 +14,6 @@ public class MagnetStormBomb : MonoBehaviour
 
     private void Update()
     {
-        
         if (!hasSpawnedZone && !isFallingToEnemy)
         {
             RaycastHit hit;
@@ -23,7 +22,12 @@ public class MagnetStormBomb : MonoBehaviour
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     isFallingToEnemy = true;
-                    targetPos = hit.point;
+
+                    RaycastHit groundHit;
+                    if (Physics.Raycast(hit.point + Vector3.up * 2f, Vector3.down, out groundHit, scanDistance))
+                        targetPos = groundHit.point;
+                    else
+                        targetPos = hit.point;
                 }
             }
         }
@@ -33,9 +37,7 @@ public class MagnetStormBomb : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, targetPos, fallSpeed * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, targetPos) < 0.2f)
-            {
                 SpawnZone();
-            }
         }
     }
 
@@ -55,12 +57,10 @@ public class MagnetStormBomb : MonoBehaviour
             Instantiate(zonePrefab, transform.position, Quaternion.identity);
 
         Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
-            rb.isKinematic = true;
+        if (rb != null) rb.isKinematic = true;
 
         Collider col = GetComponent<Collider>();
-        if (col != null)
-            col.enabled = false;
+        if (col != null) col.enabled = false;
 
         Destroy(gameObject, destroyDelay);
     }

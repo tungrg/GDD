@@ -1947,8 +1947,9 @@ MonoBehaviour:
   dashDistance: 5
   dashDuration: 0.2
   dashCooldown: 3
+  dashEffectPrefab: {fileID: 5318118474938795680, guid: 69d8f05fda8421849a84b27b8c0d773d, type: 3}
   footstepClip: {fileID: 8300000, guid: 82f1a2259b77c534cac366c8999b7f00, type: 3}
-  dashClip: {fileID: 8300000, guid: aa1b0922b627f4d4393ef792cbfd3bf3, type: 3}
+  dashClip: {fileID: 8300000, guid: b500680ec1216174e82a3cfbdf47da10, type: 3}
   animator: {fileID: 0}
 --- !u!54 &462249545640525471
 Rigidbody:
@@ -2190,10 +2191,10 @@ MonoBehaviour:
   shootInterval: 2
   explosionDamage: 10
   stunDuration: 5
-  explosionPrefab: {fileID: 7972777690131881587, guid: d75c7d39629566443a275476afefe64f, type: 3}
+  explosionPrefab: {fileID: 2433282508537954060, guid: 513525a25b16ab842b39d6f1d77de303, type: 3}
   droneLoopSound: {fileID: 8300000, guid: 4deb3bc92a16ea841927b90862aa9ef6, type: 3}
   explosionSound: {fileID: 8300000, guid: e92f0224aff07ea4789851c835237843, type: 3}
-  explosionVolume: 1.2
+  explosionVolume: 1.16
 --- !u!114 &8276077860600766954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2314,8 +2315,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: aa1b0922b627f4d4393ef792cbfd3bf3, type: 3}
-  m_Resource: {fileID: 8300000, guid: aa1b0922b627f4d4393ef792cbfd3bf3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b500680ec1216174e82a3cfbdf47da10, type: 3}
+  m_Resource: {fileID: 8300000, guid: b500680ec1216174e82a3cfbdf47da10, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
