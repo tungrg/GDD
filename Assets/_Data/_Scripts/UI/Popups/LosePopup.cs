@@ -213,6 +213,12 @@ public class LosePopup : MonoBehaviour
     private void OnMenuClicked()
     {
         // Load level select scene
-        SceneManager.LoadScene("Level");
+        if(DifficultySelector.SelectedDifficulty == DifficultySelector.Difficulty.Easy)
+            SceneManager.LoadScene("LevelSelectEasy");
+        else if(DifficultySelector.SelectedDifficulty == DifficultySelector.Difficulty.Basic)
+            SceneManager.LoadScene("LevelSelectBasic");
+        else if(DifficultySelector.SelectedDifficulty == DifficultySelector.Difficulty.Hard)
+            SceneManager.LoadScene("LevelSelectHard");
+       
     }
 }
