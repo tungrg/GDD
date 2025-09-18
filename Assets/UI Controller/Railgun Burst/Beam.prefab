@@ -53,6 +53,7 @@ MonoBehaviour:
   beamEffectPrefab: {fileID: 122648, guid: 11530f2b0a0cd2442949827ecbb622f2, type: 3}
   visualWidthScale: 0.501
   fireSound: {fileID: 8300000, guid: 01469645d85648a4998071cc1a95f80b, type: 3}
+  railgunPrefab: {fileID: 8063502819127963191, guid: 470496eacbf2a5e44a28cf8f8528cabe, type: 3}
 --- !u!82 &-5420739457419930009
 AudioSource:
   m_ObjectHideFlags: 0
