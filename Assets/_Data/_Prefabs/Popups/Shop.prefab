@@ -115,7 +115,7 @@ MonoBehaviour:
     buttonBuy: {fileID: 348561555637110836}
     buyButton: {fileID: 2613925519749655348}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
-  levelProgressManager: {fileID: 0}
+  levelProgressManager: {fileID: 11400000, guid: eb5865640076fda478be36aed7419e1b, type: 2}
   goldDisplay: {fileID: 0}
 --- !u!1 &566178647950588858
 GameObject:
@@ -3680,7 +3680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_text
-      value: "B\u1EAFn ra tia n\u0103ng l\u01B0\u1EE3ng xuy\xEAn th\u1EA5u"
+      value: Shoots a penetrating energy beam
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_fontSize
@@ -4002,7 +4002,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_text
-      value: "K\xEDch ho\u1EA1t l\xE1 ch\u1EAFn n\u0103ng l\u01B0\u1EE3ng"
+      value: Energy Shield
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_fontSize
@@ -4254,7 +4254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_text
-      value: "B\u1EAFn ra \u0111\u1EA1n t\u1EEB tr\u01B0\u1EDDng"
+      value: Shoots magnetic bullets
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_fontSize
@@ -5148,7 +5148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_text
-      value: "T\u0103ng t\u1ED1c di chuy\u1EC3n"
+      value: Speed up your character
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_fontSize
@@ -5443,7 +5443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_text
-      value: "Tri\u1EC7u h\u1ED3i drone"
+      value: Summon drone helping you combat
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_fontSize
