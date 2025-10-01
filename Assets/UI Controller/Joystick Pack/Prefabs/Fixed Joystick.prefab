@@ -127,6 +127,8 @@ MonoBehaviour:
   railgunIcon: {fileID: 21300000, guid: 678fec91019c8804ca72c74d29ac5353, type: 3}
   isUltimateMode: 0
   currentUltimate: 0
+  aimThreshold: 0.2
+  releaseDelay: 0.15
 --- !u!225 &6517443592278235474
 CanvasGroup:
   m_ObjectHideFlags: 0
