@@ -13323,9 +13323,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e053c19e73fe654480a2e034f0992f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelData: {fileID: 11400000, guid: 57126fcf8bcb3c74ba998eb20a16dff3, type: 2}
+  currentLevelData: {fileID: 11400000, guid: d9fc8a9d04bd1ba489e40a624596c2fa, type: 2}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
-  levelProgressManager: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
+  levelProgressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
   healthSlider: {fileID: 0}
   healthText: {fileID: 0}
   scoreText: {fileID: 0}
@@ -18432,7 +18432,7 @@ MonoBehaviour:
   winPanel: {fileID: 853720890}
   losePanel: {fileID: 211188688}
   hpBossPanel: {fileID: 2014041742}
-  progressManager: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
+  progressManager: {fileID: 11400000, guid: 332d4318f8a70d040b3fbf7a0ac4c072, type: 2}
 --- !u!1 &8488871554908208600
 GameObject:
   m_ObjectHideFlags: 0

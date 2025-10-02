@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
@@ -23,12 +24,12 @@ public class SceneTransition : MonoBehaviour
         }
 
         if (!string.IsNullOrEmpty(sceneToLoad))
-            Transition.LoadLevel(sceneToLoad, duration, color);
+            SceneManager.LoadScene(sceneToLoad);
         else
             Debug.LogError("No scene assigned for this difficulty!");
     }
         public void GoHome()
     {
-        Transition.LoadLevel("Home", duration, color);
+        SceneManager.LoadScene("Home");
     }
 }

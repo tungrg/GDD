@@ -6831,8 +6831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c31af023cad76f42a11b3378a0e28c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseUiPanel: {fileID: 0}
-  modalQuit: {fileID: 0}
+  pauseUiPanel: {fileID: 6694387627499277101}
+  modalQuit: {fileID: 7593501274812928443}
 --- !u!4 &1974783108
 Transform:
   m_ObjectHideFlags: 0
@@ -9799,7 +9799,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1974783109}
         m_TargetAssemblyTypeName: Popup, Assembly-CSharp
         m_MethodName: SceneMenu
         m_Mode: 1
@@ -13976,7 +13976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e053c19e73fe654480a2e034f0992f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevelData: {fileID: 11400000, guid: 57126fcf8bcb3c74ba998eb20a16dff3, type: 2}
+  currentLevelData: {fileID: 11400000, guid: ad2fc423d6422dc4ba98aa1f20ddbf2d, type: 2}
   gameCurrency: {fileID: 11400000, guid: f4978befda2840f4fa74bfde93dfa481, type: 2}
   levelProgressManager: {fileID: 11400000, guid: b85ca953a74102d47b9131af3e5071a3, type: 2}
   healthSlider: {fileID: 0}
@@ -16669,7 +16669,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1974783107}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: PauseGame
         m_Mode: 1
@@ -18321,7 +18321,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1974783107}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: ResumeGame
         m_Mode: 1
