@@ -38,11 +38,29 @@ public class GameLevelManager : MonoBehaviour
     public LevelProgressManager ProgressManager => levelProgressManager;
 
     private bool levelCompleted = false; // Track if current level was finished
+    private bool progressLoaded = false; // NEW: track if load succeeded
+
+    private void EnsureResourcesLoaded()
+    {
+        if (gameCurrency == null)
+        {
+            gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
+            if (gameCurrency == null)
+                Debug.LogError("[GameLevelManager] GameCurrency not found in Resources");
+        }
+        if (levelProgressManager == null)
+        {
+            levelProgressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (levelProgressManager == null)
+                Debug.LogError("[GameLevelManager] LevelProgressManager not found in Resources");
+        }
+    }
 
     void Awake()
     {
         // Thiết lập singleton
         Instance = this;
+        EnsureResourcesLoaded(); // ensure refs before loading
 
         // Auto-load resources
         // InitializeResources();
@@ -105,12 +123,14 @@ public class GameLevelManager : MonoBehaviour
             
             // Reset session stats sau khi load
             gameCurrency.ResetSessionStats();
+            progressLoaded = true; // mark success
             
             Debug.Log("=== GAME PROGRESS LOADED ===");
         }
         else
         {
             Debug.LogError("Cannot load game progress - missing GameCurrency or LevelProgressManager!");
+            progressLoaded = false;
         }
     }
 
@@ -133,8 +153,15 @@ public class GameLevelManager : MonoBehaviour
             resultManager.SetProgressManager(levelProgressManager);
         }
         
-        // Create files but avoid overwriting level progress with empty runtime state
-        ForceSaveProgress(false); // gold only (level data skipped)
+        // Only write a file on first start if we actually loaded data
+        if (progressLoaded)
+        {
+            ForceSaveProgress(false); // gold only
+        }
+        else
+        {
+            Debug.Log("[GameLevelManager] Skipping initial save (no progress loaded)");
+        }
     }
     
     /// <summary>
@@ -212,8 +239,14 @@ public class GameLevelManager : MonoBehaviour
     /// </summary>
     public void ForceSaveProgress(bool includeLevelProgress = true)
     {
+        EnsureResourcesLoaded(); // safeguard
         if (gameCurrency != null && levelProgressManager != null)
         {
+            if (!progressLoaded)
+            {
+                Debug.LogWarning("[GameLevelManager] Skip save: progress not loaded yet (avoid overwriting existing file).");
+                return;
+            }
             Debug.Log($"=== FORCE SAVING PROGRESS (includeLevel={includeLevelProgress}) ===");
             GameSaveManager.SaveGameProgress(gameCurrency, levelProgressManager, includeLevelProgress);
             Debug.Log("=== PROGRESS SAVED ===");

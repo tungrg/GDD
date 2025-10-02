@@ -9,6 +9,7 @@ public class LevelProgressManager : ScriptableObject
     [SerializeField] private int maxUnlockedLevel = 1; // Level cao nhất đã mở (default = 1)
     
     public int MaxUnlockedLevel => maxUnlockedLevel;
+    public bool Initialized { get; private set; } = false; // NEW
     
     /// <summary>
     /// Kiểm tra xem level có được mở không
@@ -85,7 +86,7 @@ public class LevelProgressManager : ScriptableObject
                 levelData.LoadFromSaveData(progress.bestScore, progress.starsEarned, progress.claimedStarGold);
             }
         }
-        
+        Initialized = true; // mark loaded
         Debug.Log($"Progress manager loaded: Max level {maxLevel}, {levelProgresses.Count} level data entries");
         
         // Update UI

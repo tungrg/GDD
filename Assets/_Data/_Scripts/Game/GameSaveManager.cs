@@ -3,38 +3,33 @@ using System.IO;
 
 public static class GameSaveManager
 {
-    // Separate files for level progress per difficulty
-    private static string fileNameEasy = "GameProgressEasy.json";
-    private static string fileNameNormal = "GameProgressNormal.json";
-    private static string fileNameHard = "GameProgressHard.json";
+    // PlayerPrefs keys for level progress per difficulty
+    private static string keyEasy = "GameProgress_Easy";
+    private static string keyNormal = "GameProgress_Normal";
+    private static string keyHard = "GameProgress_Hard";
     
-    // Shared gold file across all difficulties
-    private static string goldFileName = "SharedGold.json";
-    
-    private static string pathEasy = Path.Combine(Application.persistentDataPath, fileNameEasy);
-    private static string pathNormal = Path.Combine(Application.persistentDataPath, fileNameNormal);
-    private static string pathHard = Path.Combine(Application.persistentDataPath, fileNameHard);
-    private static string goldPath = Path.Combine(Application.persistentDataPath, goldFileName);
+    // Shared gold key across all difficulties
+    private static string goldKey = "SharedGold";
 
     // NEW: Remember which difficulty's data is currently loaded in memory.
     private static DifficultySelector.Difficulty loadedDifficulty = DifficultySelector.Difficulty.Basic; // default fallback
 
-    // Helper to get path for a specific difficulty
-    private static string GetPathForDifficulty(DifficultySelector.Difficulty diff)
+    // Helper to get PlayerPrefs key for a specific difficulty
+    private static string GetKeyForDifficulty(DifficultySelector.Difficulty diff)
     {
         switch (diff)
         {
-            case DifficultySelector.Difficulty.Easy: return pathEasy;
-            case DifficultySelector.Difficulty.Basic: return pathNormal;
-            case DifficultySelector.Difficulty.Hard: return pathHard;
-            default: return pathNormal;
+            case DifficultySelector.Difficulty.Easy: return keyEasy;
+            case DifficultySelector.Difficulty.Basic: return keyNormal;
+            case DifficultySelector.Difficulty.Hard: return keyHard;
+            default: return keyNormal;
         }
     }
     
-    // Keep original for debug (now uses currently selected difficulty – NOT used for saving anymore)
-    private static string GetCurrentDifficultyPath()
+    // Keep original for debug (now uses currently selected difficulty)
+    private static string GetCurrentDifficultyKey()
     {
-        return GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
+        return GetKeyForDifficulty(DifficultySelector.SelectedDifficulty);
     }
 
     /// <summary>
@@ -83,7 +78,7 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Save shared gold data across all difficulties
+    /// Save shared gold data across all difficulties using PlayerPrefs
     /// </summary>
     private static void SaveSharedGold(GameCurrency currency)
     {
@@ -95,18 +90,24 @@ public static class GameSaveManager
         };
         
         string jsonData = JsonUtility.ToJson(goldData, true);
-        File.WriteAllText(goldPath, jsonData);
+        PlayerPrefs.SetString(goldKey, jsonData);
+        PlayerPrefs.Save(); // Force immediate write to disk
         
-        Debug.Log($"Shared gold saved: {currency.TotalGold}");
+        Debug.Log($"Shared gold saved to PlayerPrefs: {currency.TotalGold}");
     }
     
     /// <summary>
-    /// Save level progress for currently loaded difficulty (tracked separately)
+    /// Save level progress for currently loaded difficulty using PlayerPrefs
     /// </summary>
     private static void SaveLevelProgress(LevelProgressManager progressManager)
     {
+        if (progressManager == null || !progressManager.Initialized)
+        {
+            Debug.LogWarning("[GameSaveManager] Skip saving level progress: not initialized");
+            return;
+        }
         // Use the difficulty that was loaded into the progressManager
-        string currentPath = GetPathForDifficulty(loadedDifficulty);
+        string currentKey = GetKeyForDifficulty(loadedDifficulty);
         
         var levelData = new LevelProgressData
         {
@@ -131,9 +132,10 @@ public static class GameSaveManager
         }
         
         string jsonData = JsonUtility.ToJson(levelData, true);
-        File.WriteAllText(currentPath, jsonData);
+        PlayerPrefs.SetString(currentKey, jsonData);
+        PlayerPrefs.Save(); // Force immediate write to disk
         
-        Debug.Log($"Level progress saved for loaded difficulty {loadedDifficulty}: Max level {levelData.maxUnlockedLevel}");
+        Debug.Log($"Level progress saved to PlayerPrefs for difficulty {loadedDifficulty}: Max level {levelData.maxUnlockedLevel}");
     }
     
     /// <summary>
@@ -159,24 +161,24 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Load shared gold data
+    /// Load shared gold data from PlayerPrefs
     /// </summary>
     private static void LoadSharedGold(GameCurrency currency)
     {
-        if (File.Exists(goldPath))
+        if (PlayerPrefs.HasKey(goldKey))
         {
-            string jsonData = File.ReadAllText(goldPath);
+            string jsonData = PlayerPrefs.GetString(goldKey);
             var goldData = JsonUtility.FromJson<SharedGoldData>(jsonData);
             
             if (goldData != null && currency != null)
             {
                 currency.LoadFromSaveData(goldData.totalGold, goldData.goldEarnedThisSession, goldData.lastGoldSource);
-                Debug.Log($"Shared gold loaded: {goldData.totalGold}");
+                Debug.Log($"Shared gold loaded from PlayerPrefs: {goldData.totalGold}");
             }
         }
         else
         {
-            Debug.Log("No shared gold file found, using default");
+            Debug.Log("No shared gold data found in PlayerPrefs, using default");
             if (currency != null)
             {
                 currency.LoadFromSaveData(0, 0, "New game");
@@ -185,26 +187,26 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Load level progress for loadedDifficulty
+    /// Load level progress for loadedDifficulty from PlayerPrefs
     /// </summary>
     private static void LoadLevelProgress(LevelProgressManager progressManager)
     {
-        string currentPath = GetPathForDifficulty(loadedDifficulty);
+        string currentKey = GetKeyForDifficulty(loadedDifficulty);
         
-        if (File.Exists(currentPath))
+        if (PlayerPrefs.HasKey(currentKey))
         {
-            string jsonData = File.ReadAllText(currentPath);
+            string jsonData = PlayerPrefs.GetString(currentKey);
             var levelData = JsonUtility.FromJson<LevelProgressData>(jsonData);
             
             if (levelData != null && progressManager != null)
             {
                 progressManager.LoadFromSaveData(levelData.maxUnlockedLevel, levelData.levelProgresses);
-                Debug.Log($"Level progress loaded for {loadedDifficulty}: Max level {levelData.maxUnlockedLevel}");
+                Debug.Log($"Level progress loaded from PlayerPrefs for {loadedDifficulty}: Max level {levelData.maxUnlockedLevel}");
             }
         }
         else
         {
-            Debug.Log($"No level progress file found for {loadedDifficulty}, using default");
+            Debug.Log($"No level progress data found in PlayerPrefs for {loadedDifficulty}, using default");
             if (progressManager != null)
             {
                 progressManager.LoadFromSaveData(1, new System.Collections.Generic.List<GameProgressData.LevelProgressInfo>());
@@ -233,29 +235,31 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Reset toàn bộ game progress
+    /// Reset toàn bộ game progress from PlayerPrefs
     /// </summary>
     public static void ResetGameProgress()
     {
         try
         {
-            // Delete shared gold file
-            if (File.Exists(goldPath))
+            // Delete shared gold data
+            if (PlayerPrefs.HasKey(goldKey))
             {
-                File.Delete(goldPath);
-                Debug.Log("Shared gold file deleted");
+                PlayerPrefs.DeleteKey(goldKey);
+                Debug.Log("Shared gold data deleted from PlayerPrefs");
             }
             
-            // Delete all difficulty files
-            string[] allPaths = { pathEasy, pathNormal, pathHard };
-            foreach (string filePath in allPaths)
+            // Delete all difficulty data
+            string[] allKeys = { keyEasy, keyNormal, keyHard };
+            foreach (string key in allKeys)
             {
-                if (File.Exists(filePath))
+                if (PlayerPrefs.HasKey(key))
                 {
-                    File.Delete(filePath);
-                    Debug.Log($"Deleted file: {Path.GetFileName(filePath)}");
+                    PlayerPrefs.DeleteKey(key);
+                    Debug.Log($"Deleted PlayerPrefs key: {key}");
                 }
             }
+            
+            PlayerPrefs.Save(); // Force write changes
             
             // Load lại để khởi tạo default values
             var currency = Resources.Load<GameCurrency>("GameCurrency");
@@ -268,7 +272,7 @@ public static class GameSaveManager
                 SaveGameProgress(currency, progressManager, true);
             }
             
-            Debug.Log("Game progress reset successfully!");
+            Debug.Log("Game progress reset successfully in PlayerPrefs!");
         }
         catch (System.Exception e)
         {
@@ -277,145 +281,154 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Kiểm tra xem save file có tồn tại không
+    /// Kiểm tra xem save data có tồn tại không trong PlayerPrefs
     /// </summary>
     public static bool HasSaveFile()
     {
         // Check currently selected difficulty + gold
-        string currentPath = GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
-        return File.Exists(currentPath) || File.Exists(goldPath);
+        string currentKey = GetKeyForDifficulty(DifficultySelector.SelectedDifficulty);
+        return PlayerPrefs.HasKey(currentKey) || PlayerPrefs.HasKey(goldKey);
     }
     
     /// <summary>
-    /// Lấy thông tin save file
+    /// Lấy thông tin save data từ PlayerPrefs
     /// </summary>
     public static string GetSaveFileInfo()
     {
-        string currentPath = GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
+        string currentKey = GetKeyForDifficulty(DifficultySelector.SelectedDifficulty);
         
-        if (!File.Exists(currentPath))
-            return "No save file found for current difficulty";
+        if (!PlayerPrefs.HasKey(currentKey))
+            return "No save data found for current difficulty in PlayerPrefs";
         
         try
         {
-            var fileInfo = new FileInfo(currentPath);
-            string result = $"Save file: {fileInfo.Name}\nSize: {fileInfo.Length} bytes\nLast modified: {fileInfo.LastWriteTime}";
-            if (File.Exists(goldPath))
+            string result = $"PlayerPrefs Key: {currentKey}\n";
+            
+            if (PlayerPrefs.HasKey(currentKey))
             {
-                var goldFileInfo = new FileInfo(goldPath);
-                result += $"\n\nGold file: {goldFileInfo.Name}\nSize: {goldFileInfo.Length} bytes\nLast modified: {goldFileInfo.LastWriteTime}";
+                string data = PlayerPrefs.GetString(currentKey);
+                result += $"Level Progress Size: {data.Length} characters\n";
             }
+            
+            if (PlayerPrefs.HasKey(goldKey))
+            {
+                string goldData = PlayerPrefs.GetString(goldKey);
+                result += $"Gold Key: {goldKey}\nGold Data Size: {goldData.Length} characters";
+            }
+            
             return result;
         }
         catch
         {
-            return "Cannot read save file info";
+            return "Cannot read PlayerPrefs save data info";
         }
     }
     
     /// <summary>
-    /// Debug: Hiển thị đường dẫn save file
+    /// Debug: Hiển thị PlayerPrefs keys
     /// </summary>
     public static void ShowSavePath()
     {
-        string selectedPath = GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
-        string loadedPath = GetPathForDifficulty(loadedDifficulty);
-        Debug.Log($"Selected difficulty save file path (may differ from loaded): {selectedPath}");
-        Debug.Log($"Loaded difficulty save file path (used for saving): {loadedPath}");
-        Debug.Log($"Gold file path: {goldPath}");
-        Debug.Log($"Directory exists: {System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(selectedPath))}");
-        Debug.Log($"Selected file exists: {System.IO.File.Exists(selectedPath)}");
-        Debug.Log($"Loaded file exists: {System.IO.File.Exists(loadedPath)}");
-        Debug.Log($"Gold file exists: {System.IO.File.Exists(goldPath)}");
+        string selectedKey = GetKeyForDifficulty(DifficultySelector.SelectedDifficulty);
+        string loadedKey = GetKeyForDifficulty(loadedDifficulty);
+        Debug.Log($"=== PLAYERPREFS SAVE INFO ===");
+        Debug.Log($"Selected difficulty key (may differ from loaded): {selectedKey}");
+        Debug.Log($"Loaded difficulty key (used for saving): {loadedKey}");
+        Debug.Log($"Gold key: {goldKey}");
+        Debug.Log($"Selected key exists: {PlayerPrefs.HasKey(selectedKey)}");
+        Debug.Log($"Loaded key exists: {PlayerPrefs.HasKey(loadedKey)}");
+        Debug.Log($"Gold key exists: {PlayerPrefs.HasKey(goldKey)}");
+        Debug.Log($"=== END PLAYERPREFS INFO ===");
     }
 
     /// <summary>
-    /// Debug: Tạo file test
+    /// Debug: Tạo test data trong PlayerPrefs
     /// </summary>
     public static void CreateTestFile()
     {
         try
         {
-            string currentPath = GetCurrentDifficultyPath();
-            string testData = "Test file created at " + System.DateTime.Now;
-            System.IO.File.WriteAllText(currentPath.Replace(".json", "_test.txt"), testData);
-            Debug.Log("Test file created successfully!");
+            string currentKey = GetCurrentDifficultyKey();
+            string testData = "Test data created at " + System.DateTime.Now;
+            PlayerPrefs.SetString(currentKey + "_test", testData);
+            PlayerPrefs.Save();
+            Debug.Log("Test data created successfully in PlayerPrefs!");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("Failed to create test file: " + e.Message);
+            Debug.LogError("Failed to create test data: " + e.Message);
         }
     }
 
     /// <summary>
-    /// Debug: Đọc và hiển thị nội dung file save
+    /// Debug: Đọc và hiển thị nội dung PlayerPrefs save data
     /// </summary>
     public static void ShowSaveFileContent()
     {
         try
         {
-            string currentPath = GetCurrentDifficultyPath();
+            string currentKey = GetCurrentDifficultyKey();
             
-            Debug.Log("=== LEVEL PROGRESS FILE ===");
-            if (File.Exists(currentPath))
+            Debug.Log("=== LEVEL PROGRESS DATA ===");
+            if (PlayerPrefs.HasKey(currentKey))
             {
-                string content = File.ReadAllText(currentPath);
+                string content = PlayerPrefs.GetString(currentKey);
                 Debug.Log(content);
             }
             else
             {
-                Debug.Log("Level progress file does not exist!");
+                Debug.Log("Level progress data does not exist in PlayerPrefs!");
             }
             
-            Debug.Log("=== GOLD FILE ===");
-            if (File.Exists(goldPath))
+            Debug.Log("=== GOLD DATA ===");
+            if (PlayerPrefs.HasKey(goldKey))
             {
-                string goldContent = File.ReadAllText(goldPath);
+                string goldContent = PlayerPrefs.GetString(goldKey);
                 Debug.Log(goldContent);
             }
             else
             {
-                Debug.Log("Gold file does not exist!");
+                Debug.Log("Gold data does not exist in PlayerPrefs!");
             }
-            Debug.Log("=== END SAVE FILES ===");
+            Debug.Log("=== END SAVE DATA ===");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("Failed to read save file: " + e.Message);
+            Debug.LogError("Failed to read PlayerPrefs save data: " + e.Message);
         }
     }
 
     /// <summary>
-    /// Debug: Kiểm tra trạng thái vàng trong file save
+    /// Debug: Kiểm tra trạng thái vàng trong PlayerPrefs
     /// </summary>
     public static void CheckGoldInSaveFile()
     {
         try
         {
-            if (File.Exists(goldPath))
+            if (PlayerPrefs.HasKey(goldKey))
             {
-                string jsonData = File.ReadAllText(goldPath);
+                string jsonData = PlayerPrefs.GetString(goldKey);
                 var goldData = JsonUtility.FromJson<SharedGoldData>(jsonData);
                 
                 if (goldData != null)
                 {
-                    Debug.Log($"Gold in save file: {goldData.totalGold}");
+                    Debug.Log($"Gold in PlayerPrefs: {goldData.totalGold}");
                     Debug.Log($"Session gold: {goldData.goldEarnedThisSession}");
                     Debug.Log($"Last source: {goldData.lastGoldSource}");
                 }
                 else
                 {
-                    Debug.Log("Failed to parse gold save file!");
+                    Debug.Log("Failed to parse gold data from PlayerPrefs!");
                 }
             }
             else
             {
-                Debug.Log("Gold save file does not exist!");
+                Debug.Log("Gold data does not exist in PlayerPrefs!");
             }
         }
         catch (System.Exception e)
         {
-            Debug.LogError("Failed to check gold in save file: " + e.Message);
+            Debug.LogError("Failed to check gold in PlayerPrefs: " + e.Message);
         }
     }
 }
