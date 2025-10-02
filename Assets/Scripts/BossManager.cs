@@ -142,16 +142,66 @@ public class BossManager : BossBase
             }
 
             Vector3 destination = GetRandomPointOnNavMesh(transform.position, moveRadius);
-            agent.SetDestination(destination);
-
-            animator.SetBool("isMoving", true);
-
-            while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+            
+            // Check if destination is valid and agent can reach it
+            if (agent != null && agent.isOnNavMesh)
             {
-                yield return null;
-            }
+                agent.SetDestination(destination);
+                animator.SetBool("isMoving", true);
 
-            animator.SetBool("isMoving", false);
+                // Add timeout to prevent infinite waiting
+                float moveTimeout = 3f; // Maximum time to wait for movement
+                float moveTimer = 0f;
+                bool reachedDestination = false;
+
+                while (moveTimer < moveTimeout && !reachedDestination)
+                {
+                    // Check if agent is stuck or path failed
+                    if (agent.pathStatus == NavMeshPathStatus.PathInvalid || 
+                        agent.pathStatus == NavMeshPathStatus.PathPartial)
+                    {
+                        Debug.Log("Boss path failed, finding new destination");
+                        break;
+                    }
+
+                    // Check if reached destination
+                    if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                    {
+                        reachedDestination = true;
+                        break;
+                    }
+
+                    // Check if agent is stuck (not moving for too long)
+                    if (!agent.pathPending && agent.velocity.magnitude < 0.1f && agent.remainingDistance > agent.stoppingDistance)
+                    {
+                        moveTimer += Time.deltaTime;
+                        if (moveTimer > 2f) // If stuck for 2 seconds, break
+                        {
+                            Debug.Log("Boss appears stuck, breaking movement");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        moveTimer = 0f; // Reset timer if moving
+                    }
+
+                    yield return null;
+                }
+
+                animator.SetBool("isMoving", false);
+
+                // If we couldn't reach the destination, try to get unstuck
+                if (!reachedDestination)
+                {
+                    TryUnstuckBoss();
+                }
+            }
+            else
+            {
+                // Agent is not on navmesh, try to fix it
+                TryFixAgentPosition();
+            }
 
             yield return new WaitForSeconds(waitAtPoint);
 
@@ -162,6 +212,49 @@ public class BossManager : BossBase
 
             yield return new WaitForSeconds(waitBeforeShoot);
             animator.SetBool("isAttack", false);
+        }
+    }
+
+    private void TryUnstuckBoss()
+    {
+        if (agent == null || !agent.isOnNavMesh) return;
+
+        Debug.Log("Trying to unstuck boss");
+        
+        // Reset agent state
+        agent.ResetPath();
+        agent.isStopped = false;
+        
+        // Try to warp to a nearby valid position
+        Vector3 currentPos = transform.position;
+        if (NavMesh.SamplePosition(currentPos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+        {
+            agent.Warp(hit.position);
+        }
+        
+        // Clear some position history to give more movement options
+        if (previousPositions.Count > 1)
+        {
+            previousPositions.RemoveRange(0, previousPositions.Count / 2);
+        }
+    }
+
+    private void TryFixAgentPosition()
+    {
+        Debug.Log("Boss agent not on NavMesh, trying to fix position");
+        
+        // Try to find a nearby valid position on NavMesh
+        Vector3 currentPos = transform.position;
+        if (NavMesh.SamplePosition(currentPos, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+        {
+            if (agent != null)
+            {
+                agent.Warp(hit.position);
+            }
+            else
+            {
+                transform.position = hit.position;
+            }
         }
     }
 

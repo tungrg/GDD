@@ -1272,8 +1272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_text
-      value: "Do you really want to quit this level? \n\n<#00BBD4>You will lose a
-        life!</color>"
+      value: "Do you really want to quit the game? \n\n<#00BBD4>Remember to comeback!</color>"
       objectReference: {fileID: 0}
     - target: {fileID: 4347005234495330071, guid: a71ae035ce5d0429a9a29210c6f978fb, type: 3}
       propertyPath: m_HorizontalAlignment

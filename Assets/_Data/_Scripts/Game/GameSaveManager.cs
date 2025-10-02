@@ -3,58 +3,111 @@ using System.IO;
 
 public static class GameSaveManager
 {
+    // Separate files for level progress per difficulty
     private static string fileNameEasy = "GameProgressEasy.json";
     private static string fileNameNormal = "GameProgressNormal.json";
     private static string fileNameHard = "GameProgressHard.json";
+    
+    // Shared gold file across all difficulties
+    private static string goldFileName = "SharedGold.json";
+    
     private static string pathEasy = Path.Combine(Application.persistentDataPath, fileNameEasy);
     private static string pathNormal = Path.Combine(Application.persistentDataPath, fileNameNormal);
     private static string pathHard = Path.Combine(Application.persistentDataPath, fileNameHard);
-    private static string path; // Mặc định Normal
+    private static string goldPath = Path.Combine(Application.persistentDataPath, goldFileName);
+    
+    private static string GetCurrentDifficultyPath()
+    {
+        switch (DifficultySelector.SelectedDifficulty)
+        {
+            case DifficultySelector.Difficulty.Easy:
+                return pathEasy;
+            case DifficultySelector.Difficulty.Basic:
+                return pathNormal;
+            case DifficultySelector.Difficulty.Hard:
+                return pathHard;
+            default:
+                return pathNormal;
+        }
+    }
     /// <summary>
     /// Lưu toàn bộ game progress
     /// </summary>
     public static void SaveGameProgress(GameCurrency currency, LevelProgressManager progressManager)
     {
-
-        switch (DifficultySelector.SelectedDifficulty)
-        {
-            case DifficultySelector.Difficulty.Easy:
-                path = pathEasy;
-                break;
-            case DifficultySelector.Difficulty.Basic:
-                path = pathNormal;
-                break;
-            case DifficultySelector.Difficulty.Hard:
-                path = pathHard;
-                break;
-        }
-
         if (currency == null || progressManager == null)
         {
             Debug.LogWarning("Cannot save game progress - missing components");
             return;
         }
 
-        // Lưu dữ liệu
-
         try
         {
-            // Tạo save data từ current state
-            GameProgressData saveData = GameProgressData.CreateFromCurrent(currency, progressManager);
+            // Save shared gold data
+            SaveSharedGold(currency);
+            
+            // Save level progress for current difficulty
+            SaveLevelProgress(progressManager);
 
-            // Convert sang JSON
-            string jsonData = JsonUtility.ToJson(saveData, true);
-
-            // Ghi vào file
-            File.WriteAllText(path, jsonData);
-
-            Debug.Log("Game progress saved to: " + path);
-            Debug.Log("Save data info:\n" + saveData.GetDebugInfo());
+            Debug.Log($"Game progress saved for difficulty: {DifficultySelector.SelectedDifficulty}");
         }
         catch (System.Exception e)
         {
             Debug.LogError("Failed to save game progress: " + e.Message);
         }
+    }
+    
+    /// <summary>
+    /// Save shared gold data across all difficulties
+    /// </summary>
+    private static void SaveSharedGold(GameCurrency currency)
+    {
+        var goldData = new SharedGoldData
+        {
+            totalGold = currency.TotalGold,
+            goldEarnedThisSession = currency.GoldEarnedThisSession,
+            lastGoldSource = currency.LastGoldSource
+        };
+        
+        string jsonData = JsonUtility.ToJson(goldData, true);
+        File.WriteAllText(goldPath, jsonData);
+        
+        Debug.Log($"Shared gold saved: {currency.TotalGold}");
+    }
+    
+    /// <summary>
+    /// Save level progress for current difficulty
+    /// </summary>
+    private static void SaveLevelProgress(LevelProgressManager progressManager)
+    {
+        string currentPath = GetCurrentDifficultyPath();
+        
+        var levelData = new LevelProgressData
+        {
+            maxUnlockedLevel = progressManager.MaxUnlockedLevel,
+            levelProgresses = new System.Collections.Generic.List<GameProgressData.LevelProgressInfo>()
+        };
+        
+        // Copy all level data
+        for (int i = 1; i <= progressManager.GetTotalLevels(); i++)
+        {
+            var levelInfo = progressManager.GetLevelData(i);
+            if (levelInfo != null)
+            {
+                var progressInfo = new GameProgressData.LevelProgressInfo(
+                    levelInfo.levelIndex,
+                    levelInfo.BestScore,
+                    levelInfo.StarsEarned,
+                    (bool[])levelInfo.ClaimedStarGold.Clone()
+                );
+                levelData.levelProgresses.Add(progressInfo);
+            }
+        }
+        
+        string jsonData = JsonUtility.ToJson(levelData, true);
+        File.WriteAllText(currentPath, jsonData);
+        
+        Debug.Log($"Level progress saved for {DifficultySelector.SelectedDifficulty}: Max level {levelData.maxUnlockedLevel}");
     }
     
     /// <summary>
@@ -64,50 +117,72 @@ public static class GameSaveManager
     {
         try
         {
-            switch (DifficultySelector.SelectedDifficulty)
-            {
-                case DifficultySelector.Difficulty.Easy:
-                    path = pathEasy;
-                    break;
-                case DifficultySelector.Difficulty.Basic:
-                    path = pathNormal;
-                    break;
-                case DifficultySelector.Difficulty.Hard:
-                    path = pathHard;
-                    break;
-            }
-            if (File.Exists(path))
-            {
-                // Đọc file JSON
-                string jsonData = File.ReadAllText(path);
+            // Load shared gold first
+            LoadSharedGold(currency);
+            
+            // Load level progress for current difficulty
+            LoadLevelProgress(progressManager);
 
-                // Parse JSON
-                GameProgressData saveData = JsonUtility.FromJson<GameProgressData>(jsonData);
-
-                if (saveData != null && saveData.IsValid())
-                {
-                    // Áp dụng data vào game
-                    saveData.ApplyToGame(currency, progressManager);
-
-                    Debug.Log("Game progress loaded from: " + path);
-                    Debug.Log("Loaded data info:\n" + saveData.GetDebugInfo());
-                }
-                else
-                {
-                    Debug.LogWarning("Invalid save data format");
-                    InitializeDefaultProgress(currency, progressManager);
-                }
-            }
-            else
-            {
-                Debug.Log("No save file found. Using default progress.");
-                InitializeDefaultProgress(currency, progressManager);
-            }
+            Debug.Log($"Game progress loaded for difficulty: {DifficultySelector.SelectedDifficulty}");
         }
         catch (System.Exception e)
         {
             Debug.LogError("Failed to load game progress: " + e.Message);
             InitializeDefaultProgress(currency, progressManager);
+        }
+    }
+    
+    /// <summary>
+    /// Load shared gold data
+    /// </summary>
+    private static void LoadSharedGold(GameCurrency currency)
+    {
+        if (File.Exists(goldPath))
+        {
+            string jsonData = File.ReadAllText(goldPath);
+            var goldData = JsonUtility.FromJson<SharedGoldData>(jsonData);
+            
+            if (goldData != null && currency != null)
+            {
+                currency.LoadFromSaveData(goldData.totalGold, goldData.goldEarnedThisSession, goldData.lastGoldSource);
+                Debug.Log($"Shared gold loaded: {goldData.totalGold}");
+            }
+        }
+        else
+        {
+            Debug.Log("No shared gold file found, using default");
+            if (currency != null)
+            {
+                currency.LoadFromSaveData(0, 0, "New game");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Load level progress for current difficulty
+    /// </summary>
+    private static void LoadLevelProgress(LevelProgressManager progressManager)
+    {
+        string currentPath = GetCurrentDifficultyPath();
+        
+        if (File.Exists(currentPath))
+        {
+            string jsonData = File.ReadAllText(currentPath);
+            var levelData = JsonUtility.FromJson<LevelProgressData>(jsonData);
+            
+            if (levelData != null && progressManager != null)
+            {
+                progressManager.LoadFromSaveData(levelData.maxUnlockedLevel, levelData.levelProgresses);
+                Debug.Log($"Level progress loaded for {DifficultySelector.SelectedDifficulty}: Max level {levelData.maxUnlockedLevel}");
+            }
+        }
+        else
+        {
+            Debug.Log($"No level progress file found for {DifficultySelector.SelectedDifficulty}, using default");
+            if (progressManager != null)
+            {
+                progressManager.LoadFromSaveData(1, new System.Collections.Generic.List<GameProgressData.LevelProgressInfo>());
+            }
         }
     }
     
@@ -138,22 +213,22 @@ public static class GameSaveManager
     {
         try
         {
-            switch (DifficultySelector.SelectedDifficulty)
+            // Delete shared gold file
+            if (File.Exists(goldPath))
             {
-                case DifficultySelector.Difficulty.Easy:
-                    path = pathEasy;
-                    break;
-                case DifficultySelector.Difficulty.Basic:
-                    path = pathNormal;
-                    break;
-                case DifficultySelector.Difficulty.Hard:
-                    path = pathHard;
-                    break;
+                File.Delete(goldPath);
+                Debug.Log("Shared gold file deleted");
             }
-            if (File.Exists(path))
+            
+            // Delete all difficulty files
+            string[] allPaths = { pathEasy, pathNormal, pathHard };
+            foreach (string filePath in allPaths)
             {
-                File.Delete(path);
-                Debug.Log("Game progress file deleted");
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    Debug.Log($"Deleted file: {Path.GetFileName(filePath)}");
+                }
             }
             
             // Load lại để khởi tạo default values
@@ -179,7 +254,8 @@ public static class GameSaveManager
     /// </summary>
     public static bool HasSaveFile()
     {
-        return File.Exists(path);
+        string currentPath = GetCurrentDifficultyPath();
+        return File.Exists(currentPath) || File.Exists(goldPath);
     }
     
     /// <summary>
@@ -187,13 +263,24 @@ public static class GameSaveManager
     /// </summary>
     public static string GetSaveFileInfo()
     {
-        if (!File.Exists(path))
-            return "No save file found";
+        string currentPath = GetCurrentDifficultyPath();
+        
+        if (!File.Exists(currentPath))
+            return "No save file found for current difficulty";
             
         try
         {
-            var fileInfo = new FileInfo(path);
-            return $"Save file: {fileInfo.Name}\nSize: {fileInfo.Length} bytes\nLast modified: {fileInfo.LastWriteTime}";
+            var fileInfo = new FileInfo(currentPath);
+            string result = $"Save file: {fileInfo.Name}\nSize: {fileInfo.Length} bytes\nLast modified: {fileInfo.LastWriteTime}";
+            
+            // Add gold file info if exists
+            if (File.Exists(goldPath))
+            {
+                var goldFileInfo = new FileInfo(goldPath);
+                result += $"\n\nGold file: {goldFileInfo.Name}\nSize: {goldFileInfo.Length} bytes\nLast modified: {goldFileInfo.LastWriteTime}";
+            }
+            
+            return result;
         }
         catch
         {
@@ -206,9 +293,12 @@ public static class GameSaveManager
     /// </summary>
     public static void ShowSavePath()
     {
-        Debug.Log($"Save file path: {path}");
-        Debug.Log($"Directory exists: {System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(path))}");
-        Debug.Log($"File exists: {System.IO.File.Exists(path)}");
+        string currentPath = GetCurrentDifficultyPath();
+        Debug.Log($"Current difficulty save file path: {currentPath}");
+        Debug.Log($"Gold file path: {goldPath}");
+        Debug.Log($"Directory exists: {System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(currentPath))}");
+        Debug.Log($"Current file exists: {System.IO.File.Exists(currentPath)}");
+        Debug.Log($"Gold file exists: {System.IO.File.Exists(goldPath)}");
     }
 
     /// <summary>
@@ -218,8 +308,9 @@ public static class GameSaveManager
     {
         try
         {
+            string currentPath = GetCurrentDifficultyPath();
             string testData = "Test file created at " + System.DateTime.Now;
-            System.IO.File.WriteAllText(path.Replace(".json", "_test.txt"), testData);
+            System.IO.File.WriteAllText(currentPath.Replace(".json", "_test.txt"), testData);
             Debug.Log("Test file created successfully!");
         }
         catch (System.Exception e)
@@ -235,17 +326,30 @@ public static class GameSaveManager
     {
         try
         {
-            if (File.Exists(path))
+            string currentPath = GetCurrentDifficultyPath();
+            
+            Debug.Log("=== LEVEL PROGRESS FILE ===");
+            if (File.Exists(currentPath))
             {
-                string content = File.ReadAllText(path);
-                Debug.Log("=== SAVE FILE CONTENT ===");
+                string content = File.ReadAllText(currentPath);
                 Debug.Log(content);
-                Debug.Log("=== END SAVE FILE ===");
             }
             else
             {
-                Debug.Log("Save file does not exist!");
+                Debug.Log("Level progress file does not exist!");
             }
+            
+            Debug.Log("=== GOLD FILE ===");
+            if (File.Exists(goldPath))
+            {
+                string goldContent = File.ReadAllText(goldPath);
+                Debug.Log(goldContent);
+            }
+            else
+            {
+                Debug.Log("Gold file does not exist!");
+            }
+            Debug.Log("=== END SAVE FILES ===");
         }
         catch (System.Exception e)
         {
@@ -260,25 +364,25 @@ public static class GameSaveManager
     {
         try
         {
-            if (File.Exists(path))
+            if (File.Exists(goldPath))
             {
-                string jsonData = File.ReadAllText(path);
-                GameProgressData saveData = JsonUtility.FromJson<GameProgressData>(jsonData);
+                string jsonData = File.ReadAllText(goldPath);
+                var goldData = JsonUtility.FromJson<SharedGoldData>(jsonData);
                 
-                if (saveData != null)
+                if (goldData != null)
                 {
-                    Debug.Log($"Gold in save file: {saveData.totalGold}");
-                    Debug.Log($"Session gold: {saveData.goldEarnedThisSession}");
-                    Debug.Log($"Last source: {saveData.lastGoldSource}");
+                    Debug.Log($"Gold in save file: {goldData.totalGold}");
+                    Debug.Log($"Session gold: {goldData.goldEarnedThisSession}");
+                    Debug.Log($"Last source: {goldData.lastGoldSource}");
                 }
                 else
                 {
-                    Debug.Log("Failed to parse save file!");
+                    Debug.Log("Failed to parse gold save file!");
                 }
             }
             else
             {
-                Debug.Log("Save file does not exist!");
+                Debug.Log("Gold save file does not exist!");
             }
         }
         catch (System.Exception e)
@@ -286,4 +390,25 @@ public static class GameSaveManager
             Debug.LogError("Failed to check gold in save file: " + e.Message);
         }
     }
+}
+
+/// <summary>
+/// Shared gold data across all difficulties
+/// </summary>
+[System.Serializable]
+public class SharedGoldData
+{
+    public int totalGold = 0;
+    public int goldEarnedThisSession = 0;
+    public string lastGoldSource = "";
+}
+
+/// <summary>
+/// Level progress data for specific difficulty
+/// </summary>
+[System.Serializable]
+public class LevelProgressData
+{
+    public int maxUnlockedLevel = 1;
+    public System.Collections.Generic.List<GameProgressData.LevelProgressInfo> levelProgresses = new System.Collections.Generic.List<GameProgressData.LevelProgressInfo>();
 }
