@@ -15,45 +15,70 @@ public static class GameSaveManager
     private static string pathNormal = Path.Combine(Application.persistentDataPath, fileNameNormal);
     private static string pathHard = Path.Combine(Application.persistentDataPath, fileNameHard);
     private static string goldPath = Path.Combine(Application.persistentDataPath, goldFileName);
-    
-    private static string GetCurrentDifficultyPath()
+
+    // NEW: Remember which difficulty's data is currently loaded in memory.
+    private static DifficultySelector.Difficulty loadedDifficulty = DifficultySelector.Difficulty.Basic; // default fallback
+
+    // Helper to get path for a specific difficulty
+    private static string GetPathForDifficulty(DifficultySelector.Difficulty diff)
     {
-        switch (DifficultySelector.SelectedDifficulty)
+        switch (diff)
         {
-            case DifficultySelector.Difficulty.Easy:
-                return pathEasy;
-            case DifficultySelector.Difficulty.Basic:
-                return pathNormal;
-            case DifficultySelector.Difficulty.Hard:
-                return pathHard;
-            default:
-                return pathNormal;
+            case DifficultySelector.Difficulty.Easy: return pathEasy;
+            case DifficultySelector.Difficulty.Basic: return pathNormal;
+            case DifficultySelector.Difficulty.Hard: return pathHard;
+            default: return pathNormal;
         }
     }
+    
+    // Keep original for debug (now uses currently selected difficulty – NOT used for saving anymore)
+    private static string GetCurrentDifficultyPath()
+    {
+        return GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
+    }
+
     /// <summary>
     /// Lưu toàn bộ game progress
     /// </summary>
-    public static void SaveGameProgress(GameCurrency currency, LevelProgressManager progressManager)
+    public static void SaveGameProgress(GameCurrency currency, LevelProgressManager progressManager, bool includeLevelProgress = true)
     {
-        if (currency == null || progressManager == null)
+        if (currency == null)
         {
-            Debug.LogWarning("Cannot save game progress - missing components");
+            Debug.LogWarning("Cannot save game progress - missing currency");
             return;
         }
 
         try
         {
-            // Save shared gold data
+            // Always save shared gold
             SaveSharedGold(currency);
             
-            // Save level progress for current difficulty
-            SaveLevelProgress(progressManager);
+            // Save level progress only if requested and valid
+            if (includeLevelProgress && progressManager != null)
+            {
+                SaveLevelProgress(progressManager);
+            }
 
-            Debug.Log($"Game progress saved for difficulty: {DifficultySelector.SelectedDifficulty}");
+            Debug.Log($"Game progress saved (gold + {(includeLevelProgress ? "level" : "no level")}) for loaded difficulty: {loadedDifficulty} (Selected now: {DifficultySelector.SelectedDifficulty})");
         }
         catch (System.Exception e)
         {
             Debug.LogError("Failed to save game progress: " + e.Message);
+        }
+    }
+
+    // Helper for currency-only save (no level data overwrite)
+    public static void SaveGoldOnly(GameCurrency currency)
+    {
+        if (currency == null) return;
+        try
+        {
+            SaveSharedGold(currency);
+            Debug.Log("Gold-only save completed");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed gold-only save: " + e.Message);
         }
     }
     
@@ -76,11 +101,12 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Save level progress for current difficulty
+    /// Save level progress for currently loaded difficulty (tracked separately)
     /// </summary>
     private static void SaveLevelProgress(LevelProgressManager progressManager)
     {
-        string currentPath = GetCurrentDifficultyPath();
+        // Use the difficulty that was loaded into the progressManager
+        string currentPath = GetPathForDifficulty(loadedDifficulty);
         
         var levelData = new LevelProgressData
         {
@@ -107,23 +133,23 @@ public static class GameSaveManager
         string jsonData = JsonUtility.ToJson(levelData, true);
         File.WriteAllText(currentPath, jsonData);
         
-        Debug.Log($"Level progress saved for {DifficultySelector.SelectedDifficulty}: Max level {levelData.maxUnlockedLevel}");
+        Debug.Log($"Level progress saved for loaded difficulty {loadedDifficulty}: Max level {levelData.maxUnlockedLevel}");
     }
     
     /// <summary>
-    /// Load toàn bộ game progress
+    /// Load toàn bộ game progress (captures which difficulty is now active in memory)
     /// </summary>
     public static void LoadGameProgress(GameCurrency currency, LevelProgressManager progressManager)
     {
         try
         {
-            // Load shared gold first
-            LoadSharedGold(currency);
+            // Capture which difficulty we are loading NOW
+            loadedDifficulty = DifficultySelector.SelectedDifficulty;
             
-            // Load level progress for current difficulty
+            LoadSharedGold(currency);
             LoadLevelProgress(progressManager);
 
-            Debug.Log($"Game progress loaded for difficulty: {DifficultySelector.SelectedDifficulty}");
+            Debug.Log($"Game progress loaded for difficulty: {loadedDifficulty}");
         }
         catch (System.Exception e)
         {
@@ -159,11 +185,11 @@ public static class GameSaveManager
     }
     
     /// <summary>
-    /// Load level progress for current difficulty
+    /// Load level progress for loadedDifficulty
     /// </summary>
     private static void LoadLevelProgress(LevelProgressManager progressManager)
     {
-        string currentPath = GetCurrentDifficultyPath();
+        string currentPath = GetPathForDifficulty(loadedDifficulty);
         
         if (File.Exists(currentPath))
         {
@@ -173,12 +199,12 @@ public static class GameSaveManager
             if (levelData != null && progressManager != null)
             {
                 progressManager.LoadFromSaveData(levelData.maxUnlockedLevel, levelData.levelProgresses);
-                Debug.Log($"Level progress loaded for {DifficultySelector.SelectedDifficulty}: Max level {levelData.maxUnlockedLevel}");
+                Debug.Log($"Level progress loaded for {loadedDifficulty}: Max level {levelData.maxUnlockedLevel}");
             }
         }
         else
         {
-            Debug.Log($"No level progress file found for {DifficultySelector.SelectedDifficulty}, using default");
+            Debug.Log($"No level progress file found for {loadedDifficulty}, using default");
             if (progressManager != null)
             {
                 progressManager.LoadFromSaveData(1, new System.Collections.Generic.List<GameProgressData.LevelProgressInfo>());
@@ -238,7 +264,8 @@ public static class GameSaveManager
             if (currency != null && progressManager != null)
             {
                 InitializeDefaultProgress(currency, progressManager);
-                SaveGameProgress(currency, progressManager);
+                // Full save (include level progress)
+                SaveGameProgress(currency, progressManager, true);
             }
             
             Debug.Log("Game progress reset successfully!");
@@ -254,7 +281,8 @@ public static class GameSaveManager
     /// </summary>
     public static bool HasSaveFile()
     {
-        string currentPath = GetCurrentDifficultyPath();
+        // Check currently selected difficulty + gold
+        string currentPath = GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
         return File.Exists(currentPath) || File.Exists(goldPath);
     }
     
@@ -263,23 +291,20 @@ public static class GameSaveManager
     /// </summary>
     public static string GetSaveFileInfo()
     {
-        string currentPath = GetCurrentDifficultyPath();
+        string currentPath = GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
         
         if (!File.Exists(currentPath))
             return "No save file found for current difficulty";
-            
+        
         try
         {
             var fileInfo = new FileInfo(currentPath);
             string result = $"Save file: {fileInfo.Name}\nSize: {fileInfo.Length} bytes\nLast modified: {fileInfo.LastWriteTime}";
-            
-            // Add gold file info if exists
             if (File.Exists(goldPath))
             {
                 var goldFileInfo = new FileInfo(goldPath);
                 result += $"\n\nGold file: {goldFileInfo.Name}\nSize: {goldFileInfo.Length} bytes\nLast modified: {goldFileInfo.LastWriteTime}";
             }
-            
             return result;
         }
         catch
@@ -293,11 +318,14 @@ public static class GameSaveManager
     /// </summary>
     public static void ShowSavePath()
     {
-        string currentPath = GetCurrentDifficultyPath();
-        Debug.Log($"Current difficulty save file path: {currentPath}");
+        string selectedPath = GetPathForDifficulty(DifficultySelector.SelectedDifficulty);
+        string loadedPath = GetPathForDifficulty(loadedDifficulty);
+        Debug.Log($"Selected difficulty save file path (may differ from loaded): {selectedPath}");
+        Debug.Log($"Loaded difficulty save file path (used for saving): {loadedPath}");
         Debug.Log($"Gold file path: {goldPath}");
-        Debug.Log($"Directory exists: {System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(currentPath))}");
-        Debug.Log($"Current file exists: {System.IO.File.Exists(currentPath)}");
+        Debug.Log($"Directory exists: {System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(selectedPath))}");
+        Debug.Log($"Selected file exists: {System.IO.File.Exists(selectedPath)}");
+        Debug.Log($"Loaded file exists: {System.IO.File.Exists(loadedPath)}");
         Debug.Log($"Gold file exists: {System.IO.File.Exists(goldPath)}");
     }
 
