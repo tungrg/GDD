@@ -261,6 +261,11 @@ public class WinPopup : MonoBehaviour
     private void OnMenuClicked()
     {
         // Load level select scene
-        SceneManager.LoadScene(0);
+        if(DifficultySelector.SelectedDifficulty == DifficultySelector.Difficulty.Easy)
+            SceneManager.LoadScene("LevelSelect_Easy");
+        else if(DifficultySelector.SelectedDifficulty == DifficultySelector.Difficulty.Basic)
+            SceneManager.LoadScene("LevelSelect_Normal");
+        else if(DifficultySelector.SelectedDifficulty == DifficultySelector.Difficulty.Hard)
+            SceneManager.LoadScene("LevelSelect_Hard");
     }
 }

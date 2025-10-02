@@ -87,7 +87,7 @@ public class MagnetStormZone : MonoBehaviour
         NavMeshAgent agent = target.GetComponent<NavMeshAgent>();
         Rigidbody rb = target.GetComponent<Rigidbody>();
 
-        if (agent == null)
+        if (agent == null || !agent.isOnNavMesh)
             yield break;
 
         AgentState state;
@@ -106,73 +106,84 @@ public class MagnetStormZone : MonoBehaviour
 
         state.counter++;
 
-        agent.ResetPath();
-        agent.isStopped = true;
-        agent.updatePosition = false;
-        agent.updateRotation = false;
-        agent.nextPosition = agent.transform.position;
+        // Stun phase - stop movement but keep agent on navmesh
+        if (agent.isOnNavMesh)
+        {
+            agent.ResetPath();
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+        }
 
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
         }
 
+        // Wait for stun duration
         float stunTimer = 0f;
-        while (stunTimer < stunDuration)
+        while (stunTimer < stunDuration && agent != null && agent.isOnNavMesh)
         {
-            if (agent == null) break;
             stunTimer += Time.deltaTime;
             yield return null;
         }
 
-        if (agent != null)
+        // Slow phase - restore movement with reduced speed
+        if (agent != null && agent.isOnNavMesh)
         {
             agent.isStopped = false;
-            agent.updatePosition = state.originalUpdatePosition;
-            agent.updateRotation = state.originalUpdateRotation;
             agent.speed = state.originalSpeed * slowMultiplier;
-            agent.ResetPath();
-            agent.nextPosition = agent.transform.position;
+            agent.velocity = Vector3.zero;
         }
 
+        // Wait for slow duration
         float slowTimer = 0f;
-        while (slowTimer < slowDuration)
+        while (slowTimer < slowDuration && agent != null && agent.isOnNavMesh)
         {
-            if (agent == null) break;
             slowTimer += Time.deltaTime;
             yield return null;
         }
 
+        // Restore original state
         if (agent != null && agentStates.TryGetValue(agent, out state))
         {
             state.counter--;
             if (state.counter <= 0)
             {
-                agent.speed = state.originalSpeed;
-                agent.isStopped = false;
-                agent.updatePosition = state.originalUpdatePosition;
-                agent.updateRotation = state.originalUpdateRotation;
-                agent.nextPosition = agent.transform.position;
+                // Fully restore agent state
+                if (agent.isOnNavMesh)
+                {
+                    agent.speed = state.originalSpeed;
+                    agent.isStopped = false;
+                    agent.velocity = Vector3.zero;
+                }
                 if (rb != null) rb.isKinematic = state.originalKinematic;
                 agentStates.Remove(agent);
             }
             else
             {
-                agent.speed = state.originalSpeed * slowMultiplier;
+                // Still affected by other effects
+                if (agent.isOnNavMesh)
+                {
+                    agent.speed = state.originalSpeed * slowMultiplier;
+                }
             }
         }
-        else
+
+        // Clean up null references
+        CleanupNullAgents();
+    }
+
+    private void CleanupNullAgents()
+    {
+        List<NavMeshAgent> nullKeys = new List<NavMeshAgent>();
+        foreach (var kv in agentStates)
         {
-            if (rb != null)
-            {
-                rb.isKinematic = rb != null ? rb.isKinematic : true;
-            }
-            List<NavMeshAgent> nullKeys = new List<NavMeshAgent>();
-            foreach (var kv in agentStates) if (kv.Key == null) nullKeys.Add(kv.Key);
-            foreach (var k in nullKeys) agentStates.Remove(k);
+            if (kv.Key == null || !kv.Key.isOnNavMesh)
+                nullKeys.Add(kv.Key);
         }
+        foreach (var k in nullKeys)
+            agentStates.Remove(k);
     }
 
     private void OnDrawGizmosSelected()
