@@ -13,8 +13,9 @@ public class BossManager : BossBase
     public Transform bossGun;
 
     [Header("Movement Settings")]
-    public float moveRadius = 5f;
+    public float moveRadius = 3f;
     public float waitAtPoint = 1f;
+    public float minDistanceFromPrevious = 1f; // Minimum distance from previous positions
 
     [Header("Attack Settings")]
     public float fireForce = 20f;
@@ -24,6 +25,10 @@ public class BossManager : BossBase
     public float CurrentHealth { get; private set; }
     private bool cloneUsed = false;
     private bool recoveryTriggered = false;
+
+    // Track previous positions
+    private System.Collections.Generic.List<Vector3> previousPositions = new System.Collections.Generic.List<Vector3>();
+    private const int maxPreviousPositions = 5;
 
     [Header("UI")]
 
@@ -162,12 +167,63 @@ public class BossManager : BossBase
 
     public Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
     {
-        Vector3 randomPos = center + Random.insideUnitSphere * radius;
-        if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
+        int maxAttempts = 20; // Maximum attempts to find a valid position
+        
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
-            return hit.position;
+            Vector3 randomPos = center + Random.insideUnitSphere * radius;
+            
+            if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, radius, NavMesh.AllAreas))
+            {
+                Vector3 candidatePos = hit.position;
+                
+                // Check if this position is too close to any previous positions
+                bool tooCloseToePrevious = false;
+                foreach (Vector3 prevPos in previousPositions)
+                {
+                    float distance = Vector3.Distance(candidatePos, prevPos);
+                    if (distance < minDistanceFromPrevious)
+                    {
+                        tooCloseToePrevious = true;
+                        break;
+                    }
+                }
+                
+                // If position is good, use it and update previous positions
+                if (!tooCloseToePrevious)
+                {
+                    UpdatePreviousPositions(candidatePos);
+                    return candidatePos;
+                }
+            }
         }
+        
+        // If we couldn't find a good position after max attempts, 
+        // just return a position and clear some history
+        Vector3 fallbackPos = center + Random.insideUnitSphere * radius;
+        if (NavMesh.SamplePosition(fallbackPos, out NavMeshHit fallbackHit, radius, NavMesh.AllAreas))
+        {
+            // Clear half the previous positions to give more options
+            if (previousPositions.Count > 2)
+            {
+                previousPositions.RemoveRange(0, previousPositions.Count / 2);
+            }
+            UpdatePreviousPositions(fallbackHit.position);
+            return fallbackHit.position;
+        }
+        
         return center;
+    }
+    
+    private void UpdatePreviousPositions(Vector3 newPosition)
+    {
+        previousPositions.Add(newPosition);
+        
+        // Keep only the last maxPreviousPositions
+        if (previousPositions.Count > maxPreviousPositions)
+        {
+            previousPositions.RemoveAt(0);
+        }
     }
 
     private void ShootAtPlayer()
