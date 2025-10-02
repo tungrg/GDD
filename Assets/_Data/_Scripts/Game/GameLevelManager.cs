@@ -409,22 +409,46 @@ public class GameLevelManager : MonoBehaviour
         // Xử lý khi thắng (có ít nhất 1 sao)
         if (star > 0)
         {
+            // Get current progress from runtime manager
+            var levelProgress = levelProgressManager != null ? levelProgressManager.GetLevelProgress(currentLevelData.levelIndex) : null;
+            
             // Tính vàng có thể claim TRƯỚC khi update score
-            int claimableGold = currentLevelData.CalculateClaimableGold(star);
+            int claimableGold = 0;
+            if (levelProgress != null)
+            {
+                // Calculate based on NEW stars vs OLD stars
+                for (int i = 0; i < star; i++)
+                {
+                    if (i < levelProgress.claimedStarGold.Length && !levelProgress.claimedStarGold[i])
+                    {
+                        // Gold rewards: 150, 300, 500
+                        int[] goldRewards = { 150, 300, 500 };
+                        claimableGold += goldRewards[i];
+                    }
+                }
+            }
             Debug.Log($"Claimable gold: {claimableGold}");
 
-            // Cập nhật best score và stars earned
-            currentLevelData.UpdateScore(score);
+            // Update progress in runtime manager (replaces ScriptableObject update)
+            if (levelProgressManager != null)
+            {
+                LevelProgressRuntimeManager.Instance.UpdateLevelProgress(currentLevelData.levelIndex, score, star);
+                
+                // Claim gold for earned stars
+                for (int i = 0; i < star; i++)
+                {
+                    LevelProgressRuntimeManager.Instance.ClaimStarGold(currentLevelData.levelIndex, i);
+                }
+            }
 
-            // Thêm vàng và đánh dấu các mốc đã claim
+            // Thêm vàng
             if (claimableGold > 0)
             {
                 AddGold(claimableGold, $"Level {currentLevelData.levelIndex} - {star} stars");
-                currentLevelData.ClaimStarGold(star);
             }
 
             // Thông báo ProgressManager để unlock level tiếp theo nếu cần
-            UpdateProgressManager();
+            UpdateProgressManager(score, star);
 
             // Hiển thị win popup
             var resultManager = GameResultManager.Instance;
@@ -452,11 +476,12 @@ public class GameLevelManager : MonoBehaviour
     /// <summary>
     /// Thông báo ProgressManager về việc hoàn thành level
     /// </summary>
-    private void UpdateProgressManager()
+    private void UpdateProgressManager(int score, int stars)
     {
         if (levelProgressManager != null)
         {
-            levelProgressManager.OnLevelCompleted(currentLevelData.levelIndex, currentLevelData.StarsEarned);
+            // The runtime manager is already updated in CompleteLevel, this just refreshes UI
+            levelProgressManager.OnLevelCompleted(currentLevelData.levelIndex, stars);
         }
     }
 

@@ -33,6 +33,24 @@ public class DifficultySelector : MonoBehaviour
         PlayerPrefs.SetInt(PlayerPrefKey, (int)diff);
         PlayerPrefs.Save();
         Debug.Log("Selected difficulty: " + diff);
+        
+        // Reload progress for new difficulty
+        if (Application.isPlaying)
+        {
+            LevelProgressRuntimeManager.Instance.ReloadForDifficulty();
+            
+            // Refresh all level managers in scene
+            var levelManagers = FindObjectsByType<LevelManager>(FindObjectsSortMode.None);
+            foreach (var manager in levelManagers)
+            {
+                if (manager != null)
+                {
+                    manager.RefreshUnlockState();
+                }
+            }
+            
+            Debug.Log($"Progress reloaded and UI refreshed for difficulty: {diff}");
+        }
     }
 
     private void LoadDifficulty()

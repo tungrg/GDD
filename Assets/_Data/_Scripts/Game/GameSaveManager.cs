@@ -115,17 +115,17 @@ public static class GameSaveManager
             levelProgresses = new System.Collections.Generic.List<GameProgressData.LevelProgressInfo>()
         };
         
-        // Copy all level data
+        // Copy all level data from runtime manager
         for (int i = 1; i <= progressManager.GetTotalLevels(); i++)
         {
-            var levelInfo = progressManager.GetLevelData(i);
-            if (levelInfo != null)
+            var levelProgress = progressManager.GetLevelProgress(i);
+            if (levelProgress != null)
             {
                 var progressInfo = new GameProgressData.LevelProgressInfo(
-                    levelInfo.levelIndex,
-                    levelInfo.BestScore,
-                    levelInfo.StarsEarned,
-                    (bool[])levelInfo.ClaimedStarGold.Clone()
+                    levelProgress.levelIndex,
+                    levelProgress.bestScore,
+                    levelProgress.starsEarned,
+                    (bool[])levelProgress.claimedStarGold.Clone()
                 );
                 levelData.levelProgresses.Add(progressInfo);
             }

@@ -111,8 +111,10 @@ public class LevelManager : MonoBehaviour
             // Cập nhật hiển thị sao
             UpdateStarDisplay();
             
-            // Debug info
-            Debug.Log($"Level {LevelIndex} refresh: shouldBeUnlocked = {shouldBeUnlocked}, current stars = {levelData.StarsEarned}");
+            // Debug info - GET FROM RUNTIME MANAGER
+            var levelProgress = progressManager.GetLevelProgress(LevelIndex);
+            int currentStars = levelProgress != null ? levelProgress.starsEarned : 0;
+            Debug.Log($"Level {LevelIndex} refresh: shouldBeUnlocked = {shouldBeUnlocked}, current stars = {currentStars}");
         }
         else
         {
@@ -127,13 +129,19 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void UpdateStarDisplay()
     {
-        if (starDisplay != null && levelData != null)
+        if (starDisplay != null && levelData != null && progressManager != null)
         {
             if (isUnlocked)
             {
-                // Level đã mở: hiển thị số sao đã đạt (giống PlayPopup)
+                // GET STARS FROM RUNTIME MANAGER, NOT SCRIPTABLEOBJECT!
+                var levelProgress = progressManager.GetLevelProgress(LevelIndex);
+                int starsEarned = levelProgress != null ? levelProgress.starsEarned : 0;
+                
+                // Level đã mở: hiển thị số sao đã đạt
                 starDisplay.SetStarsVisible(true);
-                starDisplay.SetAchievedStars(levelData.StarsEarned);
+                starDisplay.SetAchievedStars(starsEarned);
+                
+                Debug.Log($"Level {LevelIndex}: Displaying {starsEarned} stars from runtime manager");
             }
             else
             {
@@ -291,11 +299,17 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void SaveLevelScore(int score)
     {
-        if (levelData != null)
+        if (levelData != null && progressManager != null)
         {
-            int oldStars = levelData.StarsEarned;
-            levelData.UpdateScore(score);
-            int newStars = levelData.StarsEarned;
+            // Get old stars from runtime manager
+            var levelProgress = progressManager.GetLevelProgress(LevelIndex);
+            int oldStars = levelProgress != null ? levelProgress.starsEarned : 0;
+            
+            // Calculate new stars based on score
+            int newStars = levelData.StarsForScore(score);
+            
+            // Update runtime manager
+            LevelProgressRuntimeManager.Instance.UpdateLevelProgress(LevelIndex, score, newStars);
             
             Debug.Log($"Level {LevelIndex}: Score updated from {oldStars} to {newStars} stars");
             
@@ -303,14 +317,11 @@ public class LevelManager : MonoBehaviour
             UpdateStarDisplay();
             
             // Thông báo cho ProgressManager để kiểm tra unlock level tiếp theo
-            if (progressManager != null)
-            {
-                progressManager.OnLevelCompleted(LevelIndex, levelData.StarsEarned);
-            }
+            progressManager.OnLevelCompleted(LevelIndex, newStars);
         }
         else
         {
-            Debug.LogWarning("LevelData is null! Cannot save score.");
+            Debug.LogWarning("LevelData or ProgressManager is null! Cannot save score.");
         }
     }
 
@@ -422,9 +433,10 @@ public class LevelManager : MonoBehaviour
     {
         if (levelData != null && progressManager != null)
         {
+            var levelProgress = progressManager.GetLevelProgress(LevelIndex);
             Debug.Log($"=== Level {LevelIndex} Debug Info ===");
-            Debug.Log($"Current Stars: {levelData.StarsEarned}");
-            Debug.Log($"Current Score: {levelData.BestScore}");
+            Debug.Log($"Current Stars: {(levelProgress != null ? levelProgress.starsEarned : 0)}");
+            Debug.Log($"Current Score: {(levelProgress != null ? levelProgress.bestScore : 0)}");
             Debug.Log($"Is Unlocked: {progressManager.IsLevelUnlocked(LevelIndex)}");
             Debug.Log($"Can Unlock: {progressManager.CanUnlockLevel(LevelIndex)}");
             Debug.Log($"UI State: {(isUnlocked ? "UNLOCKED" : "LOCKED")}");
