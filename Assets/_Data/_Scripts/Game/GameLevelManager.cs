@@ -37,13 +37,33 @@ public class GameLevelManager : MonoBehaviour
     public GameCurrency Currency => gameCurrency;
     public LevelProgressManager ProgressManager => levelProgressManager;
 
+    private bool levelCompleted = false; // Track if current level was finished
+    private bool progressLoaded = false; // NEW: track if load succeeded
+
+    private void EnsureResourcesLoaded()
+    {
+        if (gameCurrency == null)
+        {
+            gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
+            if (gameCurrency == null)
+                Debug.LogError("[GameLevelManager] GameCurrency not found in Resources");
+        }
+        if (levelProgressManager == null)
+        {
+            levelProgressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+            if (levelProgressManager == null)
+                Debug.LogError("[GameLevelManager] LevelProgressManager not found in Resources");
+        }
+    }
+
     void Awake()
     {
         // Thiết lập singleton
         Instance = this;
+        EnsureResourcesLoaded(); // ensure refs before loading
 
         // Auto-load resources
-        InitializeResources();
+        // InitializeResources();
         
         // *** QUAN TRỌNG: Load game progress NGAY khi Awake ***
         LoadGameProgress();
@@ -52,36 +72,36 @@ public class GameLevelManager : MonoBehaviour
     /// <summary>
     /// Khởi tạo các ScriptableObject resources
     /// </summary>
-    private void InitializeResources()
-    {
-        // Auto-load GameCurrency nếu chưa assign
-        if (gameCurrency == null)
-        {
-            gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
-            if (gameCurrency == null)
-            {
-                Debug.LogError("GameCurrency not found in Resources folder!");
-            }
-            else
-            {
-                Debug.Log("GameCurrency loaded from Resources");
-            }
-        }
+    // private void InitializeResources()
+    // {
+    //     // Auto-load GameCurrency nếu chưa assign
+    //     if (gameCurrency == null)
+    //     {
+    //         gameCurrency = Resources.Load<GameCurrency>("GameCurrency");
+    //         if (gameCurrency == null)
+    //         {
+    //             Debug.LogError("GameCurrency not found in Resources folder!");
+    //         }
+    //         else
+    //         {
+    //             Debug.Log("GameCurrency loaded from Resources");
+    //         }
+    //     }
 
-        // Auto-load LevelProgressManager nếu chưa assign
-        if (levelProgressManager == null)
-        {
-            levelProgressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
-            if (levelProgressManager == null)
-            {
-                Debug.LogError("LevelProgressManager not found in Resources folder!");
-            }
-            else
-            {
-                Debug.Log("LevelProgressManager loaded from Resources");
-            }
-        }
-    }
+    //     // Auto-load LevelProgressManager nếu chưa assign
+    //     if (levelProgressManager == null)
+    //     {
+    //         levelProgressManager = Resources.Load<LevelProgressManager>("LevelProgressManager");
+    //         if (levelProgressManager == null)
+    //         {
+    //             Debug.LogError("LevelProgressManager not found in Resources folder!");
+    //         }
+    //         else
+    //         {
+    //             Debug.Log("LevelProgressManager loaded from Resources");
+    //         }
+    //     }
+    // }
     
     /// <summary>
     /// Load game progress từ JSON file
@@ -103,12 +123,14 @@ public class GameLevelManager : MonoBehaviour
             
             // Reset session stats sau khi load
             gameCurrency.ResetSessionStats();
+            progressLoaded = true; // mark success
             
             Debug.Log("=== GAME PROGRESS LOADED ===");
         }
         else
         {
             Debug.LogError("Cannot load game progress - missing GameCurrency or LevelProgressManager!");
+            progressLoaded = false;
         }
     }
 
@@ -117,9 +139,8 @@ public class GameLevelManager : MonoBehaviour
         if (playerStats == null)
             playerStats = FindAnyObjectByType<PlayerStats>();
             
-        // Load level data từ PlayerPrefs
-        int currentLevel = PlayerPrefs.GetInt("current_level", 1);
-        LoadLevelData(currentLevel);
+        // Load level data based on current scene or save file
+        LoadCurrentSceneLevelData();
 
         // Setup UI elements
         SetupUI();
@@ -132,27 +153,110 @@ public class GameLevelManager : MonoBehaviour
             resultManager.SetProgressManager(levelProgressManager);
         }
         
-        // Force save để tạo file nếu chưa có
-        ForceSaveProgress();
+        // Only write a file on first start if we actually loaded data
+        if (progressLoaded)
+        {
+            ForceSaveProgress(false); // gold only
+        }
+        else
+        {
+            Debug.Log("[GameLevelManager] Skipping initial save (no progress loaded)");
+        }
+    }
+    
+    /// <summary>
+    /// Load level data for current scene intelligently
+    /// </summary>
+    private void LoadCurrentSceneLevelData()
+    {
+        int levelIndex = 1; // Default
+        
+        // Try to get level from scene name first
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (TryParseLevelFromSceneName(sceneName, out int sceneLevel))
+        {
+            levelIndex = sceneLevel;
+            Debug.Log($"Detected level {levelIndex} from scene name: {sceneName}");
+        }
+        else
+        {
+            // Fallback: use max unlocked level from progress manager
+            if (levelProgressManager != null && levelProgressManager.MaxUnlockedLevel > 0)
+            {
+                levelIndex = levelProgressManager.MaxUnlockedLevel;
+                Debug.Log($"Using max unlocked level: {levelIndex}");
+            }
+            else
+            {
+                Debug.Log("Using default level 1");
+            }
+        }
+        
+        LoadLevelData(levelIndex);
+    }
+    
+    /// <summary>
+    /// Try to parse level number from scene name
+    /// </summary>
+    private bool TryParseLevelFromSceneName(string sceneName, out int levelIndex)
+    {
+        levelIndex = 1;
+        
+        // Common patterns: "Level_1", "Game_Level_2", "Level1", etc.
+        string[] patterns = { "Level_", "Level", "_Level_", "Game_Level_", "Map_", "Stage_" };
+        
+        foreach (string pattern in patterns)
+        {
+            int patternIndex = sceneName.IndexOf(pattern);
+            if (patternIndex >= 0)
+            {
+                string afterPattern = sceneName.Substring(patternIndex + pattern.Length);
+                
+                // Extract first number found
+                string numberStr = "";
+                foreach (char c in afterPattern)
+                {
+                    if (char.IsDigit(c))
+                        numberStr += c;
+                    else if (numberStr.Length > 0)
+                        break;
+                }
+                
+                if (int.TryParse(numberStr, out levelIndex))
+                {
+                    // Clamp to valid range (1 to 5 levels per difficulty)
+                    levelIndex = Mathf.Clamp(levelIndex, 1, 5);
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
     
     /// <summary>
     /// Force save progress (để đảm bảo file được tạo)
     /// </summary>
-    public void ForceSaveProgress()
+    public void ForceSaveProgress(bool includeLevelProgress = true)
     {
+        EnsureResourcesLoaded(); // safeguard
         if (gameCurrency != null && levelProgressManager != null)
         {
-            Debug.Log("=== FORCE SAVING PROGRESS ===");
-            GameSaveManager.SaveGameProgress(gameCurrency, levelProgressManager);
+            if (!progressLoaded)
+            {
+                Debug.LogWarning("[GameLevelManager] Skip save: progress not loaded yet (avoid overwriting existing file).");
+                return;
+            }
+            Debug.Log($"=== FORCE SAVING PROGRESS (includeLevel={includeLevelProgress}) ===");
+            GameSaveManager.SaveGameProgress(gameCurrency, levelProgressManager, includeLevelProgress);
             Debug.Log("=== PROGRESS SAVED ===");
         }
     }
 
     void OnDestroy()
     {
-        // Auto save khi destroy
-        ForceSaveProgress();
+        // If level not completed, only save gold to avoid wiping progress file
+        ForceSaveProgress(levelCompleted); // includeLevelProgress = true only if completed
         
         // Clear singleton instance
         if (Instance == this)
@@ -168,7 +272,7 @@ public class GameLevelManager : MonoBehaviour
     {
         if (pauseStatus)
         {
-            ForceSaveProgress();
+            ForceSaveProgress(levelCompleted); // avoid overwriting if mid-level
         }
     }
     
@@ -176,7 +280,7 @@ public class GameLevelManager : MonoBehaviour
     {
         if (!hasFocus)
         {
-            ForceSaveProgress();
+            ForceSaveProgress(levelCompleted);
         }
     }
 
@@ -192,8 +296,8 @@ public class GameLevelManager : MonoBehaviour
         gameCurrency.AddGold(amount, source);
         UpdateGoldDisplay();
         
-        // Force save ngay sau khi thêm vàng
-        ForceSaveProgress();
+        // Gold-only save
+        GameSaveManager.SaveGoldOnly(gameCurrency);
     }
 
     /// <summary>
@@ -210,8 +314,7 @@ public class GameLevelManager : MonoBehaviour
         if (success)
         {
             UpdateGoldDisplay();
-            // Force save ngay sau khi tiêu vàng
-            ForceSaveProgress();
+            GameSaveManager.SaveGoldOnly(gameCurrency); // prevent overwriting level progress
         }
 
         return success;
@@ -306,22 +409,46 @@ public class GameLevelManager : MonoBehaviour
         // Xử lý khi thắng (có ít nhất 1 sao)
         if (star > 0)
         {
+            // Get current progress from runtime manager
+            var levelProgress = levelProgressManager != null ? levelProgressManager.GetLevelProgress(currentLevelData.levelIndex) : null;
+            
             // Tính vàng có thể claim TRƯỚC khi update score
-            int claimableGold = currentLevelData.CalculateClaimableGold(star);
+            int claimableGold = 0;
+            if (levelProgress != null)
+            {
+                // Calculate based on NEW stars vs OLD stars
+                for (int i = 0; i < star; i++)
+                {
+                    if (i < levelProgress.claimedStarGold.Length && !levelProgress.claimedStarGold[i])
+                    {
+                        // Gold rewards: 150, 300, 500
+                        int[] goldRewards = { 150, 300, 500 };
+                        claimableGold += goldRewards[i];
+                    }
+                }
+            }
             Debug.Log($"Claimable gold: {claimableGold}");
 
-            // Cập nhật best score và stars earned
-            currentLevelData.UpdateScore(score);
+            // Update progress in runtime manager (replaces ScriptableObject update)
+            if (levelProgressManager != null)
+            {
+                LevelProgressRuntimeManager.Instance.UpdateLevelProgress(currentLevelData.levelIndex, score, star);
+                
+                // Claim gold for earned stars
+                for (int i = 0; i < star; i++)
+                {
+                    LevelProgressRuntimeManager.Instance.ClaimStarGold(currentLevelData.levelIndex, i);
+                }
+            }
 
-            // Thêm vàng và đánh dấu các mốc đã claim
+            // Thêm vàng
             if (claimableGold > 0)
             {
                 AddGold(claimableGold, $"Level {currentLevelData.levelIndex} - {star} stars");
-                currentLevelData.ClaimStarGold(star);
             }
 
             // Thông báo ProgressManager để unlock level tiếp theo nếu cần
-            UpdateProgressManager();
+            UpdateProgressManager(score, star);
 
             // Hiển thị win popup
             var resultManager = GameResultManager.Instance;
@@ -341,7 +468,7 @@ public class GameLevelManager : MonoBehaviour
         }
 
         // Force save sau khi hoàn thành level
-        ForceSaveProgress();
+        ForceSaveProgress(true); // full save includes level progress
         
         Debug.Log("=== LEVEL COMPLETED ===");
     }
@@ -349,11 +476,12 @@ public class GameLevelManager : MonoBehaviour
     /// <summary>
     /// Thông báo ProgressManager về việc hoàn thành level
     /// </summary>
-    private void UpdateProgressManager()
+    private void UpdateProgressManager(int score, int stars)
     {
         if (levelProgressManager != null)
         {
-            levelProgressManager.OnLevelCompleted(currentLevelData.levelIndex, currentLevelData.StarsEarned);
+            // The runtime manager is already updated in CompleteLevel, this just refreshes UI
+            levelProgressManager.OnLevelCompleted(currentLevelData.levelIndex, stars);
         }
     }
 

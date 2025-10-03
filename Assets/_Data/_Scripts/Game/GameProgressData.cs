@@ -60,18 +60,18 @@ public class GameProgressData
         {
             data.maxUnlockedLevel = progressManager.MaxUnlockedLevel;
             
-            // Copy all level data
+            // Copy all level data from runtime manager
             data.levelProgresses.Clear();
             for (int i = 1; i <= progressManager.GetTotalLevels(); i++)
             {
-                var levelData = progressManager.GetLevelData(i);
-                if (levelData != null)
+                var levelProgress = progressManager.GetLevelProgress(i);
+                if (levelProgress != null)
                 {
                     var progressInfo = new LevelProgressInfo(
-                        levelData.levelIndex,
-                        levelData.BestScore,
-                        levelData.StarsEarned,
-                        (bool[])levelData.ClaimedStarGold.Clone()
+                        levelProgress.levelIndex,
+                        levelProgress.bestScore,
+                        levelProgress.starsEarned,
+                        (bool[])levelProgress.claimedStarGold.Clone()
                     );
                     data.levelProgresses.Add(progressInfo);
                 }

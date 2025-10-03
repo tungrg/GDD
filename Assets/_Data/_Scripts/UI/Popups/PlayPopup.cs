@@ -34,14 +34,34 @@ public class PlayPopup : Popup
         if (headlineText != null)
             headlineText.text = $"Level {data.levelIndex}";
 
-        // Hiển thị điểm từ LevelData
-        if (scoreText != null)
+        // Get runtime progress from manager directly (not ScriptableObject!)
+        Debug.Log($"[PlayPopup] ConfigureLevel for level {data.levelIndex}");
+        
+        // Use runtime manager singleton directly instead of Resources.Load
+        var levelProgress = LevelProgressRuntimeManager.Instance.GetLevelProgress(data.levelIndex);
+        
+        Debug.Log($"[PlayPopup] Runtime manager instance exists: {(LevelProgressRuntimeManager.Instance != null)}");
+        Debug.Log($"[PlayPopup] LevelProgress retrieved: {(levelProgress != null)}");
+        
+        Debug.Log($"[PlayPopup] LevelProgress retrieved: {(levelProgress != null)}");
+        
+        if (levelProgress != null)
         {
-            scoreText.text = $"{data.BestScore:N0}";
+            Debug.Log($"[PlayPopup] Level {data.levelIndex} - BestScore: {levelProgress.bestScore}, Stars: {levelProgress.starsEarned}");
         }
 
-        // Hiển thị số sao từ LevelData
-        SetAchievedStars(data.StarsEarned);
+        // Hiển thị điểm từ runtime progress
+        if (scoreText != null)
+        {
+            int bestScore = levelProgress != null ? levelProgress.bestScore : 0;
+            scoreText.text = $"{bestScore:N0}";
+            Debug.Log($"[PlayPopup] Score text set to: {bestScore:N0}");
+        }
+
+        // Hiển thị số sao từ runtime progress
+        int stars = levelProgress != null ? levelProgress.starsEarned : 0;
+        Debug.Log($"[PlayPopup] Setting stars to: {stars}");
+        SetAchievedStars(stars);
 
         if (goButton != null)
         {
@@ -80,7 +100,7 @@ public class PlayPopup : Popup
 
     private void OnGoClicked()
     {
-        PlayerPrefs.SetInt("current_level", m_levelIndex);
+        // No longer need to set PlayerPrefs - level is determined by scene name
         // Dùng hàm sẵn có trong Popup:
         LoadLevel(m_sceneToLoad);
         // Hoặc nếu muốn hiệu ứng fade:
