@@ -85,7 +85,9 @@ public class JoystickGun : MonoBehaviour
         }
         else if (isAiming)
         {
-            StartCoroutine(HandleRelease());
+            // Capture the cancel state RIGHT NOW before coroutine delay
+            bool wasCancelled = cancelPressed;
+            StartCoroutine(HandleRelease(wasCancelled));
             isAiming = false;
             cancelPressed = false;
             aimLine.gameObject.SetActive(false);
@@ -105,11 +107,13 @@ public class JoystickGun : MonoBehaviour
         }
     }
 
-    IEnumerator HandleRelease()
+    IEnumerator HandleRelease(bool wasCancelled)
     {
         yield return new WaitForSeconds(releaseDelay);
 
-        if (!cancelPressed && Time.time >= nextFireTime && lastDirection.sqrMagnitude > 0.01f)
+        Debug.Log($"HandleRelease: wasCancelled = {wasCancelled}");
+
+        if (!wasCancelled && Time.time >= nextFireTime && lastDirection.sqrMagnitude > 0.01f)
         {
             if (isUltimateMode)
             {
@@ -157,17 +161,61 @@ public class JoystickGun : MonoBehaviour
 
     bool IsTouchingCancelZone()
     {
+        if (cancelZone == null || cancelZone.rectTransform == null)
+        {
+            Debug.LogWarning("IsTouchingCancelZone: cancelZone is null!");
+            return false;
+        }
+
+        // Get the canvas camera (null for Screen Space - Overlay, camera for others)
+        Canvas canvas = cancelZone.GetComponentInParent<Canvas>();
+        Camera cam = null;
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            cam = canvas.worldCamera;
+        }
+
+        Debug.Log($"IsTouchingCancelZone: Canvas mode = {(canvas != null ? canvas.renderMode.ToString() : "NULL")}, Camera = {(cam != null ? "SET" : "NULL")}");
+
 #if UNITY_EDITOR || UNITY_STANDALONE
-        return Input.GetMouseButton(0) &&
-               RectTransformUtility.RectangleContainsScreenPoint(cancelZone.rectTransform, Input.mousePosition, null);
+        // Desktop/Editor - use mouse
+        if (Input.GetMouseButton(0))
+        {
+            Vector2 mousePos = Input.mousePosition;
+            bool isInside = RectTransformUtility.RectangleContainsScreenPoint(
+                cancelZone.rectTransform, 
+                mousePos, 
+                cam);
+            
+            Debug.Log($"Mouse Position: {mousePos}, IsInside: {isInside}, CancelZone Rect: {cancelZone.rectTransform.rect}");
+            return isInside;
+        }
+        return false;
 #else
+        // Mobile - check all active touches
+        Debug.Log($"Touch count: {Input.touchCount}");
+        
         for (int i = 0; i < Input.touchCount; i++)
         {
             Touch t = Input.GetTouch(i);
-            if (t.phase == TouchPhase.Moved || t.phase == TouchPhase.Stationary)
+            Debug.Log($"Touch {i}: Phase = {t.phase}, Position = {t.position}");
+            
+            // Check all touch phases except Ended and Canceled
+            if (t.phase == TouchPhase.Began || 
+                t.phase == TouchPhase.Moved || 
+                t.phase == TouchPhase.Stationary)
             {
-                if (RectTransformUtility.RectangleContainsScreenPoint(cancelZone.rectTransform, t.position, null))
+                bool isInside = RectTransformUtility.RectangleContainsScreenPoint(
+                    cancelZone.rectTransform, 
+                    t.position, 
+                    cam);
+                
+                Debug.Log($"Touch {i} IsInside: {isInside}");
+                
+                if (isInside)
+                {
                     return true;
+                }
             }
         }
         return false;
