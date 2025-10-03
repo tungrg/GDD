@@ -23,6 +23,9 @@ public class ShopManager : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI goldDisplay;
 
+    // Flag to prevent multiple purchases at once
+    private bool isProcessingPurchase = false;
+
     private void Start()
     {
         if (UltimateManager.Instance == null)
@@ -126,34 +129,54 @@ public class ShopManager : MonoBehaviour
 
     private void UpdateButtonState(SkillUI ui, UltimateManager.Skill skill)
     {
-        if (ui.buyButton == null) return;
+        if (ui == null || ui.buyButton == null || skill == null) return;
 
         if (skill.unlock)
         {
+            // Disable button thay vì SetActive(false) để tránh mất listeners
             ui.buyButton.SetActive(false);
         }
         else
         {
-            ui.buyButton.SetActive(true);
+            // Ensure button is active
+            if (!ui.buyButton.activeSelf)
+            {
+                ui.buyButton.SetActive(true);
+            }
 
             bool canAfford = gameCurrency != null && gameCurrency.TotalGold >= skill.priceSkill;
             Button btn = ui.buyButton.GetComponent<Button>();
 
-            if (canAfford)
+            if (btn != null)
             {
-                if (ui.buttonBuy != null && !ui.buttonBuy.m_swapped) ui.buttonBuy.SwapSprite();
-                if (btn != null) btn.interactable = true;
+                // Set interactable state
+                btn.interactable = canAfford;
             }
-            else
+
+            // Update sprite if SpriteSwapper is available
+            if (ui.buttonBuy != null)
             {
-                if (ui.buttonBuy != null && ui.buttonBuy.m_swapped) ui.buttonBuy.SwapSprite();
-                if (btn != null) btn.interactable = false;
+                if (canAfford && !ui.buttonBuy.m_swapped)
+                {
+                    ui.buttonBuy.SwapSprite();
+                }
+                else if (!canAfford && ui.buttonBuy.m_swapped)
+                {
+                    ui.buttonBuy.SwapSprite();
+                }
             }
         }
     }
 
     public void BuySkill(int index)
     {
+        // Prevent multiple simultaneous purchases
+        if (isProcessingPurchase)
+        {
+            Debug.Log("Purchase already in progress, please wait...");
+            return;
+        }
+
         var manager = UltimateManager.Instance;
         if (manager == null || index < 0 || index >= manager.GetSkillCount()) return;
 
@@ -171,16 +194,14 @@ public class ShopManager : MonoBehaviour
         {
             Debug.Log($"Gold spent successfully! Remaining: {gameCurrency.TotalGold}");
             
+            // Set processing flag
+            isProcessingPurchase = true;
+            
             // Unlock skill thông qua UltimateManager (tự động save skill data)
             manager.UnlockSkill(index);
 
-            // Update UI
-            if (index < skills.Count) UpdateSkillUI(skills[index], skill, index);
-            UpdateGoldDisplay();
-            RefreshAllButtonStates();
-            
-            // *** QUAN TRỌNG: Force save game progress ngay sau khi mua skill ***
-            ForceSaveGameProgress();
+            // *** FIX: Update UI sau một frame để tránh conflict với button click event ***
+            StartCoroutine(UpdateUIAfterPurchase(index, skill));
             
             Debug.Log($"=== SKILL PURCHASED & SAVED: {skill.skillName} ===");
         }
@@ -188,6 +209,26 @@ public class ShopManager : MonoBehaviour
         {
             Debug.Log("Not enough gold for: " + skill.skillName);
         }
+    }
+
+    /// <summary>
+    /// Update UI sau khi mua skill, chờ 1 frame để tránh conflict với button event
+    /// </summary>
+    private System.Collections.IEnumerator UpdateUIAfterPurchase(int index, UltimateManager.Skill skill)
+    {
+        // Chờ end of frame để button event hoàn thành
+        yield return new WaitForEndOfFrame();
+        
+        // Update UI
+        if (index < skills.Count) UpdateSkillUI(skills[index], skill, index);
+        UpdateGoldDisplay();
+        RefreshAllButtonStates();
+        
+        // Force save game progress ngay sau khi mua skill
+        ForceSaveGameProgress();
+        
+        // Reset processing flag
+        isProcessingPurchase = false;
     }
 
     private void RefreshAllButtonStates()
