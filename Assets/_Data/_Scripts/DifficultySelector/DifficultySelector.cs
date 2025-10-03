@@ -10,8 +10,38 @@ public class DifficultySelector : MonoBehaviour
     public static Difficulty SelectedDifficulty { get; private set; } = Difficulty.Easy;
 
     private const string PlayerPrefKey = "SelectedDifficulty";
+    private static bool difficultyLoaded = false;
 
     public  enum Difficulty { Easy, Basic, Hard }
+
+    // Load difficulty before any scene loads
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void LoadDifficultyOnStartup()
+    {
+        if (!difficultyLoaded)
+        {
+            // Load saved difficulty or default to Easy
+            if (PlayerPrefs.HasKey(PlayerPrefKey))
+            {
+                int val = PlayerPrefs.GetInt(PlayerPrefKey);
+                if (val >= 0 && val <= (int)Difficulty.Hard)
+                {
+                    SelectedDifficulty = (Difficulty)val;
+                }
+                else
+                {
+                    SelectedDifficulty = Difficulty.Easy;
+                }
+            }
+            else
+            {
+                SelectedDifficulty = Difficulty.Easy;
+            }
+            
+            difficultyLoaded = true;
+            Debug.Log($"[DifficultySelector] Loaded difficulty on startup: {SelectedDifficulty}");
+        }
+    }
 
     private void Start()
     {
@@ -55,15 +85,12 @@ public class DifficultySelector : MonoBehaviour
 
     private void LoadDifficulty()
     {
-        if (PlayerPrefs.HasKey(PlayerPrefKey))
+        // Difficulty already loaded by static constructor
+        // Just ensure runtime manager is synced
+        if (Application.isPlaying)
         {
-            int val = PlayerPrefs.GetInt(PlayerPrefKey);
-            if (val >= 0 && val <= (int)Difficulty.Hard)
-                SelectedDifficulty = (Difficulty)val;
-        }
-        else
-        {
-            SelectedDifficulty = Difficulty.Easy;
+            LevelProgressRuntimeManager.Instance.ReloadForDifficulty();
+            Debug.Log($"[DifficultySelector] Runtime manager synced with difficulty: {SelectedDifficulty}");
         }
     }
 }
